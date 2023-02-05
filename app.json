@@ -28,6 +28,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "8d217db7-8ff9-4515-9eba-fcb75b9c31e9"
+      }
+    },
+    "owner": "talhan61"
   }
 }
