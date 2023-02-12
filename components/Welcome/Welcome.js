@@ -24,7 +24,7 @@ const Welcome = () => {
     return (
         <SafeAreaProvider>
             <SafeAreaView onLayout={onLayoutRootView}>
-                <Text style={styles.fontStyle}>Welcome</Text>
+                <Text style={styles.fontStyle} className='text-red-400 text-xl text-center'>Welcome</Text>
             </SafeAreaView>
         </SafeAreaProvider>
     )
