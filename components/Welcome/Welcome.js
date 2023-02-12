@@ -1,10 +1,11 @@
-import { Text, StyleSheet } from 'react-native'
+import { Text } from 'react-native'
 import React from 'react'
 import * as SplashScreen from 'expo-splash-screen'
 import { useCallback } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font'
-
+// Importing Font Weights
+import {fontWeight800} from '../../assets/Styles/FontWeights';
 SplashScreen.preventAutoHideAsync();
 
 const Welcome = () => {
@@ -32,39 +33,10 @@ const Welcome = () => {
     return (
         <SafeAreaProvider>
             <SafeAreaView onLayout={onLayoutRootView}>
-                <Text style={styles.fontStyle900} className='text-red-400 text-xl text-center'>Welcome</Text>
+                <Text style={fontWeight800} className='text-red-400 text-xl text-center'>Welcome</Text>
             </SafeAreaView>
         </SafeAreaProvider>
     )
 }
 
-const styles = StyleSheet.create({
-    fontStyle100 : {
-        fontFamily : 'Montserrat-100'
-    },
-    fontStyle200 : {
-        fontFamily : 'Montserrat-200'
-    },
-    fontStyle300 : {
-        fontFamily : 'Montserrat-300'
-    },
-    fontStyle400 : {
-        fontFamily : 'Montserrat-400'
-    },
-    fontStyle500 : {
-        fontFamily : 'Montserrat-500'        
-    },
-    fontStyle600 : {
-        fontFamily : 'Montserrat-600'
-    },
-    fontStyle700 : {
-        fontFamily : 'Montserrat-700'
-    }, 
-    fontStyle800 : {
-        fontFamily : 'Montserrat-800'
-    },
-    fontStyle900 : {
-        fontFamily : 'Montserrat-900'
-    }    
-})
 export default Welcome
