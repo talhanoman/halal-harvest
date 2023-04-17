@@ -8,7 +8,7 @@ import { useFonts } from 'expo-font'
 import { fontWeight800, fontWeight600, fontWeight500 } from '../../assets/Styles/FontWeights';
 SplashScreen.preventAutoHideAsync();
 
-const Welcome = () => {
+const Welcome = ({ navigation }) => {
   const [fontsLoaded] = useFonts({
     'Montserrat-900': require('../../assets/fonts/Montserrat-Black.ttf'),
     'Montserrat-800': require('../../assets/fonts/Montserrat-ExtraBold.ttf'),
@@ -43,7 +43,7 @@ const Welcome = () => {
         </View>
         <View className='h-1/6 w-full flex flex-col items-center p-5 gap-y-3'>
           {/* Pressable */}
-          <Pressable className='w-full bg-[#e8b05c] text-center rounded-lg '>
+          <Pressable onPress={() => navigation.navigate('Signup')} className='w-full bg-[#e8b05c] text-center rounded-lg '>
             <Text style={fontWeight600} className='text-center text-white py-4'>
               GET STARTED
             </Text>
