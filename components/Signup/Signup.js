@@ -1,6 +1,6 @@
 import { View, Text, TextInput, Pressable } from 'react-native';
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '../../firebase';
+import { firebaseAuth } from '../../firebase';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useEffect } from 'react'
 import { fontWeight400, fontWeight700 } from '../../assets/Styles/FontWeights';
@@ -51,7 +51,7 @@ const Signup = ({ navigation }) => {
         setError('')
         setSuccess('')
         if (validatePassword()) {
-            createUserWithEmailAndPassword(auth, email, password)
+            createUserWithEmailAndPassword(firebaseAuth, email, password)
                 .then((res) => {
                     console.log(res.user)
                     setSuccess('User Registered Successfully')

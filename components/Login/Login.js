@@ -1,7 +1,5 @@
 import { View, Text, TextInput, Pressable } from 'react-native';
-import { signInWithEmailAndPassword, sendEmailVerification } from 'firebase/auth'
-import { auth } from '../../firebase';
-
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useEffect } from 'react'
 import { fontWeight400, fontWeight700 } from '../../assets/Styles/FontWeights';
@@ -9,7 +7,7 @@ import { fontWeight400, fontWeight700 } from '../../assets/Styles/FontWeights';
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = React.useState(null);
-  const [password, setPassword] = React.useState(null);  
+  const [password, setPassword] = React.useState(null);
   const [error, setError] = React.useState(null)
   const [success, setSuccess] = React.useState(null)
   useEffect(() => {
@@ -21,24 +19,31 @@ const Login = ({ navigation }) => {
 
 
 
-// const handleLogin = ()=>{
-//   if(email === '' && password === '')
-//   {
-//     setError('Enter details to login!')    
-//   }else{
-//     auth.signInWithEmailAndPassword(email, password)
-//     .then((res)=>{
-//       setSuccess('User Logged In Successfully ')
-//     })
-//     .catch((err)=> console.log(err.code))
-//   }
+  const handleLogin = () => {
+    setError('')
+    setSuccess('')
+    const auth = getAuth();
 
-// }
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        setSuccess('Logged In Successfully')        
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;        
+        console.log(errorCode)
+        setError('Incorrect Credentials')
+      });
+
+  }
   return (
     <SafeAreaView>
       <View className={`px-2 flex flex-col justify-center h-full bg-white`}>
         <View className='mx-5'>
-          <Text style={fontWeight700} className='text-center text-4xl mb-10 text-[#e8b05c]'>Login</Text>
+          <Text style={fontWeight700} className='text-center text-4xl mb-10 text-[#e8b05c]'>Log in</Text>
           {/* Phone Input */}
           <Text style={fontWeight400} className="text-gray-800 ">Email</Text>
           <TextInput
@@ -47,8 +52,7 @@ const Login = ({ navigation }) => {
             value={email}
             onChangeText={setEmail}
 
-            className="
-                            form-control
+            className="     form-control
                             block
                             py-1.5
                             px-2
@@ -91,7 +95,7 @@ const Login = ({ navigation }) => {
             <Text className='text-white text-center' style={fontWeight400}>LOGIN</Text>
           </Pressable>
           <Text style={fontWeight700} className='text-center'>OR</Text>
-          <Text style={fontWeight400} className='mt-1 text-center'>Already Have An Account? <Text className='text-[#e8b05c] font-semibold' onPress={() => navigation.navigate('Signup')} > Login</Text></Text>
+          <Text style={fontWeight400} className='mt-1 text-center'>Already Have An Account? <Text className='text-[#e8b05c] font-semibold' onPress={() => navigation.navigate('Signup')} > Sign up</Text></Text>
         </View>
 
       </View>
