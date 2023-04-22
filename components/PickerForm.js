@@ -1,8 +1,8 @@
-import { View } from 'react-native'
+import { View, Text } from 'react-native'
 import React from 'react'
 import { Picker } from '@react-native-picker/picker';
 import { fontWeight400 } from '../assets/Styles/FontWeights';
-export default function Picker({ selectedItem, setSelectedItem, items, label }) {
+export default function PickerForm({ selectedItem, setSelectedItem, items, label }) {
     return (
         <>
             <Text style={fontWeight400} className="text-gray-800">{label}</Text>
@@ -18,12 +18,13 @@ export default function Picker({ selectedItem, setSelectedItem, items, label }) 
                             rounded">
                 <Picker
                     selectedValue={selectedItem}
-                    onValueChange={(itemValue, itemIndex) =>
-                        setSelectedItem(itemValue)
+                    onValueChange={(itemValue, itemIndex) => {                        
+                        setSelectedItem(itemValue);
+                    }
                     }>
                     {
-                        items.map(({ label, value }) =>
-                            <Picker.Item label={label} value={value} />
+                        items.map(({ label, value }, index) =>
+                            <Picker.Item key={index} label={label} value={value} />
                         )
                     }
                 </Picker>

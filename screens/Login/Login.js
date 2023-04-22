@@ -1,15 +1,15 @@
 import { View, Text, TextInput, Pressable } from 'react-native';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { SafeAreaView } from 'react-native-safe-area-context'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { fontWeight400, fontWeight700 } from '../../assets/Styles/FontWeights';
-// import validator from 'validator';
+import PickerForm from '../../components/PickerForm'
 
 const Login = ({ navigation }) => {
-  const [email, setEmail] = React.useState(null);
-  const [password, setPassword] = React.useState(null);
-  const [error, setError] = React.useState(null)
-  const [success, setSuccess] = React.useState(null)
+  const [email, setEmail] = useState(null);
+  const [password, setPassword] = useState(null);
+  const [error, setError] = useState(null)
+  const [success, setSuccess] = useState(null)
   useEffect(() => {
     navigation.setOptions({
       headerShown: false,
@@ -28,16 +28,38 @@ const Login = ({ navigation }) => {
       .then((userCredential) => {
         // Signed in 
         const user = userCredential.user;
-        setSuccess('Logged In Successfully')        
+        setSuccess('Logged In Successfully')
         // ...
       })
       .catch((error) => {
         const errorCode = error.code;
-        const errorMessage = error.message;        
+        const errorMessage = error.message;
         console.log(errorCode)
         setError('Incorrect Credentials')
       });
 
+  }
+
+
+  const [selectedItem, setSelectedItem] = useState('Customer')
+  const items = [
+    { label: 'Seller', value: 'Seller' },
+    { label: 'Customer', value: 'Customer' },
+    { label: 'Service Provider', value: 'Service Provider' },
+  ]
+
+  const handleFlow = () => {
+    console.log(selectedItem)
+    switch (selectedItem) {
+      case 'Seller':
+        navigation.navigate('SellerDashboard')
+        break;
+      case 'Customer':
+        navigation.navigate('CustomerDashboard')
+        break;
+      default:
+        break;
+    }
   }
   return (
     <SafeAreaView>
@@ -87,11 +109,14 @@ const Login = ({ navigation }) => {
                             w-full
                             mb-5"
           />
-
+          <PickerForm items={items} selectedItem={selectedItem} setSelectedItem={setSelectedItem} label={'Account Type'} />
           <Text style={fontWeight400} className="text-red-500 text-xs">{error}</Text>
           <Text style={fontWeight400} className="text-green-500 text-xs">{success}</Text>
-          {/* onPress event */}
-          <Pressable className='my-5 py-3 rounded bg-[#e8b05c]' onPress={handleLogin}>
+          {/* COMMENTED TEMPORARILY TO DESIGN FLOW OF SCREENS*/}
+          {/* <Pressable className='my-5 py-3 rounded bg-[#e8b05c]' onPress={handleLogin}>
+            <Text className='text-white text-center' style={fontWeight400}>LOGIN</Text>
+          </Pressable> */}
+          <Pressable className='my-5 py-3 rounded bg-[#e8b05c]' onPress={handleFlow}>
             <Text className='text-white text-center' style={fontWeight400}>LOGIN</Text>
           </Pressable>
           <Text style={fontWeight700} className='text-center'>OR</Text>

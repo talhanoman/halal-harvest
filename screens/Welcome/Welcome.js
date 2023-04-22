@@ -50,7 +50,7 @@ const Welcome = ({ navigation }) => {
           </Pressable>
 
           {/* Pressable */}
-          <Pressable className='w-full border-2 border-[#e8b05c] text-center rounded-lg '>
+          <Pressable onPress={() => navigation.navigate('Login')} className='w-full border-2 border-[#e8b05c] text-center rounded-lg '>
             <Text style={fontWeight600} className='text-center text-[#e8b05c] py-4'>
               LOGIN
             </Text>

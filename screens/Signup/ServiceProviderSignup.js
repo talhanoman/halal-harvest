@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react'
 import { fontWeight400, fontWeight700, fontWeight500 } from '../../assets/Styles/FontWeights';
 import validator from 'validator';
 // import { Picker } from '@react-native-picker/picker';
-import Picker from '../../components/Picker';
+import PickerForm from '../../components/PickerForm';
 
 const ServiceProviderSignup = ({ navigation }) => {
     const [email, setEmail] = useState(null);
@@ -20,7 +20,7 @@ const ServiceProviderSignup = ({ navigation }) => {
         });
     }, [])
 
-    const [selectedItem, setSelectedItem] = useState();
+    const [selectedItem, setSelectedItem] = useState(null);
 
     const validatePassword = () => {
         let isValid = true
@@ -152,7 +152,8 @@ const ServiceProviderSignup = ({ navigation }) => {
                             rounded
                             mb-5"
                     />
-                    <Picker items={items} selectedItem={selectedItem} setSelectedItem={setSelectedItem} label={'Account Type'} />                  
+                    {/* Picker Form */}
+                    <PickerForm items={items} selectedItem={selectedItem} setSelectedItem={setSelectedItem} label={'Account Type'} />
                     <Text style={fontWeight400} className="text-red-500 text-xs">{error}</Text>
                     <Text style={fontWeight400} className="text-green-500 text-xs">{success}</Text>
                     {/* onPress event */}
