@@ -14,6 +14,7 @@ import CustomerDashboard from './screens/Dashboard/CustomerDashboard';
 import ButcherDashboard from './screens/Dashboard/ServiceProvider/ButcherDashboard'
 import RiderDashboard from './screens/Dashboard/ServiceProvider/RiderDashboard'
 import SlaughterHouseDashboard from './screens/Dashboard/ServiceProvider/SlaughterHouseDashboard'
+import PostAnimal from './screens/PostAnimal/PostAnimal';
 //#e8b05c
 //2b2b2b
 export default function App() {
@@ -34,6 +35,8 @@ export default function App() {
         <Stack.Screen name="ButcherDashboard" component={ButcherDashboard} />
         <Stack.Screen name="RiderDashboard" component={RiderDashboard} />
         <Stack.Screen name="SlaughterHouseDashboard" component={SlaughterHouseDashboard} />
+        {/* Post Animal */}
+        <Stack.Screen name="PostAnimal" component={PostAnimal} />
       </Stack.Navigator>
     </NavigationContainer>
   );
