@@ -14,7 +14,7 @@ export default function NavFooter({ navigation }) {
             <View className='flex flex-row'>
                 <View className='w-4/12'>
                     <View className='flex flex-row my-auto items-center justify-around'>
-                        <Pressable className={route.name === 'SellerDashboard' ? activeTabStyle : inActiveTabStyle}>
+                        <Pressable onPress={()=> navigation.navigate('SellerDashboard')} className={route.name === 'SellerDashboard' ? activeTabStyle : inActiveTabStyle}>
                             <AntDesign name="home" size={30} color="#e8b05c" />
                             <Text style={fontWeight500} className='text-[#e8b05c] text-xs'>Home</Text>
                         </Pressable>
