@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import NavFooter from '../../components/Seller/NavFooter'
 import { fontWeight400, fontWeight500, fontWeight600, fontWeight700 } from '../../assets/Styles/FontWeights'
 import NavHeader from '../../components/Seller/NavHeader'
@@ -8,8 +8,36 @@ import NavHeader from '../../components/Seller/NavHeader'
 import { LineChart } from 'react-native-chart-kit'
 import { Dimensions } from "react-native";
 
+// Firebase Imports
+import { getDatabase, ref, onValue } from "firebase/database";
+import { getAuth } from 'firebase/auth'
 
-export default function SellerDashboard({navigation}) {
+export default function SellerDashboard({ navigation }) {    
+  const db = getDatabase();
+  const auth = getAuth()
+
+  const userId = auth.currentUser.uid
+  const [userDetails, setUserDetails] = useState({})
+
+
+  const getUserData = async () => {
+
+    return onValue(ref(db, '/Users/' + userId), (snapshot) => {
+      const user = snapshot.val() || 'Anonymous'
+      console.log('User', user)
+      let temp = user;
+      let lastname = user.fullname.split(' ')         
+      temp.fullname = lastname[0];      
+      setUserDetails(temp)
+    }, {
+      onlyOnce: true
+    })
+  }
+
+  useEffect(() => {
+    getUserData()
+  }, [])
+
   return (
     <SafeAreaView>
       <View className='flex flex-col h-screen'>
@@ -18,7 +46,7 @@ export default function SellerDashboard({navigation}) {
         <ScrollView className='flex-grow px-4'>
           <View className='mt-5'>
             <Text className='text-[10px] inter text-[#2b2b2b]' style={fontWeight400}>WED, 23 MARCH </Text>
-            <Text className='text-2xl inter text-[#e8b05c]' style={fontWeight600}>Hello, John Doe</Text>
+            <Text className='text-2xl inter text-[#e8b05c]' style={fontWeight600}>Greetings, {userDetails.fullname}</Text>
           </View>
 
           <View className='mt-10'>
@@ -55,7 +83,7 @@ export default function SellerDashboard({navigation}) {
                 <View style={shadow} className='w-full rounded-md bg-white p-5'>
                   <Text style={fontWeight500} className='text-sm mb-1'>Total Sales</Text>
                   <Text style={fontWeight700} className='text-2xl text-[#e8b05c]'>23</Text>
-                </View>              
+                </View>
               </View>
             </View>
           </View>

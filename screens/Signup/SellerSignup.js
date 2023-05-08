@@ -1,12 +1,16 @@
 import { View, Text, TextInput, Pressable } from 'react-native';
-import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { firebaseAuth } from '../../firebase';
+import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useEffect } from 'react'
 import { fontWeight400, fontWeight700, fontWeight500 } from '../../assets/Styles/FontWeights';
 import validator from 'validator';
 
+import { getDatabase, ref, set } from "firebase/database";
+
 const SellerSignup = ({ navigation }) => {
+    // Get Auth
+    const auth = getAuth()
+    const [fullname, setFullName] = React.useState(null);
     const [email, setEmail] = React.useState(null);
     const [password, setPassword] = React.useState(null);
     const [confirmPassword, setConfirmPassword] = React.useState(null);
@@ -46,28 +50,52 @@ const SellerSignup = ({ navigation }) => {
         return isValid
     }
 
-
     const handleSignup = () => {
         setError('')
         setSuccess('')
         if (validatePassword()) {
-            createUserWithEmailAndPassword(firebaseAuth, email, password)
+            createUserWithEmailAndPassword(auth, email, password)
                 .then((res) => {
                     console.log(res.user)
+                    const { uid, email } = res.user;
+                    const userType = 'Seller';
                     setSuccess('User Registered Successfully')
+                    saveUserData(uid, email, userType)
                 })
                 .catch(err => {
+                    console.log(err.code)
                     switch (err.code) {
                         case 'auth/email-already-in-use':
                             setError('Email Already in Use')
                             break;
                         case 'auth/weak-password':
                             setError('Password should be atleast 6 characters')
+                            break;
+                        case 'auth/invalid-email':
+                            setError('Invalid Email')
+                            break;
                         default:
+                            setError('Error Occured')
                             break;
                     }
                 })
         }
+    }
+
+    function saveUserData(userId, email, userType) {
+        const db = getDatabase();
+        set(ref(db, 'Users/' + userId), {
+            user_id: userId,
+            fullname: fullname,
+            email: email,
+            usertype: userType,
+            details_found: false
+        }).then(() => {
+            console.log('User Successfully Added of Type', userType);
+            setTimeout(() => {
+                navigation.navigate('Login')
+            }, 1000)
+        })
     }
 
     return (
@@ -76,6 +104,28 @@ const SellerSignup = ({ navigation }) => {
                 <View className='mx-5'>
                     <Text style={fontWeight700} className='text-center text-4xl text-[#e8b05c]'>Seller</Text>
                     <Text style={fontWeight500} className='text-[#2b2b2b] text-base text-center mb-5'>Register Account</Text>
+                    {/* Phone Input */}
+                    <Text style={fontWeight400} className="text-gray-800 ">Full Name</Text>
+                    <TextInput
+                        style={fontWeight400}
+                        keyboardType="email"
+                        value={fullname}
+                        onChangeText={setFullName}
+
+                        className="
+                            form-control
+                            block
+                            py-1.5
+                            px-2
+                            text-base
+                            font-normal
+                            text-gray-700
+                            bg-white bg-clip-padding
+                            border border-solid border-gray-300
+                            rounded
+                            w-full
+                            mb-5"
+                    />
                     {/* Phone Input */}
                     <Text style={fontWeight400} className="text-gray-800 ">Email</Text>
                     <TextInput

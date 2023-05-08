@@ -1,11 +1,12 @@
 import { Text, Image, View, Pressable } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import * as SplashScreen from 'expo-splash-screen'
 import { useCallback } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font'
 // Importing Font Weights
 import { fontWeight800, fontWeight600, fontWeight500 } from '../../assets/Styles/FontWeights';
+
 SplashScreen.preventAutoHideAsync();
 
 const Welcome = ({ navigation }) => {
@@ -20,16 +21,39 @@ const Welcome = ({ navigation }) => {
     'Montserrat-200': require('../../assets/fonts/Montserrat-ExtraLight.ttf'),
     'Montserrat-100': require('../../assets/fonts/Montserrat-Thin.ttf')
   });
+
+
+  // Set an initializing state whilst Firebase connects
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
+
+  useEffect(() => {
+    const subscriber = onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  if (!user) {
+    navigation.navigate('Welcome')
+  }
+
   // Keep the splash screen visible while we fetch resources
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
       await SplashScreen.hideAsync();
     }
-  }, [fontsLoaded]);
+  }, [fontsLoaded, initializing]);
 
-  if (!fontsLoaded) {
+  if (!fontsLoaded || initializing) {
     return null;
   }
+
+
   return (
     <SafeAreaProvider>
       <SafeAreaView className=' bg-white h-full' onLayout={onLayoutRootView}>

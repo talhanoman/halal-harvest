@@ -3,63 +3,47 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useEffect, useState } from 'react'
 import { fontWeight400, fontWeight700 } from '../../assets/Styles/FontWeights';
-import PickerForm from '../../components/PickerForm'
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
   useEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
+    setError(null)
+    setSuccess(null)
   }, [])
 
 
 
 
   const handleLogin = () => {
+    setIsLoading(true)
     setError('')
     setSuccess('')
     const auth = getAuth();
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
+        setIsLoading(false)
         // Signed in 
-        const user = userCredential.user;
+        console.log('Signed In ' + userCredential)
         setSuccess('Logged In Successfully')
-        // ...
+        navigation.navigate('SellerDashboard')
+
       })
       .catch((error) => {
+        setIsLoading(false)
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode)
         setError('Incorrect Credentials')
       });
 
-  }
-
-
-  const [selectedItem, setSelectedItem] = useState('Customer')
-  const items = [
-    { label: 'Seller', value: 'Seller' },
-    { label: 'Customer', value: 'Customer' },
-    { label: 'Service Provider', value: 'Service Provider' },
-  ]
-
-  const handleFlow = () => {
-    console.log(selectedItem)
-    switch (selectedItem) {
-      case 'Seller':
-        navigation.navigate('SellerDashboard')
-        break;
-      case 'Customer':
-        navigation.navigate('CustomerDashboard')
-        break;
-      default:
-        break;
-    }
   }
   return (
     <SafeAreaView>
@@ -109,16 +93,20 @@ const Login = ({ navigation }) => {
                             w-full
                             mb-5"
           />
-          <PickerForm items={items} selectedItem={selectedItem} setSelectedItem={setSelectedItem} label={'Account Type'} />
           <Text style={fontWeight400} className="text-red-500 text-xs">{error}</Text>
           <Text style={fontWeight400} className="text-green-500 text-xs">{success}</Text>
           {/* COMMENTED TEMPORARILY TO DESIGN FLOW OF SCREENS*/}
-          {/* <Pressable className='my-5 py-3 rounded bg-[#e8b05c]' onPress={handleLogin}>
+          <Pressable className='my-5 py-3 rounded bg-[#e8b05c]' onPress={handleLogin}>
+            <Text className='text-white text-center' style={fontWeight400}>{
+              isLoading ?
+                '...'
+                :
+                'LOGIN'
+            }</Text>
+          </Pressable>
+          {/* <Pressable className='my-5 py-3 rounded bg-[#e8b05c]' onPress={handleFlow}>
             <Text className='text-white text-center' style={fontWeight400}>LOGIN</Text>
           </Pressable> */}
-          <Pressable className='my-5 py-3 rounded bg-[#e8b05c]' onPress={handleFlow}>
-            <Text className='text-white text-center' style={fontWeight400}>LOGIN</Text>
-          </Pressable>
           <Text style={fontWeight700} className='text-center'>OR</Text>
           <Text style={fontWeight400} className='mt-1 text-center'>Already Have An Account? <Text className='text-[#e8b05c] font-semibold' onPress={() => navigation.navigate('Signup')} > Sign up</Text></Text>
         </View>

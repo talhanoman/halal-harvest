@@ -7,6 +7,7 @@ import NavHeader from '../../components/Seller/NavHeader'
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import PickerForm from '../../components/PickerForm'
+import { getDatabase } from 'firebase/database'
 
 export default function PostAnimal({ navigation }) {
 
@@ -14,6 +15,22 @@ export default function PostAnimal({ navigation }) {
     const [category, setCategory] = useState('')
     const [selectedColor, setSelectedColor] = useState('')
     const [selectedAge, setSelectedAge] = useState('')
+
+    function saveAnimalData(userId, email, userType) {
+        const db = getDatabase();
+        set(ref(db, 'Animals/' + userId), {
+            user_id: userId,
+            fullname: fullname,
+            email: email,
+            usertype: userType,
+            details_found: false
+        }).then(() => {
+            // console.log('User Successfully Added of Type', userType);
+            // setTimeout(() => {
+            //     navigation.navigate('Login')
+            // }, 1000)
+        })
+    }
     return (
         <SafeAreaView>
             <View className='flex flex-col h-screen'>

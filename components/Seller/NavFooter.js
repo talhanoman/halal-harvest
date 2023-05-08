@@ -36,7 +36,7 @@ export default function NavFooter({ navigation }) {
                             <Ionicons name="heart-outline" size={30} color="#e8b05c" />
                             <Text style={fontWeight500} className='text-[#e8b05c] text-xs'>My Ads</Text>
                         </Pressable>
-                        <Pressable className={route.name === 'SellerAccount' ? activeTabStyle : inActiveTabStyle}>
+                        <Pressable onPress={()=> navigation.navigate('SellerSettings')} className={route.name === 'SellerAccount' ? activeTabStyle : inActiveTabStyle}>
                             <Ionicons name="person-outline" size={30} color="#e8b05c" />
                             <Text style={fontWeight500} className='text-[#e8b05c] text-xs'>Account</Text>
                         </Pressable>
