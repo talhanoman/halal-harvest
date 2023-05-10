@@ -2,34 +2,74 @@ import { View, Text, ScrollView, StyleSheet, Pressable, TextInput } from 'react-
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useState } from 'react'
 import NavFooter from '../../components/Seller/NavFooter'
-import { fontWeight400, fontWeight500, fontWeight600, fontWeight700 } from '../../assets/Styles/FontWeights'
+import { fontWeight400, fontWeight500 } from '../../assets/Styles/FontWeights'
 import NavHeader from '../../components/Seller/NavHeader'
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import PickerForm from '../../components/PickerForm'
-import { getDatabase } from 'firebase/database'
-
+import { getDatabase, ref, set } from 'firebase/database'
+// Authentication
+import { getAuth } from "firebase/auth";
+import { v4 as uuidv4 } from 'uuid'
 export default function PostAnimal({ navigation }) {
-
-    const [animalType, setAnimalType] = useState('')
-    const [category, setCategory] = useState('')
+    const auth = getAuth()
+    const user = auth.currentUser
+    // loading State
+    const [loading, setLoading] = useState(false);
+    // Type Goat / Cow / Camel
+    const [animalType, setAnimalType] = useState('Goat')
+    const [category, setCategory] = useState('Independent')
     const [selectedColor, setSelectedColor] = useState('')
     const [selectedAge, setSelectedAge] = useState('')
-
-    function saveAnimalData(userId, email, userType) {
+    const [description, setDescription] = useState('')
+    const [price, setPrice] = useState('')
+    const [weight, setWeight] = useState('')
+    // Error / Success
+    const [error, setError] = useState(null)
+    const [success, setSuccess] = useState(null)
+    function saveAnimalData() {
+        setLoading(true)
+        setError('')
         const db = getDatabase();
-        set(ref(db, 'Animals/' + userId), {
-            user_id: userId,
-            fullname: fullname,
-            email: email,
-            usertype: userType,
-            details_found: false
-        }).then(() => {
-            // console.log('User Successfully Added of Type', userType);
-            // setTimeout(() => {
-            //     navigation.navigate('Login')
-            // }, 1000)
-        })
+
+        if (selectedColor !== '' && selectedAge !== '' && price !== '' && weight !== '') {
+            const animalNewId = uuidv4()
+            set(ref(db, 'Animals/' + animalNewId), {
+                age: selectedAge,
+                category: category,
+                color: selectedColor,
+                description: description,
+                price: price,
+                type: animalType,
+                weight: weight,
+            }).then(() => {
+                setSuccess('Animal Added Successfully');
+                console.log('Animal Added Successfully with Id: ', animalNewId)
+                // Get Currently Logged in User / Seller ID
+                if (user !== null) {
+                    const newSellerAnimalId = uuidv4()
+                    const sellerUid = user.uid;
+                    set(ref(db, 'SellerAnimal/' + newSellerAnimalId), {
+                        animal_id: animalNewId,
+                        seller_id: sellerUid,
+                    }).then(() => {
+
+                        console.log('Animal Seller Reference Added')
+                        setLoading(false)
+                    })
+                }
+            })
+        }
+        else {
+            setError('Please Fill all Details!')
+            console.log('Age :' , selectedAge )
+            console.log('Category :' , category )
+            console.log('Color :' , selectedColor )            
+            console.log('Price :' , price )
+            console.log('Weight', weight)
+            setLoading(false)
+        }
+
     }
     return (
         <SafeAreaView>
@@ -77,9 +117,10 @@ export default function PostAnimal({ navigation }) {
                             </View>
                             <Text style={fontWeight400} className="text-gray-800">Price (Rs)</Text>
                             <TextInput
+                                value={price}
+                                onChangeText={setPrice}
                                 style={fontWeight400}
                                 keyboardType="numeric"
-
                                 className="     form-control
                             block
                             py-1.5
@@ -96,6 +137,8 @@ export default function PostAnimal({ navigation }) {
                             />
                             <Text style={fontWeight400} className="text-gray-800 ">Weight (Kg)</Text>
                             <TextInput
+                                value={weight}
+                                onChangeText={setWeight}
                                 style={fontWeight400}
                                 keyboardType="numeric"
 
@@ -115,6 +158,8 @@ export default function PostAnimal({ navigation }) {
                             />
                             <Text style={fontWeight400} className="text-gray-800 ">Description</Text>
                             <TextInput
+                                value={description}
+                                onChangeText={setDescription}
                                 style={fontWeight400}
                                 keyboardType="default"
                                 numberOfLines={4}
@@ -135,8 +180,15 @@ export default function PostAnimal({ navigation }) {
                             />
                         </View>
                     </View>
-                    <Pressable style={shadow} className='bg-[#e8b05c] px-4 py-2 rounded-md ml-auto flex flex-row items-center mb-4'>
-                        <Text style={fontWeight500} className="text-white text-center text-base">Add Post</Text>
+                    <Text style={fontWeight400} className="text-red-500 text-xs">{error}</Text>
+                    <Text style={fontWeight400} className="text-green-500 text-xs">{success}</Text>
+                    <Pressable onPress={saveAnimalData} style={shadow} className='bg-[#e8b05c] px-4 py-2 rounded-md ml-auto flex flex-row items-center mb-4'>
+                        <Text style={fontWeight500} className="text-white text-center text-base">{
+                            loading ?
+                                '...'
+                                :
+                                'Add Post'
+                        }</Text>
                     </Pressable>
                 </ScrollView>
                 <NavFooter navigation={navigation} />
@@ -158,6 +210,7 @@ const selectedAnimal = 'rounded-md w-[32%] bg-white px-5 py-2.5 flex flex-col it
 const animalStyle = 'rounded-md w-[32%] bg-white px-5 py-2.5 flex flex-col items-center justify-center'
 
 const colorOptions = [
+    { label: 'Select Color', value: '' },
     { label: 'White', value: 'White' },
     { label: 'Black', value: 'Black' },
     { label: 'Brown', value: 'Brown' },
@@ -165,6 +218,7 @@ const colorOptions = [
     { label: 'White-Brown', value: 'White-Brown' },
 ]
 const ageOptions = [
+    { label: 'Select Age', value: '' },
     { label: 'Two-Tooth (دو دانت)', value: 'Two-Tooth (دو دانت)' },
     { label: 'Four-Tooth (چار دانت)', value: 'Four-Tooth (چار دانت)' },
     { label: 'Six-Tooth (چھ دانت)', value: 'Six-Tooth (چھ دانت)' },
