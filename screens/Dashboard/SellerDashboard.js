@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, StyleSheet } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, BackHandler, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useEffect, useState } from 'react'
 import NavFooter from '../../components/Seller/NavFooter'
@@ -12,7 +12,23 @@ import { Dimensions } from "react-native";
 import { getDatabase, ref, onValue } from "firebase/database";
 import { getAuth } from 'firebase/auth'
 
-export default function SellerDashboard({ navigation }) {    
+export default function SellerDashboard({ navigation }) {
+
+  const backActionHandler = () => {
+    Alert.alert("Alert!", "Are you sure you want to go back?", [
+      {
+        text: "Cancel",
+        onPress: () => null,
+        style: "cancel"
+      },
+      {
+        text: "YES", onPress: () => BackHandler.exitApp()          
+      }
+    ]);
+    return true;
+  };
+
+
   const db = getDatabase();
   const auth = getAuth()
 
@@ -26,8 +42,8 @@ export default function SellerDashboard({ navigation }) {
       const user = snapshot.val() || 'Anonymous'
       console.log('User', user)
       let temp = user;
-      let lastname = user.fullname.split(' ')         
-      temp.fullname = lastname[0];      
+      let lastname = user.fullname.split(' ')
+      temp.fullname = lastname[0];
       setUserDetails(temp)
     }, {
       onlyOnce: true
@@ -35,7 +51,17 @@ export default function SellerDashboard({ navigation }) {
   }
 
   useEffect(() => {
+    if (!userId) {
+      navigation.navigate('Welcome')
+    }
+    // Add event listener for hardware back button press on Android
+    BackHandler.addEventListener("hardwareBackPress", backActionHandler);
     getUserData()
+
+    return () => {
+      //clear remove 
+      BackHandler.removeEventListener("hardwareBackPress", backActionHandler)
+    }
   }, [])
 
   return (
@@ -89,7 +115,7 @@ export default function SellerDashboard({ navigation }) {
           </View>
         </ScrollView>
         {/* Footer */}
-        <NavFooter navigation={navigation}/>
+        <NavFooter navigation={navigation} />
       </View>
     </SafeAreaView>
   )
