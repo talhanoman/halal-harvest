@@ -12,6 +12,7 @@ const Signup = ({ navigation }) => {
     const [confirmPassword, setConfirmPassword] = React.useState(null);
     const [error, setError] = React.useState(null)
     const [success, setSuccess] = React.useState(null)
+    const [loading, setLoading] = React.useState(false)
     useEffect(() => {
         navigation.setOptions({
             headerShown: false,
@@ -48,15 +49,18 @@ const Signup = ({ navigation }) => {
 
 
     const handleSignup = () => {
+        setLoading(true)
         setError('')
         setSuccess('')
         if (validatePassword()) {
             createUserWithEmailAndPassword(firebaseAuth, email, password)
                 .then((res) => {
+                    setLoading(false)
                     console.log(res.user)
                     setSuccess('User Registered Successfully')
                 })
                 .catch(err => {
+                    setLoading(false)
                     switch (err.code) {
                         case 'auth/email-already-in-use':
                             setError('Email Already in Use')
@@ -145,7 +149,11 @@ const Signup = ({ navigation }) => {
                     <Text style={fontWeight400} className="text-green-500 text-xs">{success}</Text>
                     {/* onPress event */}
                     <Pressable className='my-5 py-3 rounded bg-[#e8b05c]' onPress={handleSignup}>
-                        <Text className='text-white text-center' style={fontWeight400}>SIGNUP</Text>
+                        <Text className='text-white text-center' style={fontWeight400}>{
+                            loading? '...'
+                            :
+                            'SIGN UP'
+                        }</Text>
                     </Pressable>
                     <Text style={fontWeight700} className='text-center'>OR</Text>
                     <Text style={fontWeight400} className='mt-1 text-center'>Already Have An Account? <Text className='text-[#e8b05c] font-semibold' onPress={() => navigation.navigate('Login')} > Login</Text></Text>

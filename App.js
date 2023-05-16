@@ -17,6 +17,7 @@ import SlaughterHouseDashboard from './screens/Dashboard/ServiceProvider/Slaught
 import PostAnimal from './screens/PostAnimal/PostAnimal';
 // Settings
 import SellerSettings from './screens/Settings/SellerSettings';
+import SellerAds from './screens/SellerAds/SellerAds';
 //#e8b05c
 //2b2b2b
 export default function App() {
@@ -41,6 +42,8 @@ export default function App() {
         <Stack.Screen name="PostAnimal" component={PostAnimal} />
         {/* Settings */}
         <Stack.Screen name="SellerSettings" component={SellerSettings} />
+        {/* Seller Ads */}
+        <Stack.Screen name="SellerAds" component={SellerAds} />
       </Stack.Navigator>
     </NavigationContainer>
   );

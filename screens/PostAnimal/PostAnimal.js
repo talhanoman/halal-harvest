@@ -13,6 +13,7 @@ import { getAuth } from "firebase/auth";
 import { v4 as uuidv4 } from 'uuid'
 export default function PostAnimal({ navigation }) {
     const auth = getAuth()
+    // Getting LoggedIn / Current User
     const user = auth.currentUser
     // loading State
     const [loading, setLoading] = useState(false);
@@ -34,7 +35,9 @@ export default function PostAnimal({ navigation }) {
 
         if (selectedColor !== '' && selectedAge !== '' && price !== '' && weight !== '') {
             const animalNewId = uuidv4()
+            const sellerUid = user.uid;
             set(ref(db, 'Animals/' + animalNewId), {
+                seller_id: sellerUid,
                 age: selectedAge,
                 category: category,
                 color: selectedColor,
@@ -44,29 +47,30 @@ export default function PostAnimal({ navigation }) {
                 weight: weight,
             }).then(() => {
                 setSuccess('Animal Added Successfully');
-                console.log('Animal Added Successfully with Id: ', animalNewId)
-                // Get Currently Logged in User / Seller ID
-                if (user !== null) {
-                    const newSellerAnimalId = uuidv4()
-                    const sellerUid = user.uid;
-                    set(ref(db, 'SellerAnimal/' + newSellerAnimalId), {
-                        animal_id: animalNewId,
-                        seller_id: sellerUid,
-                    }).then(() => {
+                setTimeout(() => {
+                    setSuccess('')
+                }, 1000);
 
-                        console.log('Animal Seller Reference Added')
-                        setLoading(false)
-                    })
-                }
+                setLoading(false)
+                console.log('Animal Added Successfully with Id: ', animalNewId)
+                // Fields Empty After Adding Animal
+                selectedColor('')
+                selectedAge('')
+                setDescription('')
+                setPrice('')
+                setWeight('')
+            })
+            .catch((err)=>{
+                console.log('Something Went Wrong While Posting Animal!', err);
             })
         }
         else {
             setError('Please Fill all Details!')
-            console.log('Age :' , selectedAge )
-            console.log('Category :' , category )
-            console.log('Color :' , selectedColor )            
-            console.log('Price :' , price )
-            console.log('Weight', weight)
+            // console.log('Age :', selectedAge)
+            // console.log('Category :', category)
+            // console.log('Color :', selectedColor)
+            // console.log('Price :', price)
+            // console.log('Weight', weight)            
             setLoading(false)
         }
 
@@ -156,7 +160,7 @@ export default function PostAnimal({ navigation }) {
                             mb-4
                             "
                             />
-                            <Text style={fontWeight400} className="text-gray-800 ">Description</Text>
+                            {/* <Text style={fontWeight400} className="text-gray-800 ">Description</Text>
                             <TextInput
                                 value={description}
                                 onChangeText={setDescription}
@@ -177,7 +181,7 @@ export default function PostAnimal({ navigation }) {
                             w-full
                             mb-4
                             "
-                            />
+                            /> */}
                         </View>
                     </View>
                     <Text style={fontWeight400} className="text-red-500 text-xs">{error}</Text>

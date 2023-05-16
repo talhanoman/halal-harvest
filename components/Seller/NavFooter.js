@@ -10,7 +10,7 @@ export default function NavFooter({ navigation }) {
     const inActiveTabStyle = 'flex flex-col items-center border-[#e8b05c]'
     const route = useRoute();
     return (
-        <View style={style.shadow} className='fixed bottom-0 h-16 px-4 border-none bg-[#f7f8f8]'>
+        <View style={style.shadow} className='fixed bottom-0 h-[80px] px-4 border-none bg-[#f7f8f8]'>
             <View className='flex flex-row'>
                 <View className='w-4/12'>
                     <View className='flex flex-row my-auto items-center justify-around'>
@@ -32,11 +32,11 @@ export default function NavFooter({ navigation }) {
                 </View>
                 <View className='w-4/12'>
                     <View className='flex flex-row my-auto items-center justify-around'>
-                        <Pressable className={route.name === 'MyListings' ? activeTabStyle : inActiveTabStyle}>
+                        <Pressable onPress={()=> navigation.navigate('SellerAds')} className={route.name === 'SellerAds' ? activeTabStyle : inActiveTabStyle}>
                             <Ionicons name="heart-outline" size={30} color="#e8b05c" />
                             <Text style={fontWeight500} className='text-[#e8b05c] text-xs'>My Ads</Text>
                         </Pressable>
-                        <Pressable onPress={()=> navigation.navigate('SellerSettings')} className={route.name === 'SellerAccount' ? activeTabStyle : inActiveTabStyle}>
+                        <Pressable onPress={()=> navigation.navigate('SellerSettings')} className={route.name === 'SellerSettings' ? activeTabStyle : inActiveTabStyle}>
                             <Ionicons name="person-outline" size={30} color="#e8b05c" />
                             <Text style={fontWeight500} className='text-[#e8b05c] text-xs'>Account</Text>
                         </Pressable>

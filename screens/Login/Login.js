@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { fontWeight400, fontWeight700 } from '../../assets/Styles/FontWeights';
 
 const Login = ({ navigation }) => {
-  const [email, setEmail] = useState(null);
+  const [email, setEmail] = useState(null);  
   const [password, setPassword] = useState(null);
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(null)
@@ -108,7 +108,7 @@ const Login = ({ navigation }) => {
             <Text className='text-white text-center' style={fontWeight400}>LOGIN</Text>
           </Pressable> */}
           <Text style={fontWeight700} className='text-center'>OR</Text>
-          <Text style={fontWeight400} className='mt-1 text-center'>Already Have An Account? <Text className='text-[#e8b05c] font-semibold' onPress={() => navigation.navigate('Signup')} > Sign up</Text></Text>
+          <Text style={fontWeight400} className='mt-1 text-center'>Already Have An Account? <Text className='text-[#e8b05c] font-semibold' onPress={() => navigation.navigate('SignupOptions')} > Sign up</Text></Text>
         </View>
 
       </View>
