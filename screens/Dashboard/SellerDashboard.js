@@ -9,7 +9,7 @@ import { LineChart } from 'react-native-chart-kit'
 import { Dimensions } from "react-native";
 
 // Firebase Imports
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, get } from "firebase/database";
 import { getAuth } from 'firebase/auth'
 
 export default function SellerDashboard({ navigation }) {
@@ -22,7 +22,7 @@ export default function SellerDashboard({ navigation }) {
         style: "cancel"
       },
       {
-        text: "YES", onPress: () => BackHandler.exitApp()          
+        text: "YES", onPress: () => BackHandler.exitApp()
       }
     ]);
     return true;
@@ -34,7 +34,41 @@ export default function SellerDashboard({ navigation }) {
 
   const userId = auth.currentUser.uid
   const [userDetails, setUserDetails] = useState({})
+  const [dateToday, setDateToday] = useState('')
+  const [animals, setAnimals] = useState([])
+  const [totalListings, setTotalListings] = useState(0)
+  const [sharedListings, setSharedListings] = useState(0)
+  const fetchSellerListings = async () => {
+    try {
+        const db = getDatabase()
+        const snapshot = await get(ref(db, '/Animals'));
+        if (snapshot.exists()) {
+            const data = snapshot.val()
+            // Map data to array
+            const dataArray = Object.keys(data).map((key) => ({
+                id: key,
+                ...data[key]
+            }))
+            const filteredArray = dataArray.filter(({seller_id})=>{
+              return seller_id === userId
+            })
+            // console.log(dataArray)
+            setAnimals(filteredArray)
+            console.log(filteredArray.length)
+            setTotalListings(filteredArray.length)
 
+            const sharedListings = filteredArray.filter(({category})=>{
+              return category === 'Shared'
+            })
+            setSharedListings(sharedListings.length)
+
+        } else {
+            console.log('No data available');
+        }
+    } catch (error) {
+        console.error('Error retrieving data:', error);
+    }
+};
 
   const getUserData = async () => {
 
@@ -49,17 +83,23 @@ export default function SellerDashboard({ navigation }) {
       onlyOnce: true
     })
   }
-
+  function formatTodayDate() {
+    const options = { weekday: 'short', day: 'numeric', month: 'long' };
+    const today = new Date();
+    return today.toLocaleString('en-US', options).toUpperCase();
+  }
   useEffect(() => {
     if (!userId) {
       navigation.navigate('Welcome')
     }
+    setDateToday(formatTodayDate())
     // Add event listener for hardware back button press on Android
     BackHandler.addEventListener("hardwareBackPress", backActionHandler);
     getUserData()
+    fetchSellerListings()
 
+    //clear remove 
     return () => {
-      //clear remove 
       BackHandler.removeEventListener("hardwareBackPress", backActionHandler)
     }
   }, [])
@@ -71,7 +111,7 @@ export default function SellerDashboard({ navigation }) {
         <NavHeader title={'SELLER DASHBOARD'} />
         <ScrollView className='flex-grow px-4'>
           <View className='mt-5'>
-            <Text className='text-[10px] inter text-[#2b2b2b]' style={fontWeight400}>WED, 23 MARCH </Text>
+            <Text className='text-[10px] inter text-[#2b2b2b]' style={fontWeight400}>{dateToday}</Text>
             <Text className='text-2xl inter text-[#e8b05c]' style={fontWeight600}>Greetings, {userDetails.fullname}</Text>
           </View>
 
@@ -98,17 +138,17 @@ export default function SellerDashboard({ navigation }) {
               <View className='mt-5 flex flex-row justify-between'>
                 <View style={shadow} className='w-[48%] rounded-md bg-white p-5'>
                   <Text style={fontWeight500} className='text-sm mb-1'>Total Listings</Text>
-                  <Text style={fontWeight700} className='text-2xl text-[#e8b05c]'>23</Text>
+                  <Text style={fontWeight700} className='text-2xl text-[#e8b05c]'>{totalListings}</Text>
                 </View>
                 <View style={shadow} className='w-[48%] rounded-md bg-white p-5'>
                   <Text style={fontWeight500} className='text-sm mb-1'>Shared Qurbani</Text>
-                  <Text style={fontWeight700} className='text-2xl text-[#e8b05c]'>42</Text>
+                  <Text style={fontWeight700} className='text-2xl text-[#e8b05c]'>{sharedListings}</Text>
                 </View>
               </View>
               <View className='mt-5 flex flex-row justify-between'>
                 <View style={shadow} className='w-full rounded-md bg-white p-5'>
                   <Text style={fontWeight500} className='text-sm mb-1'>Total Sales</Text>
-                  <Text style={fontWeight700} className='text-2xl text-[#e8b05c]'>23</Text>
+                  <Text style={fontWeight700} className='text-2xl text-[#e8b05c]'>0</Text>
                 </View>
               </View>
             </View>

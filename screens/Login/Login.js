@@ -3,13 +3,15 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useEffect, useState } from 'react'
 import { fontWeight400, fontWeight700 } from '../../assets/Styles/FontWeights';
+import { getDatabase, ref, onValue } from "firebase/database";
 
 const Login = ({ navigation }) => {
-  const [email, setEmail] = useState(null);  
+  const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [user, setUser] = useState(null)
   useEffect(() => {
     navigation.setOptions({
       headerShown: false,
@@ -20,6 +22,9 @@ const Login = ({ navigation }) => {
 
 
 
+  const getUserData = async (userId) => {
+
+  }
 
   const handleLogin = () => {
     setIsLoading(true)
@@ -28,13 +33,31 @@ const Login = ({ navigation }) => {
     const auth = getAuth();
 
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         setIsLoading(false)
         // Signed in 
-        console.log('Signed In ' + userCredential)
+        console.log('Signed In ' + userCredential.user.uid)
+        const userId = userCredential.user.uid
         setSuccess('Logged In Successfully')
-        navigation.navigate('SellerDashboard')
+        console.log(userId)
+        const db = getDatabase()
+        return onValue(ref(db, '/Users/' + userId), (snapshot) => {
+          const user = snapshot.val() || 'Anonymous'
+          console.log('User', user)
+          setSuccess('')
+          setEmail('')
+          setPassword('')
+          user.usertype === 'Seller' ?
+            navigation.navigate('SellerDashboard')
+            :
+            user.usertype === 'Customer' ?
+              navigation.navigate('CustomerDashboard')
+              :
+              navigation.navigate('ServiceProviderDashboard')
 
+        }, {
+          onlyOnce: true
+        })        
       })
       .catch((error) => {
         setIsLoading(false)
