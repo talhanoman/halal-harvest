@@ -11,7 +11,7 @@ export default function NavFooter({ navigation }) {
     const route = useRoute();
     return (
         <View style={style.shadow} className='fixed bottom-0 h-[80px] px-4 border-none bg-[#f7f8f8]'>
-            <View className='flex flex-row'>
+            <View className='flex flex-row items-center'>
                 <View className='w-4/12'>
                     <View className='flex flex-row my-auto items-center justify-around'>
                         <Pressable onPress={()=> navigation.navigate('SellerDashboard')} className={route.name === 'SellerDashboard' ? activeTabStyle : inActiveTabStyle}>

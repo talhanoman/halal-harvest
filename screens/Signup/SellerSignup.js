@@ -14,6 +14,7 @@ const SellerSignup = ({ navigation }) => {
     const [email, setEmail] = React.useState(null);
     const [password, setPassword] = React.useState(null);
     const [confirmPassword, setConfirmPassword] = React.useState(null);
+    const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState(null)
     const [success, setSuccess] = React.useState(null)
     useEffect(() => {
@@ -51,11 +52,13 @@ const SellerSignup = ({ navigation }) => {
     }
 
     const handleSignup = () => {
+        setLoading(true)
         setError('')
         setSuccess('')
         if (validatePassword()) {
             createUserWithEmailAndPassword(auth, email, password)
                 .then((res) => {
+                    setLoading(false)
                     console.log(res.user)
                     const { uid, email } = res.user;
                     const userType = 'Seller';
@@ -63,6 +66,7 @@ const SellerSignup = ({ navigation }) => {
                     saveUserData(uid, email, userType)
                 })
                 .catch(err => {
+                    setLoading(false)
                     console.log(err.code)
                     switch (err.code) {
                         case 'auth/email-already-in-use':
@@ -73,6 +77,9 @@ const SellerSignup = ({ navigation }) => {
                             break;
                         case 'auth/invalid-email':
                             setError('Invalid Email')
+                            break;
+                        case 'auth/network-request-failed':
+                            setError('Network Error')
                             break;
                         default:
                             setError('Error Occured')
@@ -196,7 +203,7 @@ const SellerSignup = ({ navigation }) => {
                     <Text style={fontWeight400} className="text-green-500 text-xs">{success}</Text>
                     {/* onPress event */}
                     <Pressable className='my-5 py-3 rounded bg-[#e8b05c]' onPress={handleSignup}>
-                        <Text className='text-white text-center' style={fontWeight400}>SIGNUP</Text>
+                        <Text className='text-white text-center' style={fontWeight400}>{loading ? '...' : 'SIGNUP'}</Text>
                     </Pressable>
                     <Text style={fontWeight700} className='text-center'>OR</Text>
                     <Text style={fontWeight400} className='mt-1 text-center'>Already Have An Account? <Text className='text-[#e8b05c] font-semibold' onPress={() => navigation.navigate('Login')} > Login</Text></Text>

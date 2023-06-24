@@ -4,6 +4,9 @@ import * as SplashScreen from 'expo-splash-screen'
 import { useCallback } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font'
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notifications
 // Importing Font Weights
 import { fontWeight800, fontWeight600, fontWeight500 } from '../../assets/Styles/FontWeights';
 

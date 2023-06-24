@@ -1,9 +1,9 @@
 import { View, Text, ScrollView, StyleSheet, BackHandler, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useEffect, useState } from 'react'
-import NavFooter from '../../components/Seller/NavFooter'
-import { fontWeight400, fontWeight500, fontWeight600, fontWeight700 } from '../../assets/Styles/FontWeights'
-import NavHeader from '../../components/Seller/NavHeader'
+import NavFooter from '../../../components/Seller/NavFooter'
+import { fontWeight400, fontWeight500, fontWeight600, fontWeight700 } from '../../../assets/Styles/FontWeights'
+import NavHeader from '../../../components/Seller/NavHeader'
 
 import { LineChart } from 'react-native-chart-kit'
 import { Dimensions } from "react-native";

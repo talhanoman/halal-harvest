@@ -1,6 +1,6 @@
 import { View, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
 import NavFooter from '../../components/Seller/NavFooter'
 import NavHeader from '../../components/Seller/NavHeader'
 import { getDatabase, ref, get } from "firebase/database";
@@ -38,7 +38,7 @@ export default function SellerAds({ navigation }) {
         }
     };
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         fetchSellerListings()
     }, [])
     return (
@@ -57,15 +57,7 @@ export default function SellerAds({ navigation }) {
                                     <SellerCard key={id} age={age} category={category} color={color} price={price} weight={weight} type={type} />
                                 )
                             })
-                        }
-                        {/* {
-                            animals?.map(({id, age, category, color, price, weight, type})=>{                                
-                                return (
-                                    <SellerCard key={id} age={age} category={category} color={color} price={price} weight={weight} type={type}/>
-                                )
-                            })
-                        } */}
-
+                        }                    
                     </View>
                 </ScrollView>
                 <NavFooter navigation={navigation} />

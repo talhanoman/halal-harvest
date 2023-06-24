@@ -14,7 +14,7 @@ export default function NavFooter({ navigation }) {
             <View className='flex flex-row'>
                 <View className='w-4/12'>
                     <View className='flex flex-row my-auto items-center justify-around'>
-                        <Pressable onPress={()=> navigation.navigate('SellerDashboard')} className={route.name === 'SellerDashboard' ? activeTabStyle : inActiveTabStyle}>
+                        <Pressable onPress={()=> navigation.navigate('CustomerDashboard')} className={route.name === 'CustomerDashboard' ? activeTabStyle : inActiveTabStyle}>
                             <AntDesign name="home" size={30} color="#e8b05c" />
                             <Text style={fontWeight500} className='text-[#e8b05c] text-xs'>Home</Text>
                         </Pressable>
@@ -27,7 +27,7 @@ export default function NavFooter({ navigation }) {
                 <View className='w-4/12'>
                     <Pressable  className='flex flex-col items-center px-4 py-1 rounded bg-[#e8b05c] w-2/3 mx-auto'>
                         <Ionicons name="add-circle-outline" size={30} color="white" />
-                        <Text style={fontWeight500} className='text-white text-sm'>Sell</Text>
+                        <Text style={fontWeight500} className='text-white text-sm'>Buy</Text>
                     </Pressable>
                 </View>
                 <View className='w-4/12'>
@@ -36,7 +36,7 @@ export default function NavFooter({ navigation }) {
                             <Ionicons name="heart-outline" size={30} color="#e8b05c" />
                             <Text style={fontWeight500} className='text-[#e8b05c] text-xs'>My Ads</Text>
                         </Pressable>
-                        <Pressable className={route.name === 'SellerSettings' ? activeTabStyle : inActiveTabStyle}>
+                        <Pressable onPress={()=> navigation.navigate('CustomerSettings')} className={route.name === 'CustomerSettings' ? activeTabStyle : inActiveTabStyle}>
                             <Ionicons name="person-outline" size={30} color="#e8b05c" />
                             <Text style={fontWeight500} className='text-[#e8b05c] text-xs'>Account</Text>
                         </Pressable>

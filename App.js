@@ -9,8 +9,8 @@ import SellerSignup from './screens/Signup/SellerSignup';
 import ServiceProviderSignup from './screens/Signup/ServiceProviderSignup';
 import CustomerSignup from './screens/Signup/CustomerSignup';
 // Dashboards
-import SellerDashboard from './screens/Dashboard/SellerDashboard';
-import CustomerDashboard from './screens/Dashboard/CustomerDashboard';
+import SellerDashboard from './screens/Dashboard/Seller/SellerDashboard';
+import CustomerDashboard from './screens/Dashboard/Customer/CustomerDashboard';
 import ButcherDashboard from './screens/Dashboard/ServiceProvider/ButcherDashboard'
 import RiderDashboard from './screens/Dashboard/ServiceProvider/RiderDashboard'
 import SlaughterHouseDashboard from './screens/Dashboard/ServiceProvider/SlaughterHouseDashboard'
@@ -18,6 +18,7 @@ import PostAnimal from './screens/PostAnimal/PostAnimal';
 // Settings
 import SellerSettings from './screens/Settings/SellerSettings';
 import SellerAds from './screens/SellerAds/SellerAds';
+import CustomerSettings from './screens/Settings/CustomerSettings';
 //#e8b05c
 //2b2b2b
 export default function App() {
@@ -42,6 +43,7 @@ export default function App() {
         <Stack.Screen name="PostAnimal" component={PostAnimal} />
         {/* Settings */}
         <Stack.Screen name="SellerSettings" component={SellerSettings} />
+        <Stack.Screen name="CustomerSettings" component={CustomerSettings} />
         {/* Seller Ads */}
         <Stack.Screen name="SellerAds" component={SellerAds} />
       </Stack.Navigator>
