@@ -14,6 +14,7 @@ import {
   CollapseBody,
 } from 'accordion-collapse-react-native';
 import FilterButton from '../../../components/Customer/FilterButton';
+import AnimalListingCard from '../../../components/Customer/AnimalListingCard';
 
 
 
@@ -44,6 +45,7 @@ export default function CustomerDashboard({ navigation }) {
     fetchSellerListings()
       .then((data) => {
         console.log(data)
+        setAnimals(data)
       }).catch((err) => console.log(err))
   }, [])
 
@@ -101,13 +103,22 @@ export default function CustomerDashboard({ navigation }) {
                   <FilterButton filter={'White'} setFilterType={setAnimalColor} filterType={animalColor} />
                   <FilterButton filter={'Brown'} setFilterType={setAnimalColor} filterType={animalColor} />
                   <FilterButton filter={'Black'} setFilterType={setAnimalColor} filterType={animalColor} />
-                  
+
                 </View>
 
               </View>
             </CollapseBody>
           </Collapse>
-
+          {/* Cards Section */}
+          <View className="flex flex-row justify-between flex-wrap mt-4">
+            {
+              animals?.map(({ id, price, age, color, type, category, weight }) => {
+                return (
+                  <AnimalListingCard key={id} id={id} price={price} age={age} color={color} type={type} category={category} weight={weight} />
+                )
+              })
+            }
+          </View>
 
         </ScrollView>
         <NavFooter navigation={navigation} />
