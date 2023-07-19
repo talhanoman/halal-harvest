@@ -13,6 +13,10 @@ import {
   CollapseHeader,
   CollapseBody,
 } from 'accordion-collapse-react-native';
+import FilterButton from '../../../components/Customer/FilterButton';
+
+
+
 
 export default function CustomerDashboard({ navigation }) {
   const [error, setError] = useState('')
@@ -43,6 +47,12 @@ export default function CustomerDashboard({ navigation }) {
       }).catch((err) => console.log(err))
   }, [])
 
+
+  // Filter States
+  const [animalType, setanimalType] = useState('')
+  const [animalAge, setAnimalAge] = useState('')
+  const [sacrificeType, setSacrificeType] = useState('')
+  const [animalColor, setAnimalColor] = useState('')
   return (
     <SafeAreaView>
       <View className='flex flex-col h-screen'>
@@ -67,54 +77,31 @@ export default function CustomerDashboard({ navigation }) {
             </CollapseHeader>
             <CollapseBody>
               <View className='flex flex-col gap-y-4'>
-                {/* Row 4 */}
-                <View className='flex flex-row gap-x-3 justify-between'>
-                  <View className='bg-white p-2 rounded-xl flex-1'>
-                    <Text style={fontWeight500} className='text-xs text-center'>Goat</Text>
-                  </View>
-                  <View className='bg-white p-2 rounded-xl flex-1'>
-                    <Text style={fontWeight500} className='text-xs text-center'>Cow</Text>
-                  </View>
-                  <View className='bg-white p-2 rounded-xl flex-1'>
-                    <Text style={fontWeight500} className='text-xs text-center'>Camel</Text>
-                  </View>
+                {/* Row 0 */}
+                <View className='flex flex-row justify-between'>
+                  <FilterButton filter={'Goat'} setFilterType={setanimalType} filterType={animalType} />
+                  <FilterButton filter={'Cow'} setFilterType={setanimalType} filterType={animalType} />
+                  <FilterButton filter={'Camel'} setFilterType={setanimalType} filterType={animalType} />
                 </View>
                 {/* Row 1 */}
-                <View className='flex flex-row gap-x-3 justify-between'>
-                  <View className='bg-white p-2 rounded-xl flex-1'>
-                    <Text style={fontWeight500} className='text-xs text-center'>Kheera</Text>
-                  </View>
-                  <View className='bg-white p-2 rounded-xl flex-1'>
-                    <Text style={fontWeight500} className='text-xs text-center'>Two Tooth</Text>
-                  </View>
-                  <View className='bg-white p-2 rounded-xl flex-1'>
-                    <Text style={fontWeight500} className='text-xs text-center'>Four Tooth</Text>
-                  </View>
-                  <View className='bg-white p-2 rounded-xl flex-1'>
-                    <Text style={fontWeight500} className='text-xs text-center'>Six Tooth</Text>
-                  </View>
+                <View className='flex flex-row justify-between'>
+                  <FilterButton filter={'Kheera'} setFilterType={setAnimalAge} filterType={animalAge} />
+                  <FilterButton filter={'Two Tooth'} setFilterType={setAnimalAge} filterType={animalAge} />
+                  <FilterButton filter={'Four Tooth'} setFilterType={setAnimalAge} filterType={animalAge} />
+                  <FilterButton filter={'Six Tooth'} setFilterType={setAnimalAge} filterType={animalAge} />
                 </View>
 
                 {/* Row 2 */}
-                <View className='flex flex-row gap-x-3 justify-between'>
-                  <View className='bg-white p-2 rounded-xl flex-1'>
-                    <Text style={fontWeight500} className='text-xs text-center'>Independent</Text>
-                  </View>
-                  <View className='bg-white p-2 rounded-xl flex-1'>
-                    <Text style={fontWeight500} className='text-xs text-center'>Shared</Text>
-                  </View>
+                <View className='flex flex-row justify-between'>
+                  <FilterButton filter={'Independent'} setFilterType={setSacrificeType} filterType={sacrificeType} />
+                  <FilterButton filter={'Shared'} setFilterType={setSacrificeType} filterType={sacrificeType} />
                 </View>
                 {/* Row 3 */}
-                <View className='flex flex-row gap-x-3 justify-between'>
-                  <View className='bg-white p-2 rounded-xl flex-1'>
-                    <Text style={fontWeight500} className='text-xs text-center'>White</Text>
-                  </View>
-                  <View className='bg-white p-2 rounded-xl flex-1'>
-                    <Text style={fontWeight500} className='text-xs text-center'>Brown</Text>
-                  </View>
-                  <View className='bg-white p-2 rounded-xl flex-1'>
-                    <Text style={fontWeight500} className='text-xs text-center'>Black</Text>
-                  </View>
+                <View className='flex flex-row justify-between'>
+                  <FilterButton filter={'White'} setFilterType={setAnimalColor} filterType={animalColor} />
+                  <FilterButton filter={'Brown'} setFilterType={setAnimalColor} filterType={animalColor} />
+                  <FilterButton filter={'Black'} setFilterType={setAnimalColor} filterType={animalColor} />
+                  
                 </View>
 
               </View>
