@@ -2,8 +2,11 @@ import { View, Text, Pressable, Image, StyleSheet } from 'react-native'
 import React from 'react'
 import { fontWeight500, fontWeight600 } from '../../assets/Styles/FontWeights'
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useCart } from '../../Context/CartContext';
 
-const AnimalListingCard = ({ id, price, age, color, type, category, weight }) => {
+
+const AnimalListingCard = ({ id, price, age, color, type, category, weight, navigation }) => {
+    const { addToCart } = useCart()
     return (
         <Pressable style={shadow} className='w-[48%] bg-white my-2 rounded-t-2xl p-1'>
             {
@@ -50,11 +53,11 @@ const AnimalListingCard = ({ id, price, age, color, type, category, weight }) =>
                 </View>
 
 
-                <Pressable className='w-full rounded-2xl bg-[#e8b05c] mt-4 p-2 active:bg-[#dba656]'>
+                <Pressable onPress={() => addToCart({ id, price, age, color, type, category, weight })} className='w-full rounded-2xl bg-[#e8b05c] mt-4 p-2 active:bg-[#dba656]'>
                     <Text style={fontWeight500} className='text-white text-center'>Add To Cart</Text>
                 </Pressable>
 
-                <Pressable className='w-full rounded-2xl mt-2 p-2 border-[#e8b05c] border active:bg-gray-100'>
+                <Pressable onPress={() => { navigation.navigate('CartDetails') }} className='w-full rounded-2xl mt-2 p-2 border-[#e8b05c] border active:bg-gray-100'>
                     <Text style={fontWeight500} className='text-[#e8b05c] text-center'>View Cart</Text>
                 </Pressable>
             </View>

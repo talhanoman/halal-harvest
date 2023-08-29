@@ -19,34 +19,41 @@ import PostAnimal from './screens/PostAnimal/PostAnimal';
 import SellerSettings from './screens/Settings/SellerSettings';
 import SellerAds from './screens/SellerAds/SellerAds';
 import CustomerSettings from './screens/Settings/CustomerSettings';
+import { CartProvider } from './Context/CartContext';
+// Cart
+import CartScreen from './components/Customer/CartScreen';
 //#e8b05c
 //2b2b2b
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName='Welcome' screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Welcome" component={Welcome} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Signup" component={Signup} />
-        <Stack.Screen name="SignupOptions" component={SignupOptions} />
-        <Stack.Screen name="SellerSignup" component={SellerSignup} />
-        <Stack.Screen name="ServiceProviderSignup" component={ServiceProviderSignup} />
-        <Stack.Screen name="CustomerSignup" component={CustomerSignup} />
-        {/* Dashboards */}
-        <Stack.Screen name="SellerDashboard" component={SellerDashboard} />
-        <Stack.Screen name="CustomerDashboard" component={CustomerDashboard} />
-        <Stack.Screen name="ButcherDashboard" component={ButcherDashboard} />
-        <Stack.Screen name="RiderDashboard" component={RiderDashboard} />
-        <Stack.Screen name="SlaughterHouseDashboard" component={SlaughterHouseDashboard} />
-        {/* Post Animal */}
-        <Stack.Screen name="PostAnimal" component={PostAnimal} />
-        {/* Settings */}
-        <Stack.Screen name="SellerSettings" component={SellerSettings} />
-        <Stack.Screen name="CustomerSettings" component={CustomerSettings} />
-        {/* Seller Ads */}
-        <Stack.Screen name="SellerAds" component={SellerAds} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <CartProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName='Welcome' screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Welcome" component={Welcome} />
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Signup" component={Signup} />
+          <Stack.Screen name="SignupOptions" component={SignupOptions} />
+          <Stack.Screen name="SellerSignup" component={SellerSignup} />
+          <Stack.Screen name="ServiceProviderSignup" component={ServiceProviderSignup} />
+          <Stack.Screen name="CustomerSignup" component={CustomerSignup} />
+          {/* Dashboards */}
+          <Stack.Screen name="SellerDashboard" component={SellerDashboard} />
+          <Stack.Screen name="CustomerDashboard" component={CustomerDashboard} />
+          <Stack.Screen name="ButcherDashboard" component={ButcherDashboard} />
+          <Stack.Screen name="RiderDashboard" component={RiderDashboard} />
+          <Stack.Screen name="SlaughterHouseDashboard" component={SlaughterHouseDashboard} />
+          {/* Post Animal */}
+          <Stack.Screen name="PostAnimal" component={PostAnimal} />
+          {/* Settings */}
+          <Stack.Screen name="SellerSettings" component={SellerSettings} />
+          <Stack.Screen name="CustomerSettings" component={CustomerSettings} />
+          {/* Seller Ads */}
+          <Stack.Screen name="SellerAds" component={SellerAds} />
+          {/* Cart */}
+          <Stack.Screen name="CartDetails" component={CartScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </CartProvider>
   );
 }

@@ -15,6 +15,7 @@ import {
 } from 'accordion-collapse-react-native';
 import FilterButton from '../../../components/Customer/FilterButton';
 import AnimalListingCard from '../../../components/Customer/AnimalListingCard';
+import { useCart } from '../../../Context/CartContext';
 
 
 
@@ -55,6 +56,9 @@ export default function CustomerDashboard({ navigation }) {
   const [animalAge, setAnimalAge] = useState('')
   const [sacrificeType, setSacrificeType] = useState('')
   const [animalColor, setAnimalColor] = useState('')
+
+  // Cart Context
+  const { addToCart } = useCart()
   return (
     <SafeAreaView>
       <View className='flex flex-col h-screen'>
@@ -114,7 +118,7 @@ export default function CustomerDashboard({ navigation }) {
             {
               animals?.map(({ id, price, age, color, type, category, weight }) => {
                 return (
-                  <AnimalListingCard key={id} id={id} price={price} age={age} color={color} type={type} category={category} weight={weight} />
+                  <AnimalListingCard key={id} id={id} price={price} age={age} color={color} type={type} category={category} weight={weight} navigation={navigation} />
                 )
               })
             }
