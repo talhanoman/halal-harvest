@@ -2,9 +2,8 @@ import { View, ScrollView, Pressable, Text, StyleSheet, TextInput } from 'react-
 import Icon from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useState, useEffect } from 'react'
-import NavHeader from '../../../components/Seller/NavHeader'
-import { getAuth, signOut } from '@firebase/auth'
-import { fontWeight500, fontWeight400, fontWeight600 } from '../../../assets/Styles/FontWeights'
+import NavHeader from '../../../components/Customer/NavHeader'
+import { fontWeight600 } from '../../../assets/Styles/FontWeights'
 import NavFooter from '../../../components/Customer/NavFooter'
 import { getDatabase, get, ref } from 'firebase/database'
 
@@ -15,14 +14,11 @@ import {
 } from 'accordion-collapse-react-native';
 import FilterButton from '../../../components/Customer/FilterButton';
 import AnimalListingCard from '../../../components/Customer/AnimalListingCard';
-import { useCart } from '../../../Context/CartContext';
 
 
 
 
-export default function CustomerDashboard({ navigation }) {
-  const [error, setError] = useState('')
-  const [search, setSearch] = useState('')
+export default function CustomerDashboard({ navigation }) {  
   const [animals, setAnimals] = useState([])
 
   const fetchSellerListings = async () => {
@@ -55,15 +51,12 @@ export default function CustomerDashboard({ navigation }) {
   const [animalType, setanimalType] = useState('')
   const [animalAge, setAnimalAge] = useState('')
   const [sacrificeType, setSacrificeType] = useState('')
-  const [animalColor, setAnimalColor] = useState('')
-
-  // Cart Context
-  const { addToCart } = useCart()
+  const [animalColor, setAnimalColor] = useState('')  
   return (
     <SafeAreaView>
       <View className='flex flex-col h-screen'>
         {/* Nav Header */}
-        <NavHeader title={'CUSTOMER DASHBOARD'} />
+        <NavHeader title={'CUSTOMER DASHBOARD'} navigation={navigation} />        
         <ScrollView className='flex-grow px-4'>
           <View className={`flex flex-row items-center border border-gray-300 rounded-md px-4 bg-white my-5`}>
             <Icon name="search" size={20} color="#aaa" className={`mr-4`} />
@@ -131,9 +124,3 @@ export default function CustomerDashboard({ navigation }) {
     </SafeAreaView>
   )
 }
-
-const { shadow } = StyleSheet.create({
-  shadow: {
-    elevation: 1
-  }
-})
