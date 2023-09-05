@@ -5,15 +5,17 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { fontWeight400, fontWeight500 } from '../../assets/Styles/FontWeights';
 import { Ionicons } from '@expo/vector-icons';
 import NavHeader from '../Seller/NavHeader';
-const CartScreen = () => {
+const CartScreen = ({ navigation }) => {
     const { cartItems, removeFromCart } = useCart();
-
+    const handlePurchase = () => {
+        console.log("purchase");
+    }
     return (
         <SafeAreaView>
             <View className='flex flex-col h-screen'>
                 <NavHeader title={'Cart'} />
                 <ScrollView className='flex-grow p-4'>
-                    <View>                      
+                    <View>
                         <FlatList
                             data={cartItems}
                             renderItem={({ item }) => (
@@ -61,6 +63,12 @@ const CartScreen = () => {
                             keyExtractor={(item) => item.id.toString()}
                         />
                     </View>
+                    <Pressable className='my-5 py-3 rounded bg-[#e8b05c]' onPress={handlePurchase}>
+                        <Text className='text-white text-center' style={fontWeight400}>Buy Now</Text>
+                    </Pressable>
+                    <Pressable className='py-3 rounded bg-white' onPress={()=> navigation.navigate('CustomerDashboard')}>
+                        <Text className='text-[#e8b05c] text-center' style={fontWeight400}>Back</Text>
+                    </Pressable>
                 </ScrollView>
             </View>
         </SafeAreaView>

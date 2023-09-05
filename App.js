@@ -22,6 +22,8 @@ import CustomerSettings from './screens/Settings/CustomerSettings';
 import { CartProvider } from './Context/CartContext';
 // Cart
 import CartScreen from './components/Customer/CartScreen';
+import SellerView from './screens/Dashboard/Customer/SellerView';
+import SellerListingDetails from './screens/Dashboard/Customer/SellerListingDetails';
 //#e8b05c
 //2b2b2b
 export default function App() {
@@ -52,6 +54,8 @@ export default function App() {
           <Stack.Screen name="SellerAds" component={SellerAds} />
           {/* Cart */}
           <Stack.Screen name="CartDetails" component={CartScreen} />
+          <Stack.Screen name="SellerView" component={SellerView} />          
+          <Stack.Screen name="SellerListingDetails" component={SellerListingDetails} />
         </Stack.Navigator>
       </NavigationContainer>
     </CartProvider>

@@ -14,7 +14,7 @@ export default function NavFooter({ navigation }) {
             <View className='flex flex-row'>
                 <View className='w-4/12'>
                     <View className='flex flex-row my-auto items-center justify-around'>
-                        <Pressable onPress={()=> navigation.navigate('CustomerDashboard')} className={route.name === 'CustomerDashboard' ? activeTabStyle : inActiveTabStyle}>
+                        <Pressable onPress={() => navigation.navigate('CustomerDashboard')} className={route.name === 'CustomerDashboard' ? activeTabStyle : inActiveTabStyle}>
                             <AntDesign name="home" size={30} color="#e8b05c" />
                             <Text style={fontWeight500} className='text-[#e8b05c] text-xs'>Home</Text>
                         </Pressable>
@@ -25,18 +25,18 @@ export default function NavFooter({ navigation }) {
                     </View>
                 </View>
                 <View className='w-4/12'>
-                    <Pressable  className='flex flex-col items-center px-4 py-1 rounded bg-[#e8b05c] w-2/3 mx-auto'>
+                    <Pressable className='flex flex-col items-center px-4 py-1 rounded bg-[#e8b05c] w-2/3 mx-auto'>
                         <Ionicons name="add-circle-outline" size={30} color="white" />
                         <Text style={fontWeight500} className='text-white text-sm'>Buy</Text>
                     </Pressable>
                 </View>
                 <View className='w-4/12'>
                     <View className='flex flex-row my-auto items-center justify-around'>
-                        <Pressable  className={route.name === 'SellerAds' ? activeTabStyle : inActiveTabStyle}>
+                        <Pressable onPress={()=> navigation.navigate('SellerView')} className={route.name === 'SellerAds' ? activeTabStyle : inActiveTabStyle}>
                             <Ionicons name="heart-outline" size={30} color="#e8b05c" />
-                            <Text style={fontWeight500} className='text-[#e8b05c] text-xs'>My Ads</Text>
+                            <Text style={fontWeight500} className='text-[#e8b05c] text-xs'>Sellers</Text>
                         </Pressable>
-                        <Pressable onPress={()=> navigation.navigate('CustomerSettings')} className={route.name === 'CustomerSettings' ? activeTabStyle : inActiveTabStyle}>
+                        <Pressable onPress={() => navigation.navigate('CustomerSettings')} className={route.name === 'CustomerSettings' ? activeTabStyle : inActiveTabStyle}>
                             <Ionicons name="person-outline" size={30} color="#e8b05c" />
                             <Text style={fontWeight500} className='text-[#e8b05c] text-xs'>Account</Text>
                         </Pressable>

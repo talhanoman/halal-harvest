@@ -54,8 +54,8 @@ export default function PostAnimal({ navigation }) {
                 setLoading(false)
                 console.log('Animal Added Successfully with Id: ', animalNewId)
                 // Fields Empty After Adding Animal
-                selectedColor('')
-                selectedAge('')
+                setSelectedColor('')
+                setSelectedAge('')
                 setDescription('')
                 setPrice('')
                 setWeight('')
