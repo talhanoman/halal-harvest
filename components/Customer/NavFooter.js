@@ -18,7 +18,7 @@ export default function NavFooter({ navigation }) {
                             <AntDesign name="home" size={30} color="#e8b05c" />
                             <Text style={fontWeight500} className='text-[#e8b05c] text-xs'>Home</Text>
                         </Pressable>
-                        <Pressable className={route.name === 'Chats' ? activeTabStyle : inActiveTabStyle}>
+                        <Pressable onPress={() => navigation.navigate('ChatScreenCustomer')} className={route.name === 'Chats' ? activeTabStyle : inActiveTabStyle}>
                             <AntDesign name="message1" size={30} color="#e8b05c" />
                             <Text style={fontWeight500} className='text-[#e8b05c] text-xs'>Chats</Text>
                         </Pressable>
