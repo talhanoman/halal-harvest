@@ -55,8 +55,7 @@ export default function CustomerDashboard({ navigation }) {
                     </View>
 
                     {/* Cards Section */}
-                    <View className="flex flex-row justify-between flex-wrap mt-4">
-                        {console.log('Seller Stores', sellerStores)}
+                    <View className="flex flex-row justify-between flex-wrap mt-4">                        
                         {
                             sellerStores?.map(({ city, cnic, country, name, userId }) => {
                                 return (

@@ -50,6 +50,7 @@
           "locationAlwaysAndWhenInUsePermission": "Allow Halal Harvest to use your location."
         }
       ]
-    ]
+    ],
+    "jsEngine": "hermes"
   }
 }
