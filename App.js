@@ -26,6 +26,9 @@ import SellerView from './screens/Dashboard/Customer/SellerView';
 import SellerListingDetails from './screens/Dashboard/Customer/SellerListingDetails';
 import ChatScreenCustomer from './screens/Dashboard/Customer/ChatScreenCustomer';
 import BuyCustomerScreen from './screens/Dashboard/Customer/BuyCustomerScreen';
+import AllButchersScreen from './screens/Dashboard/Customer/AllButchersScreen';
+import AllRidersScreen from './screens/Dashboard/Customer/AllRidersScreen';
+import BookingDetailsRider from './screens/Dashboard/Customer/BookingDetailsRider';
 //#e8b05c
 //2b2b2b
 export default function App() {
@@ -56,12 +59,16 @@ export default function App() {
           <Stack.Screen name="SellerAds" component={SellerAds} />
           {/* Cart */}
           <Stack.Screen name="CartDetails" component={CartScreen} />
-          <Stack.Screen name="SellerView" component={SellerView} />          
+          <Stack.Screen name="SellerView" component={SellerView} />
           <Stack.Screen name="SellerListingDetails" component={SellerListingDetails} />
           {/* Chat Screens */}
           <Stack.Screen name="ChatScreenCustomer" component={ChatScreenCustomer} />
           {/* Customer Screen */}
           <Stack.Screen name="BuyCustomerScreen" component={BuyCustomerScreen} />
+          <Stack.Screen name="AllButchersScreen" component={AllButchersScreen} />
+          <Stack.Screen name="AllRidersScreen" component={AllRidersScreen} />
+          {/* Booking Details */}
+          <Stack.Screen name="BookingDetailsRider" component={BookingDetailsRider} />
         </Stack.Navigator>
       </NavigationContainer>
     </CartProvider>
