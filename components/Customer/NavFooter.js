@@ -25,7 +25,7 @@ export default function NavFooter({ navigation }) {
                     </View>
                 </View>
                 <View className='w-4/12'>
-                    <Pressable className='flex flex-col items-center px-4 py-1 rounded bg-[#e8b05c] w-2/3 mx-auto'>
+                    <Pressable onPress={() => navigation.navigate('BuyCustomerScreen')} className='flex flex-col items-center px-4 py-1 rounded bg-[#e8b05c] w-2/3 mx-auto'>
                         <Ionicons name="add-circle-outline" size={30} color="white" />
                         <Text style={fontWeight500} className='text-white text-sm'>Buy</Text>
                     </Pressable>
