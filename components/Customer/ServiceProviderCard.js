@@ -13,10 +13,14 @@ const ServiceProviderCard = ({ navigation, serviceProvider }) => {
                 <Text style={fontWeight400} >Name: </Text>
                 <Text style={fontWeight500} >Talha Noman</Text>
             </View>
+            <View className='flex flex-row justify-between text-sm my-2'>
+                <Text style={fontWeight400}>Rate: </Text>
+                <Text style={fontWeight500} >500Pkr</Text>
+            </View>
             <View className='flex flex-row justify-between text-sm'>
                 <Text style={fontWeight400}>Rating: </Text>
                 <Text style={fontWeight500} >4.5</Text>
-            </View>
+            </View>        
             <Pressable onPress={()=> navigation.navigate(serviceProvider === 'Rider'? 'BookingDetailsRider' : 'BookingDetailsButcher')} className='my-5 py-3 rounded bg-[#e8b05c]'>
                 <Text className='text-white text-center' style={fontWeight400}>Request Service</Text>
             </Pressable>
