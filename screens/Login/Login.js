@@ -57,14 +57,18 @@ const Login = ({ navigation }) => {
 
         }, {
           onlyOnce: true
-        })        
+        })
       })
       .catch((error) => {
         setIsLoading(false)
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode)
-        setError('Incorrect Credentials')
+        if (errorMessage === 'auth/network-request-failed') {
+          setError('Network Error')
+        } else {
+          setError('Incorrect Credentials')
+        }
       });
 
   }
