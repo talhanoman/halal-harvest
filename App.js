@@ -29,6 +29,7 @@ import BuyCustomerScreen from './screens/Dashboard/Customer/BuyCustomerScreen';
 import AllButchersScreen from './screens/Dashboard/Customer/AllButchersScreen';
 import AllRidersScreen from './screens/Dashboard/Customer/AllRidersScreen';
 import BookingDetailsRider from './screens/Dashboard/Customer/BookingDetailsRider';
+import BookingDetailsButcher from './screens/Dashboard/Customer/BookingDetailsButcher';
 //#e8b05c
 //2b2b2b
 export default function App() {
@@ -69,6 +70,7 @@ export default function App() {
           <Stack.Screen name="AllRidersScreen" component={AllRidersScreen} />
           {/* Booking Details */}
           <Stack.Screen name="BookingDetailsRider" component={BookingDetailsRider} />
+          <Stack.Screen name="BookingDetailsButcher" component={BookingDetailsButcher} />
         </Stack.Navigator>
       </NavigationContainer>
     </CartProvider>

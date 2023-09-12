@@ -20,10 +20,10 @@ export default function AllRidersScreen({ navigation }) {
         <NavHeader title={'RIDERS'} navigation={navigation} />
         <ScrollView className='flex-grow px-4'>
           <View className='flex flex-row justify-between flex-wrap'>
-            <ServiceProviderCard navigation={navigation} />
-            <ServiceProviderCard navigation={navigation} />
-            <ServiceProviderCard navigation={navigation} />
-            <ServiceProviderCard navigation={navigation} />
+            <ServiceProviderCard navigation={navigation} serviceProvider={'Rider'} />
+            <ServiceProviderCard navigation={navigation} serviceProvider={'Rider'} />
+            <ServiceProviderCard navigation={navigation} serviceProvider={'Rider'} />
+            <ServiceProviderCard navigation={navigation} serviceProvider={'Rider'} />
           </View>
 
 

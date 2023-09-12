@@ -2,7 +2,7 @@ import { View, Text, Image, Pressable } from 'react-native'
 import React from 'react'
 import { fontWeight400, fontWeight500 } from '../../assets/Styles/FontWeights'
 
-const ServiceProviderCard = ({ navigation }) => {
+const ServiceProviderCard = ({ navigation, serviceProvider }) => {
     return (
         <View className='bg-white rounded-md w-[49%] p-2 flex flex-col mb-2.5'>
             <Image
@@ -17,7 +17,7 @@ const ServiceProviderCard = ({ navigation }) => {
                 <Text style={fontWeight400}>Rating: </Text>
                 <Text style={fontWeight500} >4.5</Text>
             </View>
-            <Pressable onPress={()=> navigation.navigate('BookingDetailsRider')} className='my-5 py-3 rounded bg-[#e8b05c]'>
+            <Pressable onPress={()=> navigation.navigate(serviceProvider === 'Rider'? 'BookingDetailsRider' : 'BookingDetailsButcher')} className='my-5 py-3 rounded bg-[#e8b05c]'>
                 <Text className='text-white text-center' style={fontWeight400}>Request Service</Text>
             </Pressable>
         </View>

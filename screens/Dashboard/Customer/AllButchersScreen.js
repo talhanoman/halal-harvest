@@ -19,10 +19,10 @@ export default function AllButchersScreen({ navigation }) {
                 <NavHeader title={'BUTCHERS'} navigation={navigation} />
                 <ScrollView className='flex-grow px-4'>
                     <View className='flex flex-row justify-between flex-wrap'>
-                        <ServiceProviderCard  navigation={navigation}/>
-                        <ServiceProviderCard  navigation={navigation}/>
-                        <ServiceProviderCard  navigation={navigation}/>
-                        <ServiceProviderCard  navigation={navigation}/>
+                        <ServiceProviderCard  navigation={navigation} serviceProvider={'Butcher'} />
+                        <ServiceProviderCard  navigation={navigation} serviceProvider={'Butcher'}/>
+                        <ServiceProviderCard  navigation={navigation} serviceProvider={'Butcher'}/>
+                        <ServiceProviderCard  navigation={navigation} serviceProvider={'Butcher'}/>
                     </View>
 
 
