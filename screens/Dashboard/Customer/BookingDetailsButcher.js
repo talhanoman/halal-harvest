@@ -8,6 +8,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { fontWeight400, fontWeight500, fontWeight600 } from '../../../assets/Styles/FontWeights'
 // Expo Location
 import * as Location from 'expo-location';
+const goatRate = 4000
+const cowRate = 8000;
+const camelRate = 12000
 export default function BookingDetailsButcher({ navigation }) {
 
 
@@ -224,6 +227,35 @@ export default function BookingDetailsButcher({ navigation }) {
                            "
               />
             </View>
+          </View>
+          {/* Divider */}
+          <View className='h-[1px] bg-gray-300 w-full my-5' />
+
+          {/* <Text style={fontWeight600} className='text-lg'>Charges: </Text> */}
+          <View className='flex flex-row justify-between'>
+            <View className='w-[34%]'><Text style={fontWeight500} className='text-center'>Animal Type </Text></View>
+            <View className='w-[29%]'><Text style={fontWeight500} className='text-center'>Qty </Text></View>
+            <View className='w-[34%]'><Text style={fontWeight500} className='text-center'>Qurbani Rate </Text></View>
+          </View>
+          <View className='flex flex-row justify-between'>
+            <View className='w-[34%]'><Text style={fontWeight500} className='text-xs text-center'>Goat </Text></View>
+            <View className='w-[29%]'><Text style={fontWeight500} className='text-xs text-center'>{goats} </Text></View>
+            <View className='w-[34%]'><Text style={fontWeight500} className='text-xs text-center'>Rs. 3000 </Text></View>
+          </View>
+          <View className='flex flex-row justify-between'>
+            <View className='w-[34%]'><Text style={fontWeight500} className='text-xs text-center'>Cow </Text></View>
+            <View className='w-[29%]'><Text style={fontWeight500} className='text-xs text-center'>{cows} </Text></View>
+            <View className='w-[34%]'><Text style={fontWeight500} className='text-xs text-center'>Rs. 7000 </Text></View>
+          </View>
+          <View className='flex flex-row justify-between'>
+            <View className='w-[34%]'><Text style={fontWeight500} className='text-xs text-center'>Camel </Text></View>
+            <View className='w-[29%]'><Text style={fontWeight500} className='text-xs text-center'>{camels} </Text></View>
+            <View className='w-[34%]'><Text style={fontWeight500} className='text-xs text-center'>Rs. 14000 </Text></View>
+          </View>
+          <View  className="border border-3 border-dashed my-2"/>
+          <View className='flex flex-row justify-between'>
+          <Text style={fontWeight600} className='text-lg'>Total: </Text>
+          <Text style={fontWeight600} className='text-lg'>Rs. {(goatRate * goats) + (cowRate * cows) + (camelRate * camels)} </Text>
           </View>
           <Pressable className='my-5 py-3 rounded bg-[#e8b05c]'>
             <Text className='text-white text-center' style={fontWeight400}>Request Service</Text>
