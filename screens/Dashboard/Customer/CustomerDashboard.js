@@ -52,7 +52,7 @@ export default function CustomerDashboard({ navigation }) {
             </View>
             <Text style={fontWeight600} className='text-lg ml-2.5'>Book a Slaughter house</Text>
           </Pressable>
-          <Pressable style={shadow} className='w-full bg-white rounded-md p-2 flex flex-row items-center mb-3'>
+          <Pressable onPress={()=> navigation.navigate('AllBookingsCustomer')} style={shadow} className='w-full bg-white rounded-md p-2 flex flex-row items-center mb-3'>
             <View className='w-24'>
               <Image
                 source={require('../../../assets/bookings.png')}

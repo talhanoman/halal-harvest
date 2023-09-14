@@ -6,21 +6,18 @@ import NavFooter from '../../../components/Customer/NavFooter'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { fontWeight400, fontWeight500, fontWeight600 } from '../../../assets/Styles/FontWeights'
-// Expo Location
-import * as Location from 'expo-location';
 const goatRate = 4000
 const cowRate = 8000;
 const camelRate = 12000
 export default function BookingDetailsSlaughterHouse({ navigation }) {
 
-
+    const [isBooked, setIsBooked] = useState(false)
     const [date, setDate] = useState(new Date(1598051730000));
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
     const [goats, setGoats] = useState(0)
     const [cows, setCows] = useState(0)
-    const [camels, setCamels] = useState(0)
-    const [currentLocation, setCurrentLocation] = useState("")
+    const [camels, setCamels] = useState(0)    
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate;
         setShow(false);
@@ -40,43 +37,25 @@ export default function BookingDetailsSlaughterHouse({ navigation }) {
         showMode('time');
     };
 
-    const cleanNullFromString = (inputString) => {
-        // Use a regular expression to remove 'null' (case-insensitive)
-        const cleanedString = inputString.replace(/null,/gi, '');
-
-        return cleanedString;
+    const handleTotal = ()=>{
+        return (goatRate * goats) + (cowRate * cows) + (camelRate * camels)
     }
-    const handleLocation = async () => {
-        let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== 'granted') {
-            setErrorMsg('Permission to access location was denied');
-            return;
+    const handleRequestService = () => {
+        if(date !== "" && handleTotal() !== 0)
+        {            
+            setIsBooked(true);
+            setTimeout(() => {
+            navigation.navigate('AllBookingsCustomer')
+            }, 2000);
         }
-
-        let location = await Location.getCurrentPositionAsync({});
-        // Extract latitude and longitude from the location object
-        const { latitude, longitude } = location.coords;
-        // Use reverse geocoding to get city name
-        const geocode = await Location.reverseGeocodeAsync({
-            latitude,
-            longitude,
-        });
-        // Extract city name from the geocode result
-        if (geocode.length > 0) {
-            let address = geocode[0];
-            let address2 = `${address?.street}, ${address.streetNumber},${address.district},  ${address.city}, ${address.country}`
-            setCurrentLocation(cleanNullFromString(address2));
-        }
-        console.clear()
-        console.log('Location', location)
     }
     return (
         <SafeAreaView>
             <View className='flex flex-col h-screen'>
                 {/* Nav Header */}
-                <NavHeader title={'BUTCHERS'} navigation={navigation} />
+                <NavHeader title={'SLAUGHTER HOUSES'} navigation={navigation} />
                 <ScrollView className='flex-grow p-4'>
-                    <Text style={fontWeight600} className='text-xl mb-2'>Talha Noman</Text>
+                    <Text style={fontWeight600} className='text-xl mb-2'>Anhaar Slaughter House</Text>
                     <View className='flex flex-row items-center mb-5'>
                         <Text style={fontWeight500} className='text-lg'>4.5</Text>
                         <Icon name="star" size={20} color="#e8b05c" />
@@ -230,11 +209,19 @@ export default function BookingDetailsSlaughterHouse({ navigation }) {
                     <View className="border border-3 border-dashed my-2" />
                     <View className='flex flex-row justify-between'>
                         <Text style={fontWeight600} className='text-lg'>Total: </Text>
-                        <Text style={fontWeight600} className='text-lg'>Rs. {(goatRate * goats) + (cowRate * cows) + (camelRate * camels)} </Text>
+                        <Text style={fontWeight600} className='text-lg'>Rs. {handleTotal()} </Text>
                     </View>
-                    <Pressable className='my-5 py-3 rounded bg-[#e8b05c]'>
-                        <Text className='text-white text-center' style={fontWeight400}>Request Service</Text>
-                    </Pressable>
+                    {
+                        isBooked === true ?
+                            <Pressable  className='my-5 py-3 rounded bg-white border-[#00b22d] border'>
+                                <Text className='text-[#00b22d] text-center' style={fontWeight500}>Requested</Text>
+                            </Pressable>
+                            :
+                            <Pressable onPress={handleRequestService} className='my-5 py-3 rounded bg-[#e8b05c]'>
+                                <Text className='text-white text-center' style={fontWeight400}>Request Service</Text>
+                            </Pressable>
+                    }
+
                     {show && (
                         <DateTimePicker
                             testID="dateTimePicker"

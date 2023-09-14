@@ -6,10 +6,6 @@ import NavFooter from '../../../components/Customer/NavFooter'
 import ServiceProviderCard from '../../../components/Customer/ServiceProviderCard'
 
 
-
-
-
-
 export default function AllSlaughterHousesScreen({ navigation }) {
 
     return (

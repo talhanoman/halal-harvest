@@ -4,7 +4,7 @@ import { fontWeight400, fontWeight500 } from '../../assets/Styles/FontWeights'
 
 const ServiceProviderCard = ({ navigation, serviceProvider }) => {
     return (
-        <View className='bg-white rounded-md w-[49%] p-2 flex flex-col mb-2.5'>
+        <View className='bg-white rounded-md w-[49%] p-2 flex flex-col mb-2.5'>            
             <Image
                 source={require('../../assets/sample-avatar.png')}
                 className='w-12 h-12 rounded-full mx-auto mb-3'
