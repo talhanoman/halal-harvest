@@ -10,14 +10,14 @@ const goatRate = 4000
 const cowRate = 8000;
 const camelRate = 12000
 export default function BookingDetailsSlaughterHouse({ navigation }) {
-
+    const [error, setError] = useState("")
     const [isBooked, setIsBooked] = useState(false)
     const [date, setDate] = useState(new Date(1598051730000));
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
     const [goats, setGoats] = useState(0)
     const [cows, setCows] = useState(0)
-    const [camels, setCamels] = useState(0)    
+    const [camels, setCamels] = useState(0)
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate;
         setShow(false);
@@ -37,16 +37,18 @@ export default function BookingDetailsSlaughterHouse({ navigation }) {
         showMode('time');
     };
 
-    const handleTotal = ()=>{
+    const handleTotal = () => {
         return (goatRate * goats) + (cowRate * cows) + (camelRate * camels)
     }
     const handleRequestService = () => {
-        if(date !== "" && handleTotal() !== 0)
-        {            
+        setError("")
+        if (date !== "" && handleTotal() !== 0) {
             setIsBooked(true);
             setTimeout(() => {
-            navigation.navigate('AllBookingsCustomer')
+                navigation.navigate('AllBookingsCustomer')
             }, 2000);
+        }else {
+            setError("Please fill all details!")
         }
     }
     return (
@@ -211,9 +213,10 @@ export default function BookingDetailsSlaughterHouse({ navigation }) {
                         <Text style={fontWeight600} className='text-lg'>Total: </Text>
                         <Text style={fontWeight600} className='text-lg'>Rs. {handleTotal()} </Text>
                     </View>
+                    <Text style={fontWeight500} className='text-xs text-red-500'>{error}</Text>
                     {
                         isBooked === true ?
-                            <Pressable  className='my-5 py-3 rounded bg-white border-[#00b22d] border'>
+                            <Pressable className='my-5 py-3 rounded bg-white border-[#00b22d] border'>
                                 <Text className='text-[#00b22d] text-center' style={fontWeight500}>Requested</Text>
                             </Pressable>
                             :

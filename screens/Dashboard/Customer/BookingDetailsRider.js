@@ -5,9 +5,11 @@ import NavHeader from '../../../components/Customer/NavHeader'
 import NavFooter from '../../../components/Customer/NavFooter'
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
-import { fontWeight400 } from '../../../assets/Styles/FontWeights'
+import { fontWeight400, fontWeight500 } from '../../../assets/Styles/FontWeights'
 
 export default function BookingDetailsRider({ navigation }) {
+  const [error, setError] = useState("");
+  const [isBooked, setIsBooked] = useState(false);
   const mapRef = useRef()
   const [currentLocation, setCurrentLocation] = useState({
     latitude: 0, // Default latitude
@@ -58,7 +60,16 @@ export default function BookingDetailsRider({ navigation }) {
     zoomToMarker()
   }
   const handleRequestService = () => {
+    setError("")
     // Implement your service request logic here
+    if (from !== "" && to !== "" && fare !== "") {
+      setIsBooked(true);
+      setTimeout(() => {
+        navigation.navigate('AllBookingsCustomer')
+      }, 2000);
+    }else {
+      setError("Please fill all details!")
+    }
   };
   return (
     <SafeAreaView>
@@ -103,11 +114,11 @@ export default function BookingDetailsRider({ navigation }) {
             /> */}
             <Pressable onPress={handleGetCurrentLocation} className='my-5 py-3 rounded bg-[#e8b05c]' >
               <Text className='text-white text-center' style={fontWeight400}>Use Current Location</Text>
-            </Pressable>            
+            </Pressable>
             <KeyboardAvoidingView>
               <Text>From:</Text>
               <TextInput
-              style={fontWeight400}
+                style={fontWeight400}
                 className="
                  form-control
                  block
@@ -128,7 +139,7 @@ export default function BookingDetailsRider({ navigation }) {
 
               <Text>To:</Text>
               <TextInput
-              style={fontWeight400}
+                style={fontWeight400}
                 className="
                  form-control
                  block
@@ -168,10 +179,18 @@ export default function BookingDetailsRider({ navigation }) {
                 onChangeText={(text) => setFare(text)}
               />
             </KeyboardAvoidingView>
-            <Pressable className='my-5 py-3 rounded bg-[#e8b05c]' >
-              <Text className='text-white text-center' style={fontWeight400}>Request Service</Text>
-            </Pressable>
-
+            <Text style={fontWeight500} className='text-xs text-red-500'>{error}</Text>
+            {
+              isBooked === true ?
+                <Pressable className='my-5 py-3 rounded bg-white border-[#00b22d] border'>
+                  <Text className='text-[#00b22d] text-center' style={fontWeight500}>Requested</Text>
+                </Pressable>
+                :
+                <Pressable onPress={handleRequestService} className='my-5 py-3 rounded bg-[#e8b05c]'>
+                  <Text className='text-white text-center' style={fontWeight400}>Request Service</Text>
+                </Pressable>
+            }
+            
           </View>
         </View>
         <NavFooter navigation={navigation} />

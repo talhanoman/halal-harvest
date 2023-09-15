@@ -12,8 +12,9 @@ const goatRate = 4000
 const cowRate = 8000;
 const camelRate = 12000
 export default function BookingDetailsButcher({ navigation }) {
-
-
+  
+  const [error, setError] = useState("")
+  const [isBooked, setIsBooked] = useState(false);
   const [date, setDate] = useState(new Date(1598051730000));
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
@@ -69,6 +70,20 @@ export default function BookingDetailsButcher({ navigation }) {
     }
     console.clear()
     console.log('Location', location)
+  }
+
+  const handleTotal = () => {
+    return (goatRate * goats) + (cowRate * cows) + (camelRate * camels)
+  }
+  const handleRequestService = () => {
+    if (date !== "" && handleTotal() !== 0) {
+      setIsBooked(true);
+      setTimeout(() => {
+        navigation.navigate('AllBookingsCustomer')
+      }, 2000);
+    } else {
+      setError("Please fill all details!")
+    }
   }
   return (
     <SafeAreaView>
@@ -252,14 +267,22 @@ export default function BookingDetailsButcher({ navigation }) {
             <View className='w-[29%]'><Text style={fontWeight500} className='text-xs text-center'>{camels} </Text></View>
             <View className='w-[34%]'><Text style={fontWeight500} className='text-xs text-center'>Rs. 14000 </Text></View>
           </View>
-          <View  className="border border-3 border-dashed my-2"/>
+          <View className="border border-3 border-dashed my-2" />
           <View className='flex flex-row justify-between'>
-          <Text style={fontWeight600} className='text-lg'>Total: </Text>
-          <Text style={fontWeight600} className='text-lg'>Rs. {(goatRate * goats) + (cowRate * cows) + (camelRate * camels)} </Text>
+            <Text style={fontWeight600} className='text-lg'>Total: </Text>
+            <Text style={fontWeight600} className='text-lg'>Rs. {handleTotal()} </Text>
           </View>
-          <Pressable className='my-5 py-3 rounded bg-[#e8b05c]'>
-            <Text className='text-white text-center' style={fontWeight400}>Request Service</Text>
-          </Pressable>
+          <Text style={fontWeight500} className='text-xs text-red-500'>{error}</Text>
+          {
+            isBooked === true ?
+              <Pressable className='my-5 py-3 rounded bg-white border-[#00b22d] border'>
+                <Text className='text-[#00b22d] text-center' style={fontWeight500}>Requested</Text>
+              </Pressable>
+              :
+              <Pressable onPress={handleRequestService} className='my-5 py-3 rounded bg-[#e8b05c]'>
+                <Text className='text-white text-center' style={fontWeight400}>Request Service</Text>
+              </Pressable>
+          }
           {show && (
             <DateTimePicker
               testID="dateTimePicker"
