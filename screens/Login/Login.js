@@ -53,7 +53,11 @@ const Login = ({ navigation }) => {
             user.usertype === 'Customer' ?
               navigation.navigate('CustomerDashboard')
               :
-              navigation.navigate('ServiceProviderDashboard')
+              user.usertype === 'Rider' ?
+                navigation.navigate('RiderDashboard') :
+                user.usertype === 'Butcher' ?
+                  navigation.navigate('ButcherDashboard') :
+                  navigation.navigate('SlaughterHouseDashboard');
 
         }, {
           onlyOnce: true

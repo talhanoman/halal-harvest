@@ -107,9 +107,10 @@ const ServiceProviderSignup = ({ navigation }) => {
         })
     }
     const items = [
-        { label: 'Slaughter House', value: 'Slaughter House' },
+        { label: 'Select...', value: '' },
         { label: 'Butcher', value: 'Butcher' },
         { label: 'Rider', value: 'Rider' },
+        { label: 'Slaughter House', value: 'SlaughterHouse' },
     ]
 
     return (
