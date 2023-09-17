@@ -6,6 +6,7 @@ import React, { useEffect } from 'react'
 import { fontWeight400, fontWeight700 } from '../../assets/Styles/FontWeights';
 import validator from 'validator';
 
+// Old File-> Not In use
 const Signup = ({ navigation }) => {
     const [email, setEmail] = React.useState(null);
     const [password, setPassword] = React.useState(null);
