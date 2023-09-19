@@ -65,12 +65,15 @@ const Login = ({ navigation }) => {
       })
       .catch((error) => {
         setIsLoading(false)
-        const errorCode = error.code;
-        const errorMessage = error.message;
+        const errorCode = error.code;        
         console.log(errorCode)
-        if (errorMessage === 'auth/network-request-failed') {
+        if (errorCode === 'auth/network-request-failed') {
           setError('Network Error')
-        } else {
+        }
+        else if (errorCode === 'auth/user-not-found') {
+          setError('User Not Found')
+        }
+        else {
           setError('Incorrect Credentials')
         }
       });

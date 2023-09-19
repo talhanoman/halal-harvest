@@ -33,6 +33,9 @@ import BookingDetailsButcher from './screens/Dashboard/Customer/BookingDetailsBu
 import BookingDetailsSlaughterHouse from './screens/Dashboard/Customer/BookingDetailsSlaughterHouse';
 import AllSlaughterHousesScreen from './screens/Dashboard/Customer/AllSlaughterHousesScreen';
 import AllBookingsCustomer from './screens/Dashboard/Customer/AllBookingsCustomer';
+import BookingRequestsRider from './screens/Dashboard/ServiceProvider/BookingRequestsRider';
+import ChatScreenServiceProvider from './screens/Dashboard/ServiceProvider/ChatScreenServiceProvider';
+import ServiceProviderProfile from './screens/Dashboard/ServiceProvider/ServiceProviderProfile';
 //#e8b05c
 //2b2b2b
 export default function App() {
@@ -77,6 +80,10 @@ export default function App() {
           <Stack.Screen name="BookingDetailsRider" component={BookingDetailsRider} />
           <Stack.Screen name="BookingDetailsButcher" component={BookingDetailsButcher} />
           <Stack.Screen name="BookingDetailsSlaughterHouse" component={BookingDetailsSlaughterHouse} />
+          {/* Service Provider Screens */}
+          <Stack.Screen name="BookingRequestsRider" component={BookingRequestsRider} />          
+          <Stack.Screen name="ChatScreenServiceProvider" component={ChatScreenServiceProvider} />
+          <Stack.Screen name="ServiceProviderProfile" component={ServiceProviderProfile} />                    
         </Stack.Navigator>
       </NavigationContainer>
     </CartProvider>

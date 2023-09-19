@@ -1,14 +1,18 @@
 import { View, ScrollView, Pressable, TextInput, Image, Text, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context'
-import React from 'react'
+import React, { useState } from 'react'
 import NavHeader from '../../../components/Customer/NavHeader'
 
-import NavFooter from '../../../components/ServiceProvider/NavFooter'
-import { fontWeight600 } from '../../../assets/Styles/FontWeights';
+import { fontWeight400, fontWeight600 } from '../../../assets/Styles/FontWeights';
+import NavFooterSP from '../../../components/ServiceProvider/NavFooterSP';
+import BookingRequestsRider from './BookingRequestsRider';
 
+
+const tabStyle = 'text-xs text-[#e8b05c] p-1 border border-[#e8b05c] rounded-md';
+const activeTabStyle = 'text-xs bg-[#e8b05c] text-[#FFFFFF] p-1 border border-[#e8b05c] rounded-md';
 export default function RidersDashboard({ navigation }) {
-
+  const [filter, setFilter] = useState('All');
   return (
     <SafeAreaView>
       <View className='flex flex-col h-screen'>
@@ -23,18 +27,25 @@ export default function RidersDashboard({ navigation }) {
               placeholderTextColor="#aaa"
             />
           </View>
-          <Pressable onPress={()=> navigation.navigate('AllButchersScreen')} style={shadow} className='w-full bg-white rounded-md p-2 flex flex-row items-center mb-3'>
-            <View className='w-24'>
-              <Image
-                source={require('../../../assets/butcher.png')}
-                className='w-20 h-20 bg-contain'
-              />
-            </View>
-            <Text style={fontWeight600} className='text-lg ml-2.5'>Bookings Request</Text>
-          </Pressable>              
+          <Text className='text-lg' style={fontWeight600}>Bookings: </Text>
+          <View className='flex flex-row justify-between bg-white p-2 my-4 rounded-md' style={shadow}>
+            <Pressable onPress={()=> setFilter('All')}>
+              <Text className={filter === 'All' ? activeTabStyle : tabStyle} style={fontWeight600}>All</Text>
+            </Pressable>
+            <Pressable onPress={()=> setFilter('Pending')}>
+              <Text className={filter === 'Pending' ? activeTabStyle : tabStyle} style={fontWeight600}>Pending</Text>
+            </Pressable>
+            <Pressable onPress={()=> setFilter('Served')}>
+              <Text className={filter === 'Served' ? activeTabStyle : tabStyle} style={fontWeight600}>Served</Text>
+            </Pressable>
+            <Pressable onPress={()=> setFilter('Rejected')}>
+              <Text className={filter === 'Rejected' ? activeTabStyle : tabStyle} style={fontWeight600}>Rejected</Text>
+            </Pressable>
+          </View>
+          <BookingRequestsRider />
         </ScrollView>
-        
-        <NavFooter navigation={navigation} />
+
+        <NavFooterSP navigation={navigation} />
       </View>
       {/* Footer */}
     </SafeAreaView>

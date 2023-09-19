@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import React from 'react'
 import NavHeader from '../../../components/Customer/NavHeader'
 
-import NavFooter from '../../../components/ServiceProvider/NavFooter'
+import NavFooter from '../../../components/ServiceProvider/NavFooterSP'
 import { fontWeight600 } from '../../../assets/Styles/FontWeights';
 
 export default function ButcherDashboard({ navigation }) {
