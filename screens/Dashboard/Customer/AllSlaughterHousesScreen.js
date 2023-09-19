@@ -12,7 +12,7 @@ export default function AllSlaughterHousesScreen({ navigation }) {
         <SafeAreaView>
             <View className='flex flex-col h-screen'>
                 {/* Nav Header */}
-                <NavHeader title={'SLAUGHTER HOUSES'} navigation={navigation} />
+                <NavHeader title={'Slaughter Houses'} navigation={navigation} />
                 <ScrollView className='flex-grow px-4'>
                     <View className='flex flex-row justify-between flex-wrap'>
                         <ServiceProviderCard  navigation={navigation} serviceProvider={'Slaugter House'} />

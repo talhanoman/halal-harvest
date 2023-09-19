@@ -85,7 +85,7 @@ export default function ChatScreenCustomer({ navigation }) {
         <SafeAreaView className='flex-1'>
             <View className='flex-1 '>
                 {/* Nav Header */}
-                <NavHeader title={'CHAT'} navigation={navigation} />
+                <NavHeader title={'Chat'} navigation={navigation} />
                
                     {/* GiftedChat */}
                     <GiftedChat

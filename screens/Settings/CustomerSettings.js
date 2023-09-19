@@ -20,7 +20,7 @@ export default function CustomerSettings({ navigation }) {
         <SafeAreaView>
             <View className='flex flex-col h-screen'>
                 {/* Nav Header */}
-                <NavHeader title={'CUSTOMER ACCOUNT'} />
+                <NavHeader title={'Customer Account'} />
                 <ScrollView className='flex-grow p-4'>
                     <Text style={fontWeight400} className="text-red-500 text-xs">{error}</Text>
                     <Pressable onPress={handleSignout} style={shadow} className='bg-red-500 px-4 py-2 rounded-md mt-auto flex flex-row items-center mb-4'>

@@ -1,8 +1,7 @@
-import { View, ScrollView, Text, KeyboardAvoidingView } from 'react-native'
+import { View, Text } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useState, useEffect, useCallback } from 'react'
-import NavHeader from '../../../components/Customer/NavHeader'
-import NavFooter from '../../../components/Customer/NavFooter'
+import NavHeader from '../../../components/Seller/NavHeader'
 import { GiftedChat, Bubble, Composer, Send } from 'react-native-gifted-chat'
 import NavFooterSP from '../../../components/ServiceProvider/NavFooterSP'
 
@@ -86,7 +85,7 @@ export default function ChatScreenServiceProvider({ navigation }) {
         <SafeAreaView className='flex-1'>
             <View className='flex-1 '>
                 {/* Nav Header */}
-                <NavHeader title={'CHAT'} navigation={navigation} />
+                <NavHeader title={'Chat'} navigation={navigation} />
 
                 {/* GiftedChat */}
                 <GiftedChat

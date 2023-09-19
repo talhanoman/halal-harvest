@@ -6,7 +6,8 @@ import { getAuth, signOut } from 'firebase/auth'
 import { fontWeight300, fontWeight400, fontWeight500 } from '../../../assets/Styles/FontWeights'
 import NavFooterSP from '../../../components/ServiceProvider/NavFooterSP'
 
-export default function ServiceProviderProfile({ navigation }) {
+export default function ServiceProviderProfile({ navigation, route }) {
+    const { serviceType } = route.params;
     const [error, setError] = useState('')
     const handleSignout = () => {
         const auth = getAuth()
@@ -21,7 +22,7 @@ export default function ServiceProviderProfile({ navigation }) {
         <SafeAreaView>
             <View className='flex flex-col h-screen'>
                 {/* Nav Header */}
-                <NavHeader title={'RIDERS PROFILE'} />
+                <NavHeader title={`${serviceType} Profile`} />
                 <ScrollView className='flex-grow p-4'>
                     <Text style={fontWeight400} className="text-red-500 text-xs">{error}</Text>
                     <View className='p-2 rounded-md bg-white my-2 flex flex-col' style={shadow}>
@@ -31,7 +32,7 @@ export default function ServiceProviderProfile({ navigation }) {
                         />
                         <Text className='text-base text-center' style={fontWeight500}>Talha Noman</Text>
                         <Text className='text-sm text-center' style={fontWeight300}>saad10@gmail.com</Text>
-                        <Text className='text-base text-center' style={fontWeight300}>Rider</Text>
+                        <Text className='text-base text-center' style={fontWeight300}>{serviceType}</Text>
                         <View className='bg-gray-200 h-[1px] w-full my-3' />
                         <View className='flex flex-col gap-y-2'>
                             {/* Row */}

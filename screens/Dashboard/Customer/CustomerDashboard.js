@@ -13,7 +13,7 @@ export default function CustomerDashboard({ navigation }) {
     <SafeAreaView>
       <View className='flex flex-col h-screen'>
         {/* Nav Header */}
-        <NavHeader title={'CUSTOMER DASHBOARD'} navigation={navigation} />
+        <NavHeader title={'Customer Dashboard'} navigation={navigation} />
         <ScrollView className='flex-grow px-4'>
           <View className={`flex flex-row items-center border border-gray-300 rounded-md px-4 bg-white my-5`}>
             <Icon name="search" size={20} color="#aaa" className={`mr-4`} />

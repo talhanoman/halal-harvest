@@ -55,7 +55,7 @@ export default function BookingDetailsSlaughterHouse({ navigation }) {
         <SafeAreaView>
             <View className='flex flex-col h-screen'>
                 {/* Nav Header */}
-                <NavHeader title={'SLAUGHTER HOUSES'} navigation={navigation} />
+                <NavHeader title={'Slaughter Houses'} navigation={navigation} />
                 <ScrollView className='flex-grow p-4'>
                     <Text style={fontWeight600} className='text-xl mb-2'>Anhaar Slaughter House</Text>
                     <View className='flex flex-row items-center mb-5'>

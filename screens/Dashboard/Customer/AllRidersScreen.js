@@ -17,7 +17,7 @@ export default function AllRidersScreen({ navigation }) {
     <SafeAreaView>
       <View className='flex flex-col h-screen'>
         {/* Nav Header */}
-        <NavHeader title={'RIDERS'} navigation={navigation} />
+        <NavHeader title={'Riders'} navigation={navigation} />
         <ScrollView className='flex-grow px-4'>
           <View className='flex flex-row justify-between flex-wrap'>
             <ServiceProviderCard navigation={navigation} serviceProvider={'Rider'} />

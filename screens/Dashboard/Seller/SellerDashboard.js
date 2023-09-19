@@ -216,7 +216,7 @@ export default function SellerDashboard({ navigation }) {
           userDetails.details_found ?
             <ScrollView className='flex-grow px-4'>
               <>
-                <NavHeader title={'SELLER DASHBOARD'} />
+                <NavHeader title={'Seller Dashboard'} />
                 <View className='mt-5'>
                   <Text className='text-[10px] inter text-[#2b2b2b]' style={fontWeight400}>{dateToday}</Text>
                   <Text className='text-2xl inter text-[#e8b05c]' style={fontWeight600}>Greetings, {userDetails.fullname}</Text>

@@ -79,7 +79,7 @@ export default function PostAnimal({ navigation }) {
         <SafeAreaView>
             <View className='flex flex-col h-screen'>
                 {/* Nav Header */}
-                <NavHeader title={'POST ANIMAL'} />
+                <NavHeader title={'Post Animal'} />
                 <ScrollView className='flex-grow px-4'>
                     <View className='mt-5'>
                         <Text style={fontWeight400} className="text-gray-800 mb-2">Animal Type</Text>

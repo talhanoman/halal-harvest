@@ -89,7 +89,7 @@ export default function BookingDetailsButcher({ navigation }) {
     <SafeAreaView>
       <View className='flex flex-col h-screen'>
         {/* Nav Header */}
-        <NavHeader title={'BUTCHERS'} navigation={navigation} />
+        <NavHeader title={'Butchers'} navigation={navigation} />
         <ScrollView className='flex-grow p-4'>
           <Text style={fontWeight600} className='text-xl mb-2'>Talha Noman</Text>
           <View className='flex flex-row items-center mb-5'>

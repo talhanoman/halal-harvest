@@ -1,19 +1,23 @@
 import { View, ScrollView, Pressable, TextInput, Image, Text, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context'
-import React from 'react'
+import React, { useState } from 'react'
 import NavHeader from '../../../components/Customer/NavHeader'
 
-import NavFooter from '../../../components/ServiceProvider/NavFooterSP'
 import { fontWeight600 } from '../../../assets/Styles/FontWeights';
+import NavFooterSP from '../../../components/ServiceProvider/NavFooterSP';
+import BookingCardRequest from '../../../components/ServiceProvider/BookingCardRequest';
 
-export default function ButcherDashboard({ navigation }) {
 
+const tabStyle = 'text-xs text-[#e8b05c] p-1 border border-[#e8b05c] rounded-md';
+const activeTabStyle = 'text-xs bg-[#e8b05c] text-[#FFFFFF] p-1 border border-[#e8b05c] rounded-md';
+export default function RidersDashboard({ navigation }) {
+  const [filter, setFilter] = useState('All');
   return (
     <SafeAreaView>
       <View className='flex flex-col h-screen'>
         {/* Nav Header */}
-        <NavHeader title={'BUTCHER DASHBOARD'} navigation={navigation} />
+        <NavHeader title={'Butchers Dashboard'} navigation={navigation} />
         <ScrollView className='flex-grow px-4'>
           <View className={`flex flex-row items-center border border-gray-300 rounded-md px-4 bg-white my-5`}>
             <Icon name="search" size={20} color="#aaa" className={`mr-4`} />
@@ -23,18 +27,27 @@ export default function ButcherDashboard({ navigation }) {
               placeholderTextColor="#aaa"
             />
           </View>
-
-          <Pressable onPress={()=> navigation.navigate('AllButchersScreen')} style={shadow} className='w-full bg-white rounded-md p-2 flex flex-row items-center mb-3'>
-            <View className='w-24'>
-              <Image
-                source={require('../../../assets/butcher.png')}
-                className='w-20 h-20 bg-contain'
-              />
-            </View>
-            <Text style={fontWeight600} className='text-lg ml-2.5'>Bookings Request</Text>
-          </Pressable>              
+          <Text className='text-lg' style={fontWeight600}>Bookings: </Text>
+          <View className='flex flex-row justify-between bg-white p-2 my-4 rounded-md' style={shadow}>
+            <Pressable onPress={() => setFilter('All')}>
+              <Text className={filter === 'All' ? activeTabStyle : tabStyle} style={fontWeight600}>All</Text>
+            </Pressable>
+            <Pressable onPress={() => setFilter('Pending')}>
+              <Text className={filter === 'Pending' ? activeTabStyle : tabStyle} style={fontWeight600}>Pending</Text>
+            </Pressable>
+            <Pressable onPress={() => setFilter('Served')}>
+              <Text className={filter === 'Served' ? activeTabStyle : tabStyle} style={fontWeight600}>Served</Text>
+            </Pressable>
+            <Pressable onPress={() => setFilter('Rejected')}>
+              <Text className={filter === 'Rejected' ? activeTabStyle : tabStyle} style={fontWeight600}>Rejected</Text>
+            </Pressable>
+          </View>
+          <BookingCardRequest status={'Approved'} />
+          <BookingCardRequest status={'Pending'} />
+          <BookingCardRequest status={'Served'} />
         </ScrollView>
-        <NavFooter navigation={navigation} />
+
+        <NavFooterSP navigation={navigation} serviceType='Butcher' />
       </View>
       {/* Footer */}
     </SafeAreaView>

@@ -14,7 +14,7 @@ export default function AllBookingsCustomer({ navigation }) {
     <SafeAreaView>
       <View className='flex flex-col h-screen'>
         {/* Nav Header */}
-        <NavHeader title={'ALL BOOKINGS'} navigation={navigation} />
+        <NavHeader title={'All Bookings'} navigation={navigation} />
         <ScrollView className='flex-grow px-4'>
           <View className={`flex flex-row items-center border border-gray-300 rounded-md px-4 bg-white my-5`}>
             <Icon name="search" size={20} color="#aaa" className={`mr-4`} />

@@ -75,7 +75,7 @@ export default function BookingDetailsRider({ navigation }) {
     <SafeAreaView>
       <View className='flex flex-col h-screen'>
         {/* Nav Header */}
-        <NavHeader title={'RIDER BOOKING DETAILS'} navigation={navigation} />
+        <NavHeader title={'Rider Booking Details'} navigation={navigation} />
         <View style={{ flex: 1 }}>
           <MapView
             ref={mapRef}
