@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, StyleSheet, Pressable, TextInput } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, Pressable, TextInput, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useState } from 'react'
 import NavFooter from '../../components/Seller/NavFooter'
@@ -8,11 +8,36 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import PickerForm from '../../components/PickerForm'
 import { getDatabase, ref, set } from 'firebase/database'
+
 // Authentication
 import { getAuth } from "firebase/auth";
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid'
+// Image Picker
+import * as ImagePicker from 'expo-image-picker';
+// Storage
+import { getStorage, uploadBytes, getDownloadURL, ref as refStorage } from 'firebase/storage';
+
 export default function PostAnimal({ navigation }) {
+    // Image Picker Code
+    const [image, setImage] = useState(null);
+
+    const pickImage = async () => {
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.canceled) {
+            setImage(result.assets[0].uri);
+        }
+    };
+    // ----------------------------------
     const auth = getAuth()
     // Getting LoggedIn / Current User
     const user = auth.currentUser
@@ -26,50 +51,78 @@ export default function PostAnimal({ navigation }) {
     const [description, setDescription] = useState('')
     const [price, setPrice] = useState('')
     const [weight, setWeight] = useState('')
+    const [downloadUrl, setDownloadUrl] = useState(null)
     // Error / Success
     const [error, setError] = useState(null)
     const [success, setSuccess] = useState(null)
-    function saveAnimalData() {
+
+    // Save Animal
+    async function saveAnimalData(imageURI) {
         setLoading(true)
         setError('')
+        console.log('Image URI', imageURI)
+        // 1. Upload the image to Firebase Storage      
+        // https://console.firebase.google.com/u/0/project/halal-harvest/database/halal-harvest-default-rtdb/data/~2FAnimals~2F711f64de-f8fc-4691-94c0-be406fb56262
         const db = getDatabase();
+        const animalNewId = uuidv4();
+        const storage = getStorage();
+        const storageRef = refStorage(storage, 'Images/' + animalNewId);
+        const metadata = {
+            contentType: 'image/jpeg',
+        };
 
-        if (selectedColor !== '' && selectedAge !== '' && price !== '' && weight !== '') {
-            const animalNewId = uuidv4()
-            const sellerUid = user.uid;
-            set(ref(db, 'Animals/' + animalNewId), {
-                seller_id: sellerUid,
-                age: selectedAge,
-                category: category,
-                color: selectedColor,
-                description: description,
-                price: price,
-                type: animalType,
-                weight: weight,
-            }).then(() => {
-                setSuccess('Animal Added Successfully');
-                setTimeout(() => {
-                    setSuccess('')
-                }, 1000);
+        try {
+            
+            // 'file' comes from the Blob or File API
+            uploadBytes(storageRef, imageURI, metadata).then((snapshot) => {
+                getDownloadURL(snapshot.ref).then((url) => {
+                    
+                    setDownloadUrl(url)
+                });
+                console.log('Download URL', downloadUrl)
+            });
+            if (selectedColor !== '' && selectedAge !== '' && price !== '' && weight !== '') {
+                const animalData = {
+                    seller_id: user.uid,
+                    age: selectedAge,
+                    category: category,
+                    color: selectedColor,
+                    description: description,
+                    price: price,
+                    type: animalType,
+                    weight: weight,
+                    animalImage: downloadUrl, 
+                };
 
+                set(ref(db, 'Animals/' + animalNewId), animalData).then(() => {
+                    setSuccess('Animal Added Successfully');
+                    setTimeout(() => {
+                        setSuccess('')
+                    }, 1000);
+
+                    setLoading(false)
+                    console.log('Animal Added Successfully with Id: ', animalNewId)
+                    // Fields Empty After Adding Animal
+                    setSelectedColor('')
+                    setSelectedAge('')
+                    setDescription('')
+                    setPrice('')
+                    setWeight('')
+                    setImage(null)
+                    setDownloadUrl(null)
+                }).catch((err) => {
+                    console.log('Something Went Wrong While Posting Animal!', err);
+                })
+            }
+            else {
+                setError('Please Fill all Details!')
                 setLoading(false)
-                console.log('Animal Added Successfully with Id: ', animalNewId)
-                // Fields Empty After Adding Animal
-                setSelectedColor('')
-                setSelectedAge('')
-                setDescription('')
-                setPrice('')
-                setWeight('')
-            })
-            .catch((err)=>{
-                console.log('Something Went Wrong While Posting Animal!', err);
-            })
+            }
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            setLoading(false);
+            setError('Failed to upload image.');
         }
-        else {
-            setError('Please Fill all Details!')         
-            setLoading(false)
-        }
-
     }
     return (
         <SafeAreaView>
@@ -179,10 +232,30 @@ export default function PostAnimal({ navigation }) {
                             "
                             /> */}
                         </View>
+
+
+                        <Pressable onPress={pickImage} className={image ? 'border border-green-500 rounded-md active:scale-105 p-2 bg-[#FFFFFF]' : 'border border-[#e8b05c] rounded-md active:scale-105 p-2 bg-[#FFFFFF]'}
+
+                        >
+                            <Text style={fontWeight500} className={image ? "text-green-500 text-center text-base" : "text-[#e8b05c] text-center text-base"}>
+                                {
+                                    image ? 'Image Uploaded' :
+                                        'Upload Image'
+                                }
+                            </Text>
+                        </Pressable>
+                        {image && <Image className='rounded-md my-2' source={{ uri: image }} style={{ width: 100, height: 100 }} />}
                     </View>
                     <Text style={fontWeight400} className="text-red-500 text-xs">{error}</Text>
                     <Text style={fontWeight400} className="text-green-500 text-xs">{success}</Text>
-                    <Pressable onPress={saveAnimalData} style={shadow} className='bg-[#e8b05c] px-4 py-2 rounded-md ml-auto flex flex-row items-center mb-4'>
+                    <Pressable onPress={
+                        () => {
+                            saveAnimalData(image).
+                                then(() => console.log("Success")).catch((err) => {
+                                    console.log("Error", err)
+                                })
+                        }
+                    } style={shadow} className='bg-[#e8b05c] px-4 py-2 rounded-md ml-auto flex flex-row items-center mb-4'>
                         <Text style={fontWeight500} className="text-white text-center text-base">{
                             loading ?
                                 '...'
