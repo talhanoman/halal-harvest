@@ -49,6 +49,13 @@
         {
           "locationAlwaysAndWhenInUsePermission": "Allow Halal Harvest to use your location."
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/adaptive-icon.png",
+          "color" : "#e8b05c"
+        }
       ]
     ],
     "jsEngine": "hermes"

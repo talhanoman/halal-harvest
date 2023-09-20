@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import { View, Text, FlatList, Button, Image, Pressable, ScrollView } from 'react-native';
@@ -8,8 +8,48 @@ import { fontWeight400, fontWeight500, fontWeight600 } from '../../assets/Styles
 import { Ionicons } from '@expo/vector-icons';
 import NavHeader from '../Seller/NavHeader';
 import { getDatabase, ref, set } from 'firebase/database'
-const CartScreen = ({ navigation }) => {
+
+// Notification
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
+    }),
+});
+
+
+export default CartScreen = ({ navigation }) => {
+
     const db = getDatabase();
+    // Notifications
+    const [expoPushToken, setExpoPushToken] = useState('');
+    const [notification, setNotification] = useState(false);
+    const notificationListener = useRef();
+    const responseListener = useRef();
+
+    const [totalBill, setTotalBill] = useState(0);
+
+    useEffect(() => {
+        registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+
+        notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+            setNotification(notification);
+        });
+
+        responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+            console.log(response);
+        });
+
+        return () => {
+            Notifications.removeNotificationSubscription(notificationListener.current);
+            Notifications.removeNotificationSubscription(responseListener.current);
+        };
+    }, []);
+    // -------------
 
     const { cartItems, removeFromCart, emptyCart } = useCart();
     const handlePurchase = () => {
@@ -24,14 +64,31 @@ const CartScreen = ({ navigation }) => {
                 animal_id: JSON.stringify(animalIds),
                 order_id: newOrderId,
                 seller_id: sellerId,
-                status : "Pending"
-            }).then((res) => {
-                console.log('POST', res)
+                status: "Pending"
+            }).then(() => {
+                console.log('Success')
+                schedulePushNotification()
                 emptyCart()
+            }).catch((err) => {
+                console.log(err)
             })
         }
 
     }
+    
+const handleTotal = ()=>{
+    let total = 0;
+    cartItems.map((animal)=>{
+        total += parseInt(animal.price);
+    })
+    setTotalBill(total)
+}
+
+useEffect(() => {
+  handleTotal()
+}, [cartItems])
+
+console.log(cartItems)
     return (
         <SafeAreaView>
             <View className='flex flex-col h-screen'>
@@ -84,6 +141,10 @@ const CartScreen = ({ navigation }) => {
                             )}
                             keyExtractor={(item) => item.id.toString()}
                         />
+                        <View className='flex flex-row justify-between border-t-2 border-dashed  my-4 py-2'>
+                            <Text style={fontWeight600} className='text-lg'>Total: </Text>
+                            <Text style={fontWeight600} className='text-lg'>Rs. {totalBill} </Text>
+                        </View>
                     </View>
                     {
                         cartItems.length > 0 &&
@@ -104,4 +165,46 @@ const CartScreen = ({ navigation }) => {
     );
 };
 
-export default CartScreen;
+
+async function schedulePushNotification() {
+    await Notifications.scheduleNotificationAsync({
+        content: {
+            title: "Order Placed!",
+            body: 'Thank You for using Halal Harvest!',
+            data: { data: 'goes here' },
+        },
+        trigger: { seconds: 1 },
+    });
+}
+
+async function registerForPushNotificationsAsync() {
+    let token;
+
+    if (Platform.OS === 'android') {
+        await Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
+        });
+    }
+
+    if (Device.isDevice) {
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+            const { status } = await Notifications.requestPermissionsAsync();
+            finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+            alert('Failed to get push token for push notification!');
+            return;
+        }
+        token = (await Notifications.getExpoPushTokenAsync({ projectId: '8d217db7-8ff9-4515-9eba-fcb75b9c31e9' })).data;
+        console.log(token);
+    } else {
+        alert('Must use physical device for Push Notifications');
+    }
+
+    return token;
+}
