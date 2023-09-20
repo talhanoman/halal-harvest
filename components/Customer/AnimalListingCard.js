@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useCart } from '../../Context/CartContext';
 
 
-const AnimalListingCard = ({ id, price, age, color, type, category, weight, navigation }) => {
+const AnimalListingCard = ({ id, price, age, color, type, category, weight, seller_id , navigation }) => {
     const { addToCart } = useCart()
     return (
         <Pressable style={shadow} className='w-[48%] bg-white my-2 rounded-t-2xl p-1'>
@@ -53,7 +53,7 @@ const AnimalListingCard = ({ id, price, age, color, type, category, weight, navi
                 </View>
 
 
-                <Pressable onPress={() => addToCart({ id, price, age, color, type, category, weight })} className='w-full rounded-2xl bg-[#e8b05c] mt-4 p-2 active:bg-[#dba656]'>
+                <Pressable onPress={() => addToCart({ id, price, age, color, type, category, weight, seller_id })} className='w-full rounded-2xl bg-[#e8b05c] mt-4 p-2 active:bg-[#dba656]'>
                     <Text style={fontWeight500} className='text-white text-center'>Add To Cart</Text>
                 </Pressable>
 

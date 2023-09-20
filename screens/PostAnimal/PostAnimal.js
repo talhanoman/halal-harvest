@@ -10,6 +10,7 @@ import PickerForm from '../../components/PickerForm'
 import { getDatabase, ref, set } from 'firebase/database'
 // Authentication
 import { getAuth } from "firebase/auth";
+import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid'
 export default function PostAnimal({ navigation }) {
     const auth = getAuth()
@@ -65,12 +66,7 @@ export default function PostAnimal({ navigation }) {
             })
         }
         else {
-            setError('Please Fill all Details!')
-            // console.log('Age :', selectedAge)
-            // console.log('Category :', category)
-            // console.log('Color :', selectedColor)
-            // console.log('Price :', price)
-            // console.log('Weight', weight)            
+            setError('Please Fill all Details!')         
             setLoading(false)
         }
 

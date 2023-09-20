@@ -16,7 +16,8 @@ export default function SellerListingDetails({ navigation }) {
     const sellerId = route.params?.sellerId;
     const name = route.params?.name;
     const [animalData, setAnimalData] = useState([]);
-
+    
+    const [filteredAnimals, setFilteredAnimals] = useState([]);
     const fetchAnimalListings = async (sellerId) => {
         const db = getDatabase();
         // Create a query to fetch animals with a specific seller_id
@@ -24,7 +25,7 @@ export default function SellerListingDetails({ navigation }) {
         try {
             const snapshot = await get(animalQuery);
             if (snapshot.exists()) {
-                const data = snapshot.val();                
+                const data = snapshot.val();
                 // Map data to an array
                 const animalArray = Object.keys(data).map((key) => ({
                     id: key,
@@ -42,11 +43,52 @@ export default function SellerListingDetails({ navigation }) {
         }
     };
 
+    const fetchSellerOrders = async (sellerId) => {
+        const db = getDatabase();
+        // Create a query to fetch animals with a specific seller_id
+        const orderQuery = query(ref(db, 'Orders'), orderByChild('seller_id'), equalTo(sellerId)); // Use 'seller_id' or the correct property name        
+        try {
+            const snapshot = await get(orderQuery);
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                // Map data to an array
+                const orderArray = Object.keys(data).map((key) => ({
+                    id: key,
+                    ...data[key],
+                }));
+                return orderArray;
+            } else {
+                // Return an empty array or handle the case where there are no animals
+                return [];
+            }
+        } catch (error) {
+            // Handle any errors here
+            console.error(error);
+            return [];
+        }
+    };
+
     useEffect(() => {
-        fetchAnimalListings(sellerId).then((data) => {           
+        fetchAnimalListings(sellerId).then((data) => {
             setAnimalData(data)
         }).catch((err) => console.error(err))
+
+
+
+        fetchSellerOrders(sellerId).then((data) => {
+            let tempAnimals = [];            
+            data.map((order) => {
+                let parsedAnimals = JSON.parse(order?.animal_id)
+                parsedAnimals.map((animalId) => { tempAnimals.push(animalId) })
+            })         
+            setFilteredAnimals(tempAnimals);
+        }).catch((err) => console.log(err))
     }, []);
+
+    const handleFilter = ({id}) => {        
+        const idExists = filteredAnimals.some(animalId => animalId === id);                
+        return !idExists;        
+    }
     return (
         <SafeAreaView>
             <View className='flex flex-col h-screen'>
@@ -63,9 +105,9 @@ export default function SellerListingDetails({ navigation }) {
                     </View>
                     <View className="flex flex-row justify-between flex-wrap mt-4">
                         {
-                            animalData?.map(({ id, price, age, color, type, category, weight }) => {
+                            animalData?.filter(handleFilter).map(({ id, price, age, color, type, category, weight, seller_id }) => {                              
                                 return (
-                                    <AnimalListingCard key={id} id={id} price={price} age={age} color={color} type={type} category={category} weight={weight} navigation={navigation} />
+                                    <AnimalListingCard key={id} id={id} price={price} age={age} color={color} type={type} category={category} weight={weight} seller_id={seller_id} navigation={navigation} />
                                 )
                             })
                         }
