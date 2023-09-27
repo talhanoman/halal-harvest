@@ -52,9 +52,9 @@ export default function SellerAds({ navigation }) {
                         {
                             animals.filter(({ seller_id }) => {
                                 return (user.uid === seller_id)
-                            }).map(({ id, age, category, color, price, weight, type }) => {
+                            }).map(({ id, age, category, color, price, weight, type, animalImage }) => {
                                 return (
-                                    <SellerCard key={id} age={age} category={category} color={color} price={price} weight={weight} type={type} />
+                                    <SellerCard key={id} age={age} category={category} color={color} price={price} weight={weight} type={type} animalImage={animalImage} />
                                 )
                             })
                         }                    

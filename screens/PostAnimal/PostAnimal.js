@@ -56,74 +56,79 @@ export default function PostAnimal({ navigation }) {
     const [error, setError] = useState(null)
     const [success, setSuccess] = useState(null)
 
-    // Save Animal
-    async function saveAnimalData(imageURI) {
-        setLoading(true)
-        setError('')
-        console.log('Image URI', imageURI)
-        // 1. Upload the image to Firebase Storage      
-        // https://console.firebase.google.com/u/0/project/halal-harvest/database/halal-harvest-default-rtdb/data/~2FAnimals~2F711f64de-f8fc-4691-94c0-be406fb56262
-        const db = getDatabase();
-        const animalNewId = uuidv4();
-        const storage = getStorage();
-        const storageRef = refStorage(storage, 'Images/' + animalNewId);
-        const metadata = {
-            contentType: 'image/jpeg',
-        };
+// Function to upload an image to Firebase Storage
+async function uploadImageToStorage(image, animalNewId) {
+    const storage = getStorage();    
+    const storageRef = refStorage(storage, 'Images/' + animalNewId);
+    const metadata = {
+        contentType: 'image/jpeg',
+    };
 
-        try {
-            
-            // 'file' comes from the Blob or File API
-            uploadBytes(storageRef, imageURI, metadata).then((snapshot) => {
-                getDownloadURL(snapshot.ref).then((url) => {
-                    
-                    setDownloadUrl(url)
-                });
-                console.log('Download URL', downloadUrl)
-            });
-            if (selectedColor !== '' && selectedAge !== '' && price !== '' && weight !== '') {
-                const animalData = {
-                    seller_id: user.uid,
-                    age: selectedAge,
-                    category: category,
-                    color: selectedColor,
-                    description: description,
-                    price: price,
-                    type: animalType,
-                    weight: weight,
-                    animalImage: downloadUrl, 
-                };
-
-                set(ref(db, 'Animals/' + animalNewId), animalData).then(() => {
-                    setSuccess('Animal Added Successfully');
-                    setTimeout(() => {
-                        setSuccess('')
-                    }, 1000);
-
-                    setLoading(false)
-                    console.log('Animal Added Successfully with Id: ', animalNewId)
-                    // Fields Empty After Adding Animal
-                    setSelectedColor('')
-                    setSelectedAge('')
-                    setDescription('')
-                    setPrice('')
-                    setWeight('')
-                    setImage(null)
-                    setDownloadUrl(null)
-                }).catch((err) => {
-                    console.log('Something Went Wrong While Posting Animal!', err);
-                })
-            }
-            else {
-                setError('Please Fill all Details!')
-                setLoading(false)
-            }
-        } catch (error) {
-            console.error('Error uploading image:', error);
-            setLoading(false);
-            setError('Failed to upload image.');
-        }
+    try {
+        const response = await fetch(image);
+        const blobImage = await response.blob();
+        const snapshot = await uploadBytes(storageRef, blobImage, metadata);
+        const downloadUrl = await getDownloadURL(snapshot.ref);
+        return downloadUrl;
+    } catch (error) {
+        console.error('Error uploading image:', error);
+        throw new Error('Failed to upload image.');
     }
+}
+
+// Function to save animal data to Firebase Database
+async function saveAnimalData() {
+    setLoading(true);
+    setError('');
+
+    try {
+        if (selectedColor && selectedAge && price && weight) {
+            const animalNewId = uuidv4();
+            const downloadUrl = await uploadImageToStorage(image, animalNewId);
+
+            const animalData = {
+                seller_id: user.uid,
+                age: selectedAge,
+                category: category,
+                color: selectedColor,
+                description: description,
+                price: price,
+                type: animalType,
+                weight: weight,
+                animalImage: downloadUrl,
+            };
+
+            const db = getDatabase();
+            const animalRef = ref(db, 'Animals/' + animalNewId);
+            
+            await set(animalRef, animalData);
+
+            setSuccess('Animal Added Successfully');
+            setTimeout(() => {
+                setSuccess('');
+            }, 1000);
+
+            setLoading(false);
+
+            // Clear form fields
+            setSelectedColor('');
+            setSelectedAge('');
+            setDescription('');
+            setPrice('');
+            setWeight('');
+            setImage(null);
+            setDownloadUrl(null);
+        } else {
+            setError('Please Fill all Details!');
+            setLoading(false);
+        }
+    } catch (error) {
+        console.log('Something Went Wrong:', error);
+        setLoading(false);
+        setError('An error occurred while saving the animal.');
+    }
+}
+
     return (
         <SafeAreaView>
             <View className='flex flex-col h-screen'>
@@ -209,28 +214,6 @@ export default function PostAnimal({ navigation }) {
                             mb-4
                             "
                             />
-                            {/* <Text style={fontWeight400} className="text-gray-800 ">Description</Text>
-                            <TextInput
-                                value={description}
-                                onChangeText={setDescription}
-                                style={fontWeight400}
-                                keyboardType="default"
-                                numberOfLines={4}
-                                multiline
-                                className="  
-                                 form-control
-                            block                            
-                            px-2                            
-                            text-base
-                            font-normal
-                            text-gray-700
-                            bg-white bg-clip-padding
-                            border border-solid border-gray-300
-                            rounded
-                            w-full
-                            mb-4
-                            "
-                            /> */}
                         </View>
 
 
@@ -250,7 +233,7 @@ export default function PostAnimal({ navigation }) {
                     <Text style={fontWeight400} className="text-green-500 text-xs">{success}</Text>
                     <Pressable onPress={
                         () => {
-                            saveAnimalData(image).
+                            saveAnimalData().
                                 then(() => console.log("Success")).catch((err) => {
                                     console.log("Error", err)
                                 })

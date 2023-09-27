@@ -2,26 +2,32 @@ import { View, Text, Image, StyleSheet } from 'react-native'
 import React from 'react'
 import { fontWeight400, fontWeight500, fontWeight600 } from '../../assets/Styles/FontWeights'
 // key={id} age={age} category={category} color={color} price={price} weight={weight} type={type}
-export default function SellerCard({ price, age, color, type, category, weight }) {
+export default function SellerCard({ price, age, color, type, category, weight, animalImage }) {
     return (
         <View style={shadow} className='bg-white rounded-2xl p-2 flex flex-col mb-2.5'>
             {
-                type === 'Goat' ?
+                animalImage ?
                     <Image
-                        source={require('../../assets/white-goat.jpeg')}
+                        source={{uri : animalImage}}
                         className='w-full rounded-t-2xl bg-contain h-52'
                     />
                     :
-                    type === 'Camel' ?
+                    type === 'Goat' ?
                         <Image
-                            source={require('../../assets/camel.jpg')}
+                            source={require('../../assets/white-goat.jpeg')}
                             className='w-full rounded-t-2xl bg-contain h-52'
                         />
                         :
-                        <Image
-                            source={require('../../assets/cow.jpg')}
-                            className='w-full rounded-t-2xl bg-contain h-52'
-                        />
+                        type === 'Camel' ?
+                            <Image
+                                source={require('../../assets/camel.jpg')}
+                                className='w-full rounded-t-2xl bg-contain h-52'
+                            />
+                            :
+                            <Image
+                                source={require('../../assets/cow.jpg')}
+                                className='w-full rounded-t-2xl bg-contain h-52'
+                            />
             }
 
             <View className='py-2.5'>
