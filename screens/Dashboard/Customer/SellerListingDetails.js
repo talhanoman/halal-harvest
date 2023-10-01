@@ -5,14 +5,13 @@ import React, { useState, useEffect } from 'react'
 import NavHeader from '../../../components/Customer/NavHeader'
 import NavFooter from '../../../components/Customer/NavFooter'
 import { getDatabase, get, ref, query, equalTo, orderByKey, orderByChild } from 'firebase/database'
-import { useRoute } from '@react-navigation/native';
 import AnimalListingCard from '../../../components/Customer/AnimalListingCard';
 import { fontWeight600 } from '../../../assets/Styles/FontWeights';
 
 
 
-export default function SellerListingDetails({ navigation }) {
-    const route = useRoute()
+export default function SellerListingDetails({ navigation, route }) {
+    
     const sellerId = route.params?.sellerId;
     const name = route.params?.name;
     const [animalData, setAnimalData] = useState([]);
@@ -107,7 +106,7 @@ export default function SellerListingDetails({ navigation }) {
                         {
                             animalData?.filter(handleFilter).map(({ id, price, age, color, type, category, weight, seller_id }) => {                              
                                 return (
-                                    <AnimalListingCard key={id} id={id} price={price} age={age} color={color} type={type} category={category} weight={weight} seller_id={seller_id} navigation={navigation} />
+                                    <AnimalListingCard key={id} id={id} price={price} age={age} color={color} type={type} category={category} weight={weight} seller_id={sellerId} navigation={navigation} />
                                 )
                             })
                         }

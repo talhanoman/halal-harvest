@@ -44,10 +44,36 @@ export default function SellerDashboard({ navigation }) {
   const [animals, setAnimals] = useState([])
   const [totalListings, setTotalListings] = useState(0)
   const [sharedListings, setSharedListings] = useState(0)
+  const [totalSales, setTotalSales] = useState(0)
+  const [allOrders, setAllOrders] = useState([]);
 
   const fetchSellerListings = async () => {
     try {
       const db = getDatabase()
+      fetchAllOrders()
+      const snapshotOrders = await get(ref(db, '/Orders'))
+      if (snapshotOrders.exists()) {
+        const data = snapshotOrders.val();
+
+        const ordersArray = Object.keys(data).map((key) => ({
+          id: key,
+          ...data[key]
+        }))
+
+        const ordersFiltered = ordersArray.filter(({ seller_id }) => {
+          return seller_id === userId;
+        })
+        console.clear()
+        console.log('Orders Filtered', ordersArray)
+        console.log('User id', userDetails.user_id)
+        setAllOrders(ordersFiltered);
+        let ordersArrayLength = ordersFiltered?.length;
+        setTotalSales(ordersArrayLength)
+      }
+
+
+
+
       const snapshot = await get(ref(db, '/Animals'));
       if (snapshot.exists()) {
         const data = snapshot.val()
@@ -56,11 +82,15 @@ export default function SellerDashboard({ navigation }) {
           id: key,
           ...data[key]
         }))
+        console.log('Seller ID Animals', userId)
         const filteredArray = dataArray.filter(({ seller_id }) => {
           return seller_id === userId
         })
         // console.log(dataArray)
         setAnimals(filteredArray)
+        console.log(filteredArray.length)
+        console.log(filteredArray.length)
+        setTotalListings(filteredArray.length)
         console.log(filteredArray.length)
         setTotalListings(filteredArray.length)
 
@@ -77,6 +107,27 @@ export default function SellerDashboard({ navigation }) {
     }
   };
 
+
+  const fetchAllOrders = async () => {
+    const snapshotOrders = await get(ref(db, '/Orders'))
+    if (snapshotOrders.exists()) {
+      const data = snapshotOrders.val();
+
+      const ordersArray = Object.keys(data).map((key) => ({
+        id: key,
+        ...data[key]
+      }))
+
+      const ordersFiltered = ordersArray.filter(({ seller_id }) => {
+        return seller_id === userId;
+      })
+      console.clear()
+      console.log('Orders Filtered', ordersArray)
+      console.log('User id', userDetails.user_id)      
+      let ordersArrayLength = ordersFiltered?.length;
+      setTotalSales(ordersArrayLength)
+    }
+  }
 
   // Seller Details
   const [storeName, setStoreName] = useState('')
@@ -119,7 +170,7 @@ export default function SellerDashboard({ navigation }) {
       let temp = user;
       let lastname = user.fullname.split(' ')
       temp.fullname = lastname[0];
-      setUserDetails(temp)      
+      setUserDetails(temp)
       if (!userDetails.details_found) {
         handleLocation()
       }
@@ -162,8 +213,8 @@ export default function SellerDashboard({ navigation }) {
       }).then(() => {
         setSuccess('Store Added Successfully');
         update(ref(db, 'Users/' + userDetails.user_id), {
-          details_found : true
-        }).then(()=>{
+          details_found: true
+        }).then(() => {
           setDetailsFound(true)
         })
         setTimeout(() => {
@@ -179,31 +230,6 @@ export default function SellerDashboard({ navigation }) {
           console.log('Something Went Wrong While Posting Seller!', err);
         })
     }
-
-    // city
-    // :
-    // ""
-    // cnic
-    // :
-    // ""
-    // country
-    // :
-    // ""
-    // dob
-    // :
-    // ""
-    // gender
-    // :
-    // ""
-    // name
-    // :
-    // ""
-    // phone
-    // :
-    // ""
-    // userId
-    // :
-    // ""
 
   }
 
@@ -252,12 +278,12 @@ export default function SellerDashboard({ navigation }) {
                         <Text style={fontWeight700} className='text-2xl text-[#e8b05c]'>{sharedListings}</Text>
                       </View>
                     </View>
-                    <View className='mt-5 flex flex-row justify-between'>
+                    <Pressable onPress={()=> {navigation.navigate('TotalSales')}} className='mt-5 flex flex-row justify-between'>
                       <View style={shadow} className='w-full rounded-md bg-white p-5'>
                         <Text style={fontWeight500} className='text-sm mb-1'>Total Sales</Text>
-                        <Text style={fontWeight700} className='text-2xl text-[#e8b05c]'>0</Text>
+                        <Text style={fontWeight700} className='text-2xl text-[#e8b05c]'>{totalSales}</Text>
                       </View>
-                    </View>
+                    </Pressable>
                   </View>
                 </View>
               </>

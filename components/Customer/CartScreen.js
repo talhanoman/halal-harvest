@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
-import { View, Text, FlatList, Button, Image, Pressable, ScrollView } from 'react-native';
+import { View, Text, FlatList, Button, Image, Pressable, ScrollView, TextInput } from 'react-native';
 import { useCart } from '../../Context/CartContext'; // Import the useCart hook
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { fontWeight400, fontWeight500, fontWeight600 } from '../../assets/Styles/FontWeights';
 import { Ionicons } from '@expo/vector-icons';
 import NavHeader from '../Seller/NavHeader';
 import { getDatabase, ref, set } from 'firebase/database'
+import { getAuth } from 'firebase/auth';
 
 // Notification
 import * as Device from 'expo-device';
@@ -23,7 +24,8 @@ Notifications.setNotificationHandler({
 
 
 export default CartScreen = ({ navigation }) => {
-
+    const auth = getAuth();
+    const userId = auth.currentUser.uid
     const db = getDatabase();
     // Notifications
     const [expoPushToken, setExpoPushToken] = useState('');
@@ -31,6 +33,7 @@ export default CartScreen = ({ navigation }) => {
     const notificationListener = useRef();
     const responseListener = useRef();
 
+    const [address, setAddress] = useState('');
     const [totalBill, setTotalBill] = useState(0);
 
     useEffect(() => {
@@ -61,34 +64,38 @@ export default CartScreen = ({ navigation }) => {
             console.log(JSON.stringify(animalIds))
             // Create a reference for each item in the database and add it's ID to an array of order items
             set(ref(db, 'Orders/' + newOrderId), {
+                user_id: userId,
                 animal_id: JSON.stringify(animalIds),
                 order_id: newOrderId,
                 seller_id: sellerId,
-                status: "Pending"
+                status: "Bought",
+                address: address,
+                total: totalBill,
             }).then(() => {
                 console.log('Success')
                 schedulePushNotification()
                 emptyCart()
+                setAddress('')
             }).catch((err) => {
                 console.log(err)
             })
         }
 
     }
-    
-const handleTotal = ()=>{
-    let total = 0;
-    cartItems.map((animal)=>{
-        total += parseInt(animal.price);
-    })
-    setTotalBill(total)
-}
 
-useEffect(() => {
-  handleTotal()
-}, [cartItems])
+    const handleTotal = () => {
+        let total = 0;
+        cartItems.map((animal) => {
+            total += parseInt(animal.price);
+        })
+        setTotalBill(total)
+    }
 
-console.log(cartItems)
+    useEffect(() => {
+        handleTotal()
+    }, [cartItems])
+
+    console.log(cartItems)
     return (
         <SafeAreaView>
             <View className='flex flex-col h-screen'>
@@ -146,9 +153,31 @@ console.log(cartItems)
                             <Text style={fontWeight600} className='text-lg'>Rs. {totalBill} </Text>
                         </View>
                     </View>
+
+                    {/* Phone Input */}
+                    <Text style={fontWeight400} className="text-gray-800 ">Address</Text>
+                    <TextInput
+                        style={fontWeight400}
+                        keyboardType="email"
+                        value={address}
+                        onChangeText={setAddress}
+
+                        className="     form-control
+                            block
+                            py-1.5
+                            px-2
+                            text-base
+                            font-normal
+                            text-gray-700
+                            bg-white bg-clip-padding
+                            border border-solid border-gray-300
+                            rounded
+                            w-full
+                            mb-5"
+                    />
                     {
-                        cartItems.length > 0 &&
-                        <Pressable className='my-5 py-3 rounded bg-[#e8b05c]' onPress={handlePurchase}>
+                        cartItems.length > 0 && address.length > 0 &&
+                        <Pressable className='my-5 py-3 rounded bg-[#e8b05c] disabled:opacity-50 disabled:bg-gray-200' onPress={handlePurchase}>
                             <Text className='text-white text-center' style={fontWeight400}>Buy Now</Text>
                         </Pressable>
                     }

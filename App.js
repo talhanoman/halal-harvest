@@ -35,6 +35,7 @@ import AllSlaughterHousesScreen from './screens/Dashboard/Customer/AllSlaughterH
 import AllBookingsCustomer from './screens/Dashboard/Customer/AllBookingsCustomer';
 import ChatScreenServiceProvider from './screens/Dashboard/ServiceProvider/ChatScreenServiceProvider';
 import ServiceProviderProfile from './screens/Dashboard/ServiceProvider/ServiceProviderProfile';
+import TotalSales from './screens/Dashboard/Seller/TotalSales';
 //#e8b05c
 //2b2b2b
 export default function App() {
@@ -63,6 +64,8 @@ export default function App() {
           <Stack.Screen name="CustomerSettings" component={CustomerSettings} />
           {/* Seller Ads */}
           <Stack.Screen name="SellerAds" component={SellerAds} />
+          <Stack.Screen name="TotalSales" component={TotalSales} />
+          
           {/* Cart */}
           <Stack.Screen name="CartDetails" component={CartScreen} />
           <Stack.Screen name="SellerView" component={SellerView} />
