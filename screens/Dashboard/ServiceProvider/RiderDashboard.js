@@ -26,7 +26,15 @@ export default function RidersDashboard({ navigation }) {
               placeholderTextColor="#aaa"
             />
           </View>
-          <Text className='text-lg' style={fontWeight600}>Bookings: </Text>
+          <View className='flex flex-row justify-between'>
+            <Text className='text-lg' style={fontWeight600}>Bookings: </Text>
+            <Pressable className='my-5 py-3 rounded bg-[#e8b05c]'>
+              <Icon name="add-circle-outline" size={20} color="#ffffff" className={`mr-4`} />
+              <Text className='text-white text-center' style={fontWeight400}>
+                New Service
+              </Text>
+            </Pressable>
+          </View>
           <View className='flex flex-row justify-between bg-white p-2 my-4 rounded-md' style={shadow}>
             <Pressable onPress={() => setFilter('All')}>
               <Text className={filter === 'All' ? activeTabStyle : tabStyle} style={fontWeight600}>All</Text>

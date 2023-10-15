@@ -8,11 +8,17 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { fontWeight400, fontWeight500, fontWeight600 } from '../../../assets/Styles/FontWeights'
 // Expo Location
 import * as Location from 'expo-location';
-const goatRate = 4000
-const cowRate = 8000;
-const camelRate = 12000
-export default function BookingDetailsButcher({ navigation }) {
-  
+
+export default function BookingDetailsButcher({ navigation, route }) {
+  const user = route.params?.user;
+  const service = route.params?.service;
+
+  // Rate
+  const [goatRate, setGoatRate] = useState(service?.rate_goat);
+  const [cowRate, setCowRate] = useState(service?.rate_cow);
+  const [camelRate, setCamelRate] = useState(service?.rate_camel);
+
+
   const [error, setError] = useState("")
   const [isBooked, setIsBooked] = useState(false);
   const [date, setDate] = useState(new Date(1598051730000));
@@ -91,9 +97,9 @@ export default function BookingDetailsButcher({ navigation }) {
         {/* Nav Header */}
         <NavHeader title={'Butchers'} navigation={navigation} />
         <ScrollView className='flex-grow p-4'>
-          <Text style={fontWeight600} className='text-xl mb-2'>Talha Noman</Text>
+          <Text style={fontWeight600} className='text-xl mb-2'>{user?.fullname}</Text>
           <View className='flex flex-row items-center mb-5'>
-            <Text style={fontWeight500} className='text-lg'>4.5</Text>
+            <Text style={fontWeight500} className='text-lg'>{service?.rating === 0 ? 'Not Available' : service?.rating}</Text>
             <Icon name="star" size={20} color="#e8b05c" />
           </View>
           {/* Booking Date */}
@@ -255,17 +261,17 @@ export default function BookingDetailsButcher({ navigation }) {
           <View className='flex flex-row justify-between'>
             <View className='w-[34%]'><Text style={fontWeight500} className='text-xs text-center'>Goat </Text></View>
             <View className='w-[29%]'><Text style={fontWeight500} className='text-xs text-center'>{goats} </Text></View>
-            <View className='w-[34%]'><Text style={fontWeight500} className='text-xs text-center'>Rs. 3000 </Text></View>
+            <View className='w-[34%]'><Text style={fontWeight500} className='text-xs text-center'>Rs. {goatRate} </Text></View>
           </View>
           <View className='flex flex-row justify-between'>
             <View className='w-[34%]'><Text style={fontWeight500} className='text-xs text-center'>Cow </Text></View>
             <View className='w-[29%]'><Text style={fontWeight500} className='text-xs text-center'>{cows} </Text></View>
-            <View className='w-[34%]'><Text style={fontWeight500} className='text-xs text-center'>Rs. 7000 </Text></View>
+            <View className='w-[34%]'><Text style={fontWeight500} className='text-xs text-center'>Rs. {cowRate} </Text></View>
           </View>
           <View className='flex flex-row justify-between'>
             <View className='w-[34%]'><Text style={fontWeight500} className='text-xs text-center'>Camel </Text></View>
             <View className='w-[29%]'><Text style={fontWeight500} className='text-xs text-center'>{camels} </Text></View>
-            <View className='w-[34%]'><Text style={fontWeight500} className='text-xs text-center'>Rs. 14000 </Text></View>
+            <View className='w-[34%]'><Text style={fontWeight500} className='text-xs text-center'>Rs. {camelRate} </Text></View>
           </View>
           <View className="border border-3 border-dashed my-2" />
           <View className='flex flex-row justify-between'>
