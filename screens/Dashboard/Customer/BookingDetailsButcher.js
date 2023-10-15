@@ -8,8 +8,17 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { fontWeight400, fontWeight500, fontWeight600 } from '../../../assets/Styles/FontWeights'
 // Expo Location
 import * as Location from 'expo-location';
+// Firebase Imports
+import { v4 as uuidv4 } from 'uuid';
+import { getAuth } from 'firebase/auth';
+import { set, ref, getDatabase } from 'firebase/database';
 
 export default function BookingDetailsButcher({ navigation, route }) {
+
+  // Firebase Hooks
+  const db = getDatabase();
+  const auth = getAuth()
+  // Navigation Params
   const user = route.params?.user;
   const service = route.params?.service;
 
@@ -56,7 +65,7 @@ export default function BookingDetailsButcher({ navigation, route }) {
   const handleLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
-      setErrorMsg('Permission to access location was denied');
+      setError('Permission to access location was denied');
       return;
     }
 
@@ -81,12 +90,28 @@ export default function BookingDetailsButcher({ navigation, route }) {
   const handleTotal = () => {
     return (goatRate * goats) + (cowRate * cows) + (camelRate * camels)
   }
+
   const handleRequestService = () => {
+  
     if (date !== "" && handleTotal() !== 0) {
-      setIsBooked(true);
-      setTimeout(() => {
-        navigation.navigate('AllBookingsCustomer')
-      }, 2000);
+      set(ref(db, 'ServiceRequests/' + uuidv4()), {
+        user_id: auth.currentUser.uid,
+        service_provider_id: user.user_id,
+        date: date?.toLocaleDateString(),
+        time: date?.toLocaleTimeString(),
+        address: currentLocation,
+        number_of_goats: goats,
+        number_of_camels: camels,
+        number_of_cows: cows,
+        total: handleTotal()
+
+      }).then(() => {
+        console.log('Success Requesting Service');
+        setIsBooked(true)
+        setTimeout(() => {
+          navigation.navigate('AllBookingsCustomer')
+        }, 2000);
+      })
     } else {
       setError("Please fill all details!")
     }
@@ -285,7 +310,7 @@ export default function BookingDetailsButcher({ navigation, route }) {
                 <Text className='text-[#00b22d] text-center' style={fontWeight500}>Requested</Text>
               </Pressable>
               :
-              <Pressable onPress={handleRequestService} className='my-5 py-3 rounded bg-[#e8b05c]'>
+              <Pressable onPress={handleRequestService} className='my-5 py-3 rounded bg-[#e8b05c] active:scale-95'>
                 <Text className='text-white text-center' style={fontWeight400}>Request Service</Text>
               </Pressable>
           }
