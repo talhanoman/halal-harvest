@@ -1,7 +1,7 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native'
 import React from 'react'
 import { fontWeight400, fontWeight500 } from '../../assets/Styles/FontWeights'
-
+import { getDatabase, ref, update } from 'firebase/database'
 
 function Badge({ type }) {
     return (
@@ -32,26 +32,46 @@ function Badge({ type }) {
         </>
     )
 }
-export default function BookingCardRequest({ status }) {
+
+export default function BookingCardRequest({ status, service, user, id, fetchAllServices }) {
+    const db = getDatabase();    
+
+    const updateServiceRequestStatus = async (serviceRequestId, newStatus) => {
+        const serviceRequestRef = ref(db, `/ServiceRequests/${serviceRequestId}`);
+        try {
+            await update(serviceRequestRef, { status: newStatus });
+            console.log(`Service request status updated successfully to ${newStatus}`);
+            fetchAllServices();
+        } catch (error) {
+            console.error('Error updating service request status:', error.message);
+            
+        }
+    };
     return (
         <Pressable style={shadow} className='w-full bg-white rounded-md p-2 mb-3 flex flex-col gap-y-1'>
-            <Text style={fontWeight500} className='text-xs'>Booking Id: #8217361827</Text>
+            <Text style={fontWeight500} className='text-xs'>Booking Id: #{id.slice(0, 12)}</Text>
             {/* Row */}
-            <View className='flex flex-row justify-between items-center'>
-                <View className='w-[49%]'>
-                    <Text style={fontWeight400} className='text-xs '>Pickup Location:</Text>
+            {
+                service.service_type === 'Rider' &&
+                <View className='flex flex-row justify-between items-center'>
+                    <View className='w-[49%]'>
+                        <Text style={fontWeight400} className='text-xs '>Pickup Location:</Text>
+                    </View>
+
+                    <View className='w-[49%]'>
+                        <Text style={fontWeight500} className='text-sm  text-right'>Sargodha Road</Text>
+                    </View>
                 </View>
-                <View className='w-[49%]'>
-                    <Text style={fontWeight500} className='text-sm  text-right'>Sargodha Road</Text>
-                </View>
-            </View>
+            }
+
+
             {/* Row */}
             <View className='flex flex-row justify-between items-center'>
                 <View className='w-[49%]'>
                     <Text style={fontWeight400} className='text-xs '>Destination:</Text>
                 </View>
                 <View className='w-[49%]'>
-                    <Text style={fontWeight500} className='text-sm  text-right'>Canal Road</Text>
+                    <Text style={fontWeight500} className='text-sm  text-right'>{service?.address}</Text>
                 </View>
             </View>
             {/* Row */}
@@ -60,7 +80,7 @@ export default function BookingCardRequest({ status }) {
                     <Text style={fontWeight400} className='text-xs '>Customer Name:</Text>
                 </View>
                 <View className='w-[49%]'>
-                    <Text style={fontWeight500} className='text-sm  text-right'>Talha Noman</Text>
+                    <Text style={fontWeight500} className='text-sm  text-right'>{user?.fullname}</Text>
                 </View>
             </View>
             {/* Row */}
@@ -69,7 +89,7 @@ export default function BookingCardRequest({ status }) {
                     <Text style={fontWeight400} className='text-xs '>Date:</Text>
                 </View>
                 <View className='w-[49%]'>
-                    <Text style={fontWeight500} className='text-sm  text-right'>Wed 22, May</Text>
+                    <Text style={fontWeight500} className='text-sm  text-right'>{service?.date}</Text>
                 </View>
             </View>
             {/* Row */}
@@ -78,7 +98,7 @@ export default function BookingCardRequest({ status }) {
                     <Text style={fontWeight400} className='text-xs '>Charges:</Text>
                 </View>
                 <View className='w-[49%]'>
-                    <Text style={fontWeight500} className='text-sm  text-right'>Rs. 22000</Text>
+                    <Text style={fontWeight500} className='text-sm  text-right'>Rs. {service.total}</Text>
                 </View>
             </View>
             {/* Row */}
@@ -88,14 +108,14 @@ export default function BookingCardRequest({ status }) {
                 </View>
 
                 {
-                    status === 'Pending' ?
+                    service.status === 'Pending' ?
                         <View className='flex flex-row justify-between items-center gap-x-2'>
-                            <Pressable className='active:bg-gray-100'>
+                            <Pressable onPress={() => updateServiceRequestStatus(id, 'Rejected')} className='active:bg-gray-100'>
                                 <Text className='text-xs p-1 border border-red-500 rounded-md text-red-500' style={fontWeight500}>
                                     Reject
                                 </Text>
                             </Pressable>
-                            <Pressable className='active:bg-gray-100'>
+                            <Pressable onPress={() => updateServiceRequestStatus(id, 'Approved')} className='active:bg-gray-100'>
                                 <Text className='text-xs p-1 border border-green-500 rounded-md text-green-500' style={fontWeight500}>
                                     Accept
                                 </Text>

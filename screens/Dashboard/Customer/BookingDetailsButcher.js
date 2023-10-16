@@ -103,7 +103,9 @@ export default function BookingDetailsButcher({ navigation, route }) {
         number_of_goats: goats,
         number_of_camels: camels,
         number_of_cows: cows,
-        total: handleTotal()
+        total: handleTotal(),
+        status : 'Pending',
+        service_type : service.service_type
 
       }).then(() => {
         console.log('Success Requesting Service');

@@ -15,6 +15,7 @@ import { getAuth } from 'firebase/auth';
 const tabStyle = 'text-xs text-[#e8b05c] p-1 border border-[#e8b05c] rounded-md';
 const activeTabStyle = 'text-xs bg-[#e8b05c] text-[#FFFFFF] p-1 border border-[#e8b05c] rounded-md';
 export default function RidersDashboard({ navigation }) {
+  const [allServices, setAllServices] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [serviceExists, setServiceExists] = useState(false);
 
@@ -46,9 +47,54 @@ export default function RidersDashboard({ navigation }) {
       setServiceExists(null)
     }
   }
+  const fetchAllServices = async () => {
+    try {
+      const snapshot = await get(ref(db, '/ServiceRequests'));
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+
+        // Map data to array
+        const dataArray = await Promise.all(
+          Object.keys(data).map(async (key) => {
+            const service = data[key];
+            const userId = service.user_id;
+
+            // Fetch user data for the service
+            const userSnapshot = await get(ref(db, `/Users/${userId}`));
+
+            if (userSnapshot.exists()) {
+              const userData = userSnapshot.val();
+              return {
+                id: key,
+                service,
+                user: userData
+              };
+            } else {
+              // Handle the case where the user data doesn't exist
+              console.error(`User data not found for service with ID ${key}`);
+              return null;
+            }
+          })
+        );
+
+        // Filter out null entries (cases where user data was not found)
+        const filteredDataArray = dataArray.filter((entry) => entry !== null);
+
+        setAllServices(filteredDataArray);
+        console.clear();
+        console.log('Data Array', filteredDataArray);
+      } else {
+        console.log("No Data");
+        setAllServices(null);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
   const [toastDisplay, setToastDisplay] = useState(false)
   useEffect(() => {
     handleServiceExists();
+    fetchAllServices();
   }, [serviceExists])
 
   return (
@@ -69,12 +115,12 @@ export default function RidersDashboard({ navigation }) {
             <Text className='text-lg' style={fontWeight600}>Bookings: </Text>
             {
               !serviceExists &&
-                <Pressable onPress={handleModalOpen} className='my-5 p-3 rounded bg-[#e8b05c] flex flex-row'>
-                  <Icon name="add-circle-outline" size={20} color="#ffffff" className={`mr-4`} />
-                  <Text className='text-white text-center' style={fontWeight400}>
-                    New Service
-                  </Text>
-                </Pressable>                
+              <Pressable onPress={handleModalOpen} className='my-5 p-3 rounded bg-[#e8b05c] flex flex-row'>
+                <Icon name="add-circle-outline" size={20} color="#ffffff" className={`mr-4`} />
+                <Text className='text-white text-center' style={fontWeight400}>
+                  New Service
+                </Text>
+              </Pressable>
             }
 
           </View>
@@ -92,9 +138,16 @@ export default function RidersDashboard({ navigation }) {
               <Text className={filter === 'Rejected' ? activeTabStyle : tabStyle} style={fontWeight600}>Rejected</Text>
             </Pressable>
           </View>
-          <BookingCardRequest status={'Approved'} />
-          <BookingCardRequest status={'Pending'} />
-          <BookingCardRequest status={'Served'} />
+          {
+            allServices?.map(({service, user, id}) => {
+              return (
+                <BookingCardRequest key={id} status={service?.status} user={user} service={service} id={id} fetchAllServices={fetchAllServices} />
+              )
+            })
+          }
+          {/* <BookingCardRequest status={'Approved'} /> */}
+          {/* <BookingCardRequest status={'Pending'} /> */}
+          {/* <BookingCardRequest status={'Served'} /> */}
         </ScrollView>
 
         <NavFooterSP navigation={navigation} serviceType='Butcher' />
