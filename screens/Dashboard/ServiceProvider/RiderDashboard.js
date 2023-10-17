@@ -1,9 +1,9 @@
-import { View, ScrollView, Pressable, TextInput, Text, StyleSheet } from 'react-native'
+import { View, ScrollView, Pressable, TextInput, Text, StyleSheet, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useState, useEffect } from 'react'
 import NavHeader from '../../../components/Seller/NavHeader'
-import { fontWeight400, fontWeight600 } from '../../../assets/Styles/FontWeights';
+import { fontWeight400, fontWeight500, fontWeight600 } from '../../../assets/Styles/FontWeights';
 import NavFooterSP from '../../../components/ServiceProvider/NavFooterSP';
 import MyModalRider from '../../../components/ServiceProvider/MyModalRider';
 import Toast from '../../../components/Toast';
@@ -56,7 +56,7 @@ export default function RidersDashboard({ navigation }) {
               const userData = userSnapshot.val();
               return {
                 id: key,
-                service : serviceRequest,
+                service: serviceRequest,
                 user: userData,
               };
             } else {
@@ -68,9 +68,13 @@ export default function RidersDashboard({ navigation }) {
 
         // Filter out null entries (cases where user data was not found)
         const filteredDataArray = dataArray.filter((entry) => entry !== null);
-
-        setAllServices(filteredDataArray);        
-        console.log('Data Array', filteredDataArray);
+        const riderFilter = filteredDataArray.filter(({ user, service }) => {
+          if (service?.service_type === 'Rider' && service?.service_provider_id === auth.currentUser.uid) {
+            return true;
+          }
+        })
+        setAllServices(riderFilter);
+        console.log('Data Array', riderFilter);
       } else {
         console.log('No Data');
         setAllServices(null);
@@ -103,18 +107,6 @@ export default function RidersDashboard({ navigation }) {
               placeholderTextColor="#aaa"
             />
           </View>
-          <View className='flex flex-row justify-between items-center'>
-            <Text className='text-lg' style={fontWeight600}>Bookings: </Text>
-            {
-              !serviceExists &&
-              <Pressable onPress={handleModalOpen} className='my-5 p-3 rounded bg-[#e8b05c] flex flex-row'>
-                <Icon name="add-circle-outline" size={20} color="#ffffff" className={`mr-4`} />
-                <Text className='text-white text-center' style={fontWeight400}>
-                  New Service
-                </Text>
-              </Pressable>
-            }
-          </View>
           <View className='flex flex-row justify-between bg-white p-2 my-4 rounded-md' style={shadow}>
             <Pressable onPress={() => setFilter('All')}>
               <Text className={filter === 'All' ? activeTabStyle : tabStyle} style={fontWeight600}>All</Text>
@@ -129,12 +121,46 @@ export default function RidersDashboard({ navigation }) {
               <Text className={filter === 'Rejected' ? activeTabStyle : tabStyle} style={fontWeight600}>Rejected</Text>
             </Pressable>
           </View>
+          <View className='flex flex-row justify-between items-center'>
+            <Text className='text-lg' style={fontWeight600}>Bookings: </Text>
+            {
+              !serviceExists &&
+              <Pressable onPress={handleModalOpen} className='my-5 p-3 rounded bg-[#e8b05c] flex flex-row'>
+                <Icon name="add-circle-outline" size={20} color="#ffffff" className={`mr-4`} />
+                <Text className='text-white text-center' style={fontWeight400}>
+                  New Service
+                </Text>
+              </Pressable>
+            }
+          </View>
           {
-            allServices?.filter(({ service, user }) => {
-              if (service?.service_type === 'Rider' && service?.service_provider_id === auth.currentUser.uid) {
-                return true;
-              }
-            }).map((serviceUser) => {                           
+            serviceExists ?
+              allServices?.service?.length === 0 ?
+
+                <>
+                  <View className='p-4 flex flex-col items-center justify-center'>
+                    <Image
+                      source={require('../../../assets/WaitingIllustration-removebg-preview.png')}
+                      className='w-full bg-contain h-52 p-2 object-contain'
+                    />
+                    <Text style={fontWeight500} className='text-lg text-center'>Waiting for bookings.</Text>
+                  </View>
+                </>
+                :
+                <>
+                  {/* If service exists and there are currently no bookings. */}
+                </>
+              :
+              <View className='p-4 flex flex-col items-center justify-center'>
+                <Image
+                  source={require('../../../assets/get-started.webp')}
+                  className='w-full bg-contain p-2 object-contain h-[300px]'
+                />
+                <Text style={fontWeight500} className='text-lg text-center'>Please add a service to get started.</Text>
+              </View>
+          }
+          {
+            allServices?.map((serviceUser) => {
               return (
                 // <BookingCardRequest key={id} status={service?.status} user={user} service={service} id={id} fetchAllServices={fetchAllServices} />
                 <Text>1</Text>

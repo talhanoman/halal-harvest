@@ -78,7 +78,7 @@ export default function ServiceProviderProfile({ navigation, route }) {
                         <Text style={fontWeight500} className="text-white text-center text-base">Logout</Text>
                     </Pressable>
                 </ScrollView>
-                <NavFooterSP navigation={navigation} />
+                <NavFooterSP navigation={navigation} serviceType={serviceType} />
             </View >
         </SafeAreaView >
     )

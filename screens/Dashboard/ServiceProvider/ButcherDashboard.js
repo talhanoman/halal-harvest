@@ -1,10 +1,10 @@
-import { View, ScrollView, Pressable, TextInput, Text, StyleSheet } from 'react-native'
+import { View, ScrollView, Pressable, TextInput, Text, StyleSheet, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useState, useEffect } from 'react'
 import NavHeader from '../../../components/Customer/NavHeader'
 
-import { fontWeight600, fontWeight400 } from '../../../assets/Styles/FontWeights';
+import { fontWeight600, fontWeight400, fontWeight300, fontWeight500 } from '../../../assets/Styles/FontWeights';
 import NavFooterSP from '../../../components/ServiceProvider/NavFooterSP';
 import BookingCardRequest from '../../../components/ServiceProvider/BookingCardRequest';
 import MyModalButcher from '../../../components/ServiceProvider/MyModalButcher';
@@ -79,10 +79,14 @@ export default function ButcherDashboard({ navigation }) {
 
         // Filter out null entries (cases where user data was not found)
         const filteredDataArray = dataArray.filter((entry) => entry !== null);
-
-        setAllServices(filteredDataArray);
+        const butcherFilter = filteredDataArray.filter(({ user, service }) => {
+          if (service?.service_type === 'Butcher' && service?.service_provider_id === auth.currentUser.uid) {
+            return true;
+          }
+        })
+        setAllServices(butcherFilter);
         console.clear();
-        console.log('Data Array', filteredDataArray);
+        console.log('Data Array', butcherFilter);
       } else {
         console.log("No Data");
         setAllServices(null);
@@ -111,19 +115,6 @@ export default function ButcherDashboard({ navigation }) {
               placeholderTextColor="#aaa"
             />
           </View>
-          <View className='flex flex-row justify-between items-center'>
-            <Text className='text-lg' style={fontWeight600}>Bookings: </Text>
-            {
-              !serviceExists &&
-              <Pressable onPress={handleModalOpen} className='my-5 p-3 rounded bg-[#e8b05c] flex flex-row'>
-                <Icon name="add-circle-outline" size={20} color="#ffffff" className={`mr-4`} />
-                <Text className='text-white text-center' style={fontWeight400}>
-                  New Service
-                </Text>
-              </Pressable>
-            }
-
-          </View>
           <View className='flex flex-row justify-between bg-white p-2 my-4 rounded-md' style={shadow}>
             <Pressable onPress={() => setFilter('All')}>
               <Text className={filter === 'All' ? activeTabStyle : tabStyle} style={fontWeight600}>All</Text>
@@ -138,6 +129,46 @@ export default function ButcherDashboard({ navigation }) {
               <Text className={filter === 'Rejected' ? activeTabStyle : tabStyle} style={fontWeight600}>Rejected</Text>
             </Pressable>
           </View>
+          <View className='flex flex-row justify-between items-center'>
+            <Text className='text-lg' style={fontWeight600}>Bookings: </Text>
+            {
+              !serviceExists &&
+              <Pressable onPress={handleModalOpen} className='my-5 p-3 rounded bg-[#e8b05c] flex flex-row'>
+                <Icon name="add-circle-outline" size={20} color="#ffffff" className={`mr-4`} />
+                <Text className='text-white text-center' style={fontWeight400}>
+                  New Service
+                </Text>
+              </Pressable>
+            }
+
+          </View>
+          {
+            serviceExists?
+            allServices?.service?.length === 0?
+
+              <>
+                <View className='p-4 flex flex-col items-center justify-center'>
+                  <Image
+                    source={require('../../../assets/WaitingIllustration-removebg-preview.png')}
+                    className='w-full bg-contain h-52 p-2 object-contain'
+                  />
+                  <Text style={fontWeight500} className='text-lg text-center'>Waiting for bookings.</Text>
+                </View>
+              </>
+              :
+              <>
+              {/* If service exists and there are currently no bookings. */}
+              </>
+              :
+              <View className='p-4 flex flex-col items-center justify-center'>
+                <Image
+                  source={require('../../../assets/get-started.webp')}
+                  className='w-full bg-contain p-2 object-contain h-[300px]'
+                />
+                <Text style={fontWeight500} className='text-lg text-center'>Please add a service to get started.</Text>
+              </View>
+          }
+
           {
             allServices?.map(({ service, user, id }) => {
               return (

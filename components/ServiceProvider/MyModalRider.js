@@ -127,7 +127,7 @@ const MyModalRider = ({ modalVisible, setModalVisible, setToastDisplay, fetchAll
                         />
                         <Text style={fontWeight400} className="text-red-500 text-xs">{error}</Text>
                         <View className='flex flex-row justify-between mt-2.5 pt-3 border-t border-t-gray-200'>
-                            <Pressable className=' p-2 rounded border bg-[#ffffff] border-[#e8b05c] flex flex-row w-[49%] gap-x-1 active:scale-95'>
+                            <Pressable onPress={()=> setModalVisible(false)} className=' p-2 rounded border bg-[#ffffff] border-[#e8b05c] flex flex-row w-[49%] gap-x-1 active:scale-95'>
                                 <Icon name="close-outline" size={20} color="#e8b05c" />
                                 <Text className='text-[#e8b05c] text-center' style={fontWeight400}>
                                     Close

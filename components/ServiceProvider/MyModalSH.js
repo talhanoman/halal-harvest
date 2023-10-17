@@ -7,42 +7,48 @@ import { v4 as uuidv4 } from 'uuid';
 import { getAuth } from 'firebase/auth';
 import { set, ref, getDatabase } from 'firebase/database';
 
-const MyModalButcher = ({ modalVisible, setModalVisible, setToastDisplay }) => {
+const MyModalSH = ({ modalVisible, setModalVisible, setToastDisplay, fetchAllServices }) => {
 
     const auth = getAuth()
-    const [rateCamel, setRateCamel] = useState("");
-    const [rateCow, setRateCow] = useState("");
-    const [rategoat, setRateGoat] = useState("");
+    const [rateCamel, setRateCamel] = useState("")
+    const [rateCow, setRateCow] = useState("")
+    const [rategoat, setRateGoat] = useState("")
     const [description, setDescription] = useState("");
     const [contact, setContact] = useState("");
+    const [location, setLocation] = useState("");
+    const [slaughterHouseName, setSlaughterHouseName] = useState("");
     // Error
-    const [error, setError] = useState('');
+    const [error, setError] = useState('')
+
     const emptyFields = () => {
         setRateCamel('');
         setRateCow('');
         setRateGoat('');
         setDescription('');
         setContact('');
-        setError('')
+        setSlaughterHouseName();
     }
     const handleSave = () => {
         // Getting LoggedIn / Current User
         const user = auth.currentUser;
         const db = getDatabase();
-        if (rategoat.length > 0 || rateCow.length > 0 || rateCamel.length > 0) {
+        if (rategoat.length > 0 && rateCow.length > 0 && rateCamel.length > 0 && contact.length === 11 && slaughterHouseName.length > 0 && slaughterHouseName.length > 0) {
             set(ref(db, 'OfferedServices/' + user.uid), {
                 service_provider_id: user.uid,
-                service_type: 'Butcher',
+                service_type: 'SlaughterHouse',
                 rate_goat: rategoat,
                 rate_cow: rateCow,
                 rate_camel: rateCamel,
                 description: description,
                 total_bookings: 0,
                 rating: 0,
-                contact: contact
+                location: location,
+                contact: contact,
+                slaughterHouseName: slaughterHouseName
 
             }).then(() => {
                 console.log('Success Adding Service');
+                fetchAllServices()
                 emptyFields();
                 setModalVisible(false);
                 setTimeout(() => {
@@ -53,7 +59,7 @@ const MyModalButcher = ({ modalVisible, setModalVisible, setToastDisplay }) => {
                 }, 1000);
             })
         }else {
-            setError('Please Fill All the fields!')
+            setError('Please fill all the fields correctly.')
         }
     }
     return (
@@ -72,6 +78,25 @@ const MyModalButcher = ({ modalVisible, setModalVisible, setToastDisplay }) => {
                     <View style={styles.modalContent}>
                         <Text style={fontWeight600} className='text-center text-lg text-[#e8b05c] mb-2'>Add Service</Text>
                         <Text style={fontWeight500} className='text-xs text-red-500'>{error}</Text>
+                        <Text style={fontWeight400} className="text-gray-800 text-xs">Slaughter House Name</Text>
+                        <TextInput
+                            value={slaughterHouseName}
+                            onChangeText={setSlaughterHouseName}
+                            style={fontWeight400}                            
+                            className="     form-control
+                            block
+                            py-1.5
+                            px-2
+                            text-base
+                            font-normal
+                            text-gray-700
+                            bg-white bg-clip-padding
+                            border border-solid border-gray-300
+                            rounded
+                            w-full
+                            mb-2.5
+                           "
+                        />
                         <Text style={fontWeight400} className="text-gray-800 text-xs">Goat Charges (Rs)</Text>
                         <TextInput
                             value={rategoat}
@@ -137,7 +162,26 @@ const MyModalButcher = ({ modalVisible, setModalVisible, setToastDisplay }) => {
                             value={contact}
                             onChangeText={setContact}
                             style={fontWeight400}
-                            keyboardType="numeric"
+                            keyboardType='numeric'
+                            className="     form-control
+                            block
+                            py-1.5
+                            px-2
+                            text-base
+                            font-normal
+                            text-gray-700
+                            bg-white bg-clip-padding
+                            border border-solid border-gray-300
+                            rounded
+                            w-full
+                            mb-2.5
+                           "
+                        />
+                        <Text style={fontWeight400} className="text-gray-800 text-xs">Location</Text>
+                        <TextInput
+                            value={location}
+                            onChangeText={setLocation}
+                            style={fontWeight400}
                             className="     form-control
                             block
                             py-1.5
@@ -214,4 +258,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default MyModalButcher;
+export default MyModalSH;
