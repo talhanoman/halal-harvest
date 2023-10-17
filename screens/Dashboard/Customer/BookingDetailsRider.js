@@ -125,7 +125,7 @@ export default function BookingDetailsRider({ navigation, route }) {
     setShow(false);
     setDate(currentDate);
   };
-  const [date, setDate] = useState(new Date(1598051730000));
+  const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   return (
@@ -327,6 +327,7 @@ export default function BookingDetailsRider({ navigation, route }) {
           mode={mode}
           is24Hour={true}
           onChange={onChange}
+          minimumDate={new Date()}
         />
       )}
     </SafeAreaView>

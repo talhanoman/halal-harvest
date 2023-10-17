@@ -22,7 +22,7 @@ export default function BookingDetailsSlaughterHouse({ navigation, route }) {
     const [camelRate, setCamelRate] = useState(service?.rate_camel);
     const [error, setError] = useState("")
     const [isBooked, setIsBooked] = useState(false)
-    const [date, setDate] = useState(new Date(1598051730000));
+    const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
     const [goats, setGoats] = useState(0)
@@ -288,6 +288,7 @@ export default function BookingDetailsSlaughterHouse({ navigation, route }) {
                             mode={mode}
                             is24Hour={true}
                             onChange={onChange}
+                            minimumDate={new Date()}
                         />
                     )}
                 </ScrollView>

@@ -30,7 +30,7 @@ export default function BookingDetailsButcher({ navigation, route }) {
 
   const [error, setError] = useState("")
   const [isBooked, setIsBooked] = useState(false);
-  const [date, setDate] = useState(new Date(1598051730000));
+  const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   const [goats, setGoats] = useState(0)
@@ -351,6 +351,7 @@ export default function BookingDetailsButcher({ navigation, route }) {
               mode={mode}
               is24Hour={true}
               onChange={onChange}
+              minimumDate={new Date()}
             />
           )}
         </ScrollView>
