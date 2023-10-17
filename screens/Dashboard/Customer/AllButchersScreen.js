@@ -72,7 +72,12 @@ export default function AllButchersScreen({ navigation }) {
                 <ScrollView className='flex-grow p-4'>
                     <View className='flex flex-row justify-between flex-wrap'>
                         {
-                            butcherListings.map(({ id, service, user }) => {
+                            butcherListings.filter(({service, user})=>{
+                                if(service?.service_type === 'Butcher')
+                                {
+                                    return true;
+                                }
+                            }).map(({ id, service, user }) => {
                                 return (
                                     <ServiceProviderCard key={id} service={service} user={user} navigation={navigation} serviceProvider={'Butcher'} />
                                 )
