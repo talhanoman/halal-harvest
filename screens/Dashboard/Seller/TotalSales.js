@@ -72,7 +72,7 @@ export default function TotalSales({ navigation }) {
                     {
                         allOrders.map((order) => (
                             <>
-                                <Pressable style={shadow} className='w-full bg-white rounded-md p-2 mb-3 flex flex-col gap-y-1'>
+                                <Pressable style={shadow} className='w-full bg-white rounded-md p-2 mb-3 flex flex-col gap-y-1 active:scale-95'>
                                     <Text style={fontWeight500} className='text-xs'>Booking Id: #{order?.order_id}</Text>
                                     {/* Row */}                                    
                                     {/* Row */}

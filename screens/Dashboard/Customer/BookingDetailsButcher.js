@@ -149,7 +149,7 @@ export default function BookingDetailsButcher({ navigation, route }) {
             >
               <Text style={fontWeight400}>{date.toLocaleDateString()}</Text>
             </View>
-            <Pressable style={shadow} className='py-2 px-2 rounded bg-[#e8b05c]' onPress={showDatepicker}>
+            <Pressable style={shadow} className='py-2 px-2 rounded bg-[#e8b05c] active:scale-95' onPress={showDatepicker}>
               <Icon name="calendar-outline" size={20} color="#ffffff" />
             </Pressable>
           </View>
@@ -172,7 +172,7 @@ export default function BookingDetailsButcher({ navigation, route }) {
             >
               <Text style={fontWeight400}>{date.toLocaleTimeString()}</Text>
             </View>
-            <Pressable style={shadow} className='py-2 px-2 rounded bg-[#e8b05c]' onPress={showTimepicker}>
+            <Pressable style={shadow} className='py-2 px-2 rounded bg-[#e8b05c] active:scale-95' onPress={showTimepicker}>
               <Icon name="time-outline" size={20} color="#ffffff" />
             </Pressable>
           </View>
@@ -198,7 +198,7 @@ export default function BookingDetailsButcher({ navigation, route }) {
                             flex-1
                            "
             />
-            <Pressable style={shadow} className='py-2 px-2 rounded bg-[#e8b05c]' onPress={handleLocation}>
+            <Pressable style={shadow} className='py-2 px-2 rounded bg-[#e8b05c] active:scale-95' onPress={handleLocation}>
               <Icon name="location-outline" size={20} color="#ffffff" />
             </Pressable>
           </View>
@@ -308,7 +308,7 @@ export default function BookingDetailsButcher({ navigation, route }) {
           <Text style={fontWeight500} className='text-xs text-red-500'>{error}</Text>
           {
             isBooked === true ?
-              <Pressable className='my-5 py-3 rounded bg-white border-[#00b22d] border'>
+              <Pressable className='my-5 py-3 rounded bg-white border-[#00b22d] border active:scale-95'>
                 <Text className='text-[#00b22d] text-center' style={fontWeight500}>Requested</Text>
               </Pressable>
               :

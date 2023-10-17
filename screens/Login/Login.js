@@ -130,7 +130,7 @@ const Login = ({ navigation }) => {
           <Text style={fontWeight400} className="text-red-500 text-xs">{error}</Text>
           <Text style={fontWeight400} className="text-green-500 text-xs">{success}</Text>
           {/* COMMENTED TEMPORARILY TO DESIGN FLOW OF SCREENS*/}
-          <Pressable className='my-5 py-3 rounded bg-[#e8b05c]' onPress={handleLogin}>
+          <Pressable className='my-5 py-3 rounded bg-[#e8b05c] active:scale-95' onPress={handleLogin}>
             <Text className='text-white text-center' style={fontWeight400}>{
               isLoading ?
                 '...'

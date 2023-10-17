@@ -259,11 +259,11 @@ const { shadow } = StyleSheet.create({
     }
 })
 
-const selectedCategory = 'rounded-md w-[48%] bg-white p-5 flex flex-col items-center justify-center border border-[#e8b05c]'
-const categoryStyle = 'rounded-md w-[48%] bg-white p-5 flex flex-col items-center justify-center'
+const selectedCategory = 'rounded-md w-[48%] bg-white p-5 flex flex-col items-center justify-center border border-[#e8b05c] active:scale-95'
+const categoryStyle = 'rounded-md w-[48%] bg-white p-5 flex flex-col items-center justify-center active:scale-95'
 
-const selectedAnimal = 'rounded-md w-[32%] bg-white px-5 py-2.5 flex flex-col items-center justify-center bg-[#e8b05c]'
-const animalStyle = 'rounded-md w-[32%] bg-white px-5 py-2.5 flex flex-col items-center justify-center'
+const selectedAnimal = 'rounded-md w-[32%] bg-white px-5 py-2.5 flex flex-col items-center justify-center bg-[#e8b05c] active:scale-95'
+const animalStyle = 'rounded-md w-[32%] bg-white px-5 py-2.5 flex flex-col items-center justify-center active:scale-95'
 
 const colorOptions = [
     { label: 'Select Color', value: '' },

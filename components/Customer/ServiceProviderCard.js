@@ -30,14 +30,28 @@ const ServiceProviderCard = ({ navigation, serviceProvider, service, user }) => 
                     </View>
                 </>
             }
-            <View className='flex flex-row justify-between text-sm'>
+
+            {
+                service?.service_type === 'Rider' &&
+                <>
+                    <View className='flex flex-row justify-between text-sm my-2'>
+                        <Text style={fontWeight400}>Contact: </Text>
+                        <Text style={fontWeight500} >{service?.contact}</Text>
+                    </View>
+                    <View className='flex flex-row justify-between text-sm my-2'>
+                        <Text style={fontWeight400}>Min. Fare: </Text>
+                        <Text style={fontWeight500} >{service?.minimum_fare}Pkr</Text>
+                    </View>                   
+                </>
+            }
+            <View className='flex flex-row justify-between text-sm my-2'>
                 <Text style={fontWeight400}>Rating: </Text>
                 <Text style={fontWeight500} >{service?.rating === 0 ? 'Not Available' : service?.rating}</Text>
-            </View>            
+            </View>
             <Pressable onPress={() => navigation.navigate(serviceProvider === 'Rider' ? 'BookingDetailsRider' : serviceProvider === 'Butcher' ? 'BookingDetailsButcher' : 'BookingDetailsSlaughterHouse', {
                 service,
                 user
-            })} className='my-5 py-3 rounded bg-[#e8b05c]'>
+            })} className='my-5 py-3 rounded bg-[#e8b05c] active:scale-95'>
                 <Text className='text-white text-center' style={fontWeight400}>Request Service</Text>
             </Pressable>
         </View>

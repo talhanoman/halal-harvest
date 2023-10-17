@@ -70,14 +70,14 @@ const Welcome = ({ navigation }) => {
         </View>
         <View className='h-1/6 w-full flex flex-col items-center p-5 gap-y-3'>
           {/* Pressable */}
-          <Pressable onPress={() => navigation.navigate('SignupOptions')} className='w-full bg-[#e8b05c] text-center rounded-lg '>
+          <Pressable onPress={() => navigation.navigate('SignupOptions')} className='w-full bg-[#e8b05c] text-center rounded-lg active:scale-95'>
             <Text style={fontWeight600} className='text-center text-white py-4'>
               GET STARTED
             </Text>
           </Pressable>
 
           {/* Pressable */}
-          <Pressable onPress={() => navigation.navigate('Login')} className='w-full border-2 border-[#e8b05c] text-center rounded-lg '>
+          <Pressable onPress={() => navigation.navigate('Login')} className='w-full border-2 border-[#e8b05c] text-center rounded-lg active:scale-95 '>
             <Text style={fontWeight600} className='text-center text-[#e8b05c] py-4'>
               LOGIN
             </Text>

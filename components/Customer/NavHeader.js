@@ -14,7 +14,7 @@ export default function NavHeader({ title, navigation }) {
                 />
                 <Text className='text-[#e8b05c] mx-auto' style={fontWeight500}>{title}</Text>
                 <View className='relative rounded-full border border-gray-400 p-1'>
-                    <Pressable onPress={()=> navigation.navigate('CartDetails')}>
+                    <Pressable className='active:scale-95' onPress={()=> navigation.navigate('CartDetails')}>
                         <Ionicons size={24} name='cart-outline' color={'#9ca3af'} />
 
                     {cartItems.length > 0 &&

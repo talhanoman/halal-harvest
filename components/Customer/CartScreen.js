@@ -139,7 +139,7 @@ export default CartScreen = ({ navigation }) => {
                                                 <Text style={fontWeight400} className='text-xs'>{item.weight}</Text>
                                             </View>
                                         </View>
-                                        <Pressable className='ml-auto' onPress={() => removeFromCart(item.id)}>
+                                        <Pressable className='ml-auto active:scale-95' onPress={() => removeFromCart(item.id)}>
                                             <Ionicons name='trash-outline' size={32} color={"red"} />
                                         </Pressable>
                                     </View>
@@ -177,7 +177,7 @@ export default CartScreen = ({ navigation }) => {
                     />
                     {
                         cartItems.length > 0 && address.length > 0 &&
-                        <Pressable className='my-5 py-3 rounded bg-[#e8b05c] disabled:opacity-50 disabled:bg-gray-200' onPress={handlePurchase}>
+                        <Pressable className='my-5 py-3 rounded bg-[#e8b05c] disabled:opacity-50 disabled:bg-gray-200 active:scale-95 disabled:scale-100' onPress={handlePurchase}>
                             <Text className='text-white text-center' style={fontWeight400}>Buy Now</Text>
                         </Pressable>
                     }
@@ -185,7 +185,7 @@ export default CartScreen = ({ navigation }) => {
                         cartItems.length === 0 &&
                         <Text className='text-center text-lg my-5 text-[#e8b05c]' style={fontWeight600}>Please Add Animals in Cart to proceed!</Text>
                     }
-                    <Pressable className='py-3 rounded bg-white' onPress={() => navigation.navigate('CustomerDashboard')}>
+                    <Pressable className='py-3 rounded bg-white active:scale-95' onPress={() => navigation.navigate('CustomerDashboard')}>
                         <Text className='text-[#e8b05c] text-center' style={fontWeight400}>Back</Text>
                     </Pressable>
                 </ScrollView>

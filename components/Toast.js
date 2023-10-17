@@ -21,7 +21,7 @@ const Toast = ({ display, message }) => {
                             </Text>
                         </View>
 
-                        <Pressable className="text-gray-500 transition hover:text-gray-600">
+                        <Pressable className="text-gray-500 transition hover:text-gray-600 active:scale-95">
                             <Icon name="close-outline" size={20} color="#e8b05c" className='h-6 w-6' />
                         </Pressable>
                     </View>

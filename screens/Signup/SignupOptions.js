@@ -20,13 +20,13 @@ const SignupOptions = ({ navigation }) => {
             </View>
             <View className='h-2/6 w-full flex flex-col items-center p-5 gap-y-3'>
                 {/* Pressable */}
-                <Pressable onPress={() => navigation.navigate('CustomerSignup')} className='w-full border-2 border-[#e8b05c] text-center rounded-lg '>
+                <Pressable onPress={() => navigation.navigate('CustomerSignup')} className='w-full border-2 border-[#e8b05c] text-center rounded-lg active:scale-95'>
                     <Text style={fontWeight600} className='text-center text-[#e8b05c] py-4'>
                         Customer
                     </Text>
                 </Pressable>
                 {/* Pressable */}
-                <Pressable onPress={() => navigation.navigate('ServiceProviderSignup')} className='w-full border-2 border-[#e8b05c] text-center rounded-lg '>
+                <Pressable onPress={() => navigation.navigate('ServiceProviderSignup')} className='w-full border-2 border-[#e8b05c] text-center rounded-lg active:scale-95'>
                     <Text style={fontWeight600} className='text-center text-[#e8b05c] py-4'>
                         Service Provider
                     </Text>
@@ -34,7 +34,7 @@ const SignupOptions = ({ navigation }) => {
 
 
                 {/* Pressable */}
-                <Pressable onPress={() => navigation.navigate('SellerSignup')} className='w-full border-2 border-[#e8b05c] text-center rounded-lg '>
+                <Pressable onPress={() => navigation.navigate('SellerSignup')} className='w-full border-2 border-[#e8b05c] text-center rounded-lg active:scale-95'>
                     <Text style={fontWeight600} className='text-center text-[#e8b05c] py-4'>
                         Seller
                     </Text>

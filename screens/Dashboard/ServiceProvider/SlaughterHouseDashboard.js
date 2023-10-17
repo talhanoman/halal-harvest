@@ -8,8 +8,8 @@ import { fontWeight400, fontWeight600 } from '../../../assets/Styles/FontWeights
 import NavFooterSP from '../../../components/ServiceProvider/NavFooterSP';
 
 
-const tabStyle = 'text-xs text-[#e8b05c] p-1 border border-[#e8b05c] rounded-md';
-const activeTabStyle = 'text-xs bg-[#e8b05c] text-[#FFFFFF] p-1 border border-[#e8b05c] rounded-md';
+const tabStyle = 'text-xs text-[#e8b05c] p-1 border border-[#e8b05c] rounded-md active:scale-95';
+const activeTabStyle = 'text-xs bg-[#e8b05c] text-[#FFFFFF] p-1 border border-[#e8b05c] rounded-md active:scale-95';
 export default function SlaughterHouseDashboard({ navigation }) {
   const [filter, setFilter] = useState('All');
   return (

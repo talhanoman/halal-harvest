@@ -16,7 +16,7 @@ const SellerStoreCard = ({ name, city, sellerId, navigation }) => {
                 <Text style={fontWeight500} className="text-gray-600">
                     4.5 Rating
                 </Text>
-                <Pressable onPress={() => navigation.navigate('SellerListingDetails', { sellerId, name })} className="px-4 py-2 bg-[#e8b05c] text-white rounded-full hover:bg-[#e8b05c] focus:outline-none focus:ring focus:ring-[#e8b05c]">
+                <Pressable onPress={() => navigation.navigate('SellerListingDetails', { sellerId, name })} className="px-4 py-2 bg-[#e8b05c] text-white rounded-full hover:bg-[#e8b05c] focus:outline-none focus:ring focus:ring-[#e8b05c] active:scale-95">
                     <Text className='text-[#FFFFFF]' style={fontWeight500}>
                         View Listings
                     </Text>

@@ -74,7 +74,7 @@ export default function ServiceProviderProfile({ navigation, route }) {
                         </View>
 
                     </View>
-                    <Pressable onPress={handleSignout} style={shadow} className='bg-red-500 px-4 py-2 rounded-md mt-auto flex flex-row items-center mb-4'>
+                    <Pressable onPress={handleSignout} style={shadow} className='bg-red-500 px-4 py-2 rounded-md mt-auto flex flex-row items-center mb-4 active:scale-95'>
                         <Text style={fontWeight500} className="text-white text-center text-base">Logout</Text>
                     </Pressable>
                 </ScrollView>

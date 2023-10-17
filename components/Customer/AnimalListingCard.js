@@ -8,7 +8,7 @@ import { useCart } from '../../Context/CartContext';
 const AnimalListingCard = ({ id, price, age, color, type, category, weight, seller_id , navigation }) => {
     const { addToCart } = useCart()
     return (
-        <Pressable style={shadow} className='w-[48%] bg-white my-2 rounded-t-2xl p-1'>
+        <Pressable style={shadow} className='w-[48%] bg-white my-2 rounded-t-2xl p-1 active:scale-95'>
             {
                 type === 'Goat' ?
                     <Image
@@ -53,11 +53,11 @@ const AnimalListingCard = ({ id, price, age, color, type, category, weight, sell
                 </View>
 
 
-                <Pressable onPress={() => addToCart({ id, price, age, color, type, category, weight, seller_id })} className='w-full rounded-2xl bg-[#e8b05c] mt-4 p-2 active:bg-[#dba656]'>
+                <Pressable onPress={() => addToCart({ id, price, age, color, type, category, weight, seller_id })} className='w-full rounded-2xl bg-[#e8b05c] mt-4 p-2 active:bg-[#dba656] active:scale-95'>
                     <Text style={fontWeight500} className='text-white text-center'>Add To Cart</Text>
                 </Pressable>
 
-                <Pressable onPress={() => { navigation.navigate('CartDetails') }} className='w-full rounded-2xl mt-2 p-2 border-[#e8b05c] border active:bg-gray-100'>
+                <Pressable onPress={() => { navigation.navigate('CartDetails') }} className='w-full rounded-2xl mt-2 p-2 border-[#e8b05c] border active:bg-gray-100 active:scale-95'>
                     <Text style={fontWeight500} className='text-[#e8b05c] text-center'>View Cart</Text>
                 </Pressable>
             </View>

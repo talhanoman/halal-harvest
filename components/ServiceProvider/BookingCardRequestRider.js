@@ -34,7 +34,7 @@ function Badge({ type }) {
 }
 
 export default function BookingCardRequest({ status, service, user, id, fetchAllServices }) {
-    const db = getDatabase();    
+    const db = getDatabase();
 
     const updateServiceRequestStatus = async (serviceRequestId, newStatus) => {
         const serviceRequestRef = ref(db, `/ServiceRequests/${serviceRequestId}`);
@@ -44,7 +44,7 @@ export default function BookingCardRequest({ status, service, user, id, fetchAll
             fetchAllServices();
         } catch (error) {
             console.error('Error updating service request status:', error.message);
-            
+
         }
     };
     return (

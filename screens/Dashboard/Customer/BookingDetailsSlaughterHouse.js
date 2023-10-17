@@ -82,7 +82,7 @@ export default function BookingDetailsSlaughterHouse({ navigation }) {
                         >
                             <Text style={fontWeight400}>{date.toLocaleDateString()}</Text>
                         </View>
-                        <Pressable style={shadow} className='py-2 px-2 rounded bg-[#e8b05c]' onPress={showDatepicker}>
+                        <Pressable style={shadow} className='py-2 px-2 rounded bg-[#e8b05c] active:scale-95' onPress={showDatepicker}>
                             <Icon name="calendar-outline" size={20} color="#ffffff" />
                         </Pressable>
                     </View>
@@ -105,7 +105,7 @@ export default function BookingDetailsSlaughterHouse({ navigation }) {
                         >
                             <Text style={fontWeight400}>{date.toLocaleTimeString()}</Text>
                         </View>
-                        <Pressable style={shadow} className='py-2 px-2 rounded bg-[#e8b05c]' onPress={showTimepicker}>
+                        <Pressable style={shadow} className='py-2 px-2 rounded bg-[#e8b05c] active:scale-95' onPress={showTimepicker}>
                             <Icon name="time-outline" size={20} color="#ffffff" />
                         </Pressable>
                     </View>
@@ -216,11 +216,11 @@ export default function BookingDetailsSlaughterHouse({ navigation }) {
                     <Text style={fontWeight500} className='text-xs text-red-500'>{error}</Text>
                     {
                         isBooked === true ?
-                            <Pressable className='my-5 py-3 rounded bg-white border-[#00b22d] border'>
+                            <Pressable className='my-5 py-3 rounded bg-white border-[#00b22d] border active:scale-95'>
                                 <Text className='text-[#00b22d] text-center' style={fontWeight500}>Requested</Text>
                             </Pressable>
                             :
-                            <Pressable onPress={handleRequestService} className='my-5 py-3 rounded bg-[#e8b05c]'>
+                            <Pressable onPress={handleRequestService} className='my-5 py-3 rounded bg-[#e8b05c] active:scale-95'>
                                 <Text className='text-white text-center' style={fontWeight400}>Request Service</Text>
                             </Pressable>
                     }

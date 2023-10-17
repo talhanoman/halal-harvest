@@ -6,8 +6,8 @@ import { fontWeight500 } from '../../assets/Styles/FontWeights';
 import { useRoute } from '@react-navigation/native';
 
 export default function NavFooterSP({ navigation, serviceType }) {
-    const activeTabStyle = 'flex flex-col items-center border-t-[3px] border-[#e8b05c]'
-    const inActiveTabStyle = 'flex flex-col items-center border-[#e8b05c]'
+    const activeTabStyle = 'flex flex-col items-center border-t-[3px] border-[#e8b05c] active:scale-95'
+    const inActiveTabStyle = 'flex flex-col items-center border-[#e8b05c] active:scale-95'
     const route = useRoute();
     return (
         <View style={style.shadow} className='fixed bottom-0 h-[60px] px-4 border-none bg-[#f7f8f8] py-2'>

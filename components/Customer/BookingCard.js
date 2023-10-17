@@ -29,7 +29,7 @@ function Badge({ type }) {
 }
 export default function BookingCard({ status }) {
     return (
-        <Pressable style={shadow} className='w-full bg-white rounded-md p-2 mb-3'>
+        <Pressable style={shadow} className='w-full bg-white rounded-md p-2 mb-3 active:scale-95'>
             <Text style={fontWeight500} className='text-xs'>Booking Id: #8217361827</Text>
             {/* Row */}
             <View className='flex flex-row justify-between items-center'>

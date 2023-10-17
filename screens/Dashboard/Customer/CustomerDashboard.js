@@ -24,7 +24,7 @@ export default function CustomerDashboard({ navigation }) {
             />
           </View>
 
-          <Pressable onPress={()=> navigation.navigate('AllButchersScreen')} style={shadow} className='w-full bg-white rounded-md p-2 flex flex-row items-center mb-3'>
+          <Pressable onPress={()=> navigation.navigate('AllButchersScreen')} style={shadow} className='w-full bg-white rounded-md p-2 flex flex-row items-center mb-3 active:scale-95'>
             <View className='w-24'>
               <Image
                 source={require('../../../assets/butcher.png')}
@@ -33,7 +33,7 @@ export default function CustomerDashboard({ navigation }) {
             </View>
             <Text style={fontWeight600} className='text-lg ml-2.5'>Book a Butcher</Text>
           </Pressable>
-          <Pressable onPress={()=> navigation.navigate('AllRidersScreen')} style={shadow} className='w-full bg-white rounded-md p-2 flex flex-row items-center mb-3'>
+          <Pressable onPress={()=> navigation.navigate('AllRidersScreen')} style={shadow} className='w-full bg-white rounded-md p-2 flex flex-row items-center mb-3 active:scale-95'>
             <View className='w-24'>
               <Image
                 source={require('../../../assets/delivery-bike.png')}
@@ -43,7 +43,7 @@ export default function CustomerDashboard({ navigation }) {
             <Text style={fontWeight600} className='text-lg ml-2.5'>Book a Rider</Text>
           </Pressable>
 
-          <Pressable onPress={()=> navigation.navigate('AllSlaughterHousesScreen')} style={shadow} className='w-full bg-white rounded-md p-2 flex flex-row items-center mb-3'>
+          <Pressable onPress={()=> navigation.navigate('AllSlaughterHousesScreen')} style={shadow} className='w-full bg-white rounded-md p-2 flex flex-row items-center mb-3 active:scale-95'>
             <View className='w-24'>
               <Image
                 source={require('../../../assets/slaughter-house.png')}
@@ -52,7 +52,7 @@ export default function CustomerDashboard({ navigation }) {
             </View>
             <Text style={fontWeight600} className='text-lg ml-2.5'>Book a Slaughter house</Text>
           </Pressable>
-          <Pressable onPress={()=> navigation.navigate('AllBookingsCustomer')} style={shadow} className='w-full bg-white rounded-md p-2 flex flex-row items-center mb-3'>
+          <Pressable onPress={()=> navigation.navigate('AllBookingsCustomer')} style={shadow} className='w-full bg-white rounded-md p-2 flex flex-row items-center mb-3 active:scale-95'>
             <View className='w-24'>
               <Image
                 source={require('../../../assets/bookings.png')}

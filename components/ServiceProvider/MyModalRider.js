@@ -3,42 +3,40 @@ import React, { useState } from 'react';
 import { View, Text, Modal, Button, StyleSheet, TextInput, Pressable } from 'react-native';
 import { fontWeight400, fontWeight600 } from '../../assets/Styles/FontWeights';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { v4 as uuidv4 } from 'uuid';
 import { getAuth } from 'firebase/auth';
 import { set, ref, getDatabase } from 'firebase/database';
 
-const MyModalButcher = ({ modalVisible, setModalVisible, setToastDisplay }) => {
+const MyModalRider = ({ modalVisible, setModalVisible, setToastDisplay, fetchAllServices }) => {
 
     const auth = getAuth()
-    const [rateCamel, setRateCamel] = useState("")
-    const [rateCow, setRateCow] = useState("")
-    const [rategoat, setRateGoat] = useState("")
+    const [minimumFare, setMinimumFare] = useState("")
     const [description, setDescription] = useState("");
+    const [contact, setContact] = useState("");
 
-
-    const emptyFields = ()=>{
-        setRateCamel('');
-        setRateCow('') ;
-        setRateGoat('');
-        setDescription('');
+    const [error, setError] = useState("");
+    const emptyFields = () => {
+        setMinimumFare("");
+        setDescription("");
+        setContact("");
+        setError("")
     }
     const handleSave = () => {
         // Getting LoggedIn / Current User
         const user = auth.currentUser;
         const db = getDatabase();
-        if (rategoat.length > 0 || rateCow.length > 0 || rateCamel.length > 0) {
+        if (minimumFare.length > 0 && contact.length > 0) {
             set(ref(db, 'OfferedServices/' + user.uid), {
-                service_provider_id : user.uid,
-                service_type : 'Butcher',
-                rate_goat : rategoat,
-                rate_cow  : rateCow,
-                rate_camel : rateCamel,
-                description : description,
-                total_bookings : 0,        
-                rating : 0
+                service_provider_id: user.uid,
+                service_type: 'Rider',
+                minimum_fare: minimumFare,
+                description: description,
+                total_bookings: 0,
+                rating: 0,
+                contact: contact
 
-            }).then(()=>{
+            }).then(() => {
                 console.log('Success Adding Service');
+                fetchAllServices();
                 emptyFields();
                 setModalVisible(false);
                 setTimeout(() => {
@@ -48,6 +46,8 @@ const MyModalButcher = ({ modalVisible, setModalVisible, setToastDisplay }) => {
                     }, 1000);
                 }, 1000);
             })
+        } else {
+            setError('Please fill the required fields!')
         }
     }
     return (
@@ -65,10 +65,11 @@ const MyModalButcher = ({ modalVisible, setModalVisible, setToastDisplay }) => {
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
                         <Text style={fontWeight600} className='text-center text-lg text-[#e8b05c] mb-2'>Add Service</Text>
-                        <Text style={fontWeight400} className="text-gray-800 text-xs">Goat Charges (Rs)</Text>
+                        {/* Forms */}
+                        <Text style={fontWeight400} className="text-gray-800 text-xs">Minimum Fare (Rs)</Text>
                         <TextInput
-                            value={rategoat}
-                            onChangeText={setRateGoat}
+                            value={minimumFare}
+                            onChangeText={setMinimumFare}
                             style={fontWeight400}
                             keyboardType="numeric"
                             className="     form-control
@@ -85,30 +86,10 @@ const MyModalButcher = ({ modalVisible, setModalVisible, setToastDisplay }) => {
                             mb-2.5
                            "
                         />
-                        <Text style={fontWeight400} className="text-gray-800 text-xs">Cow Charges (Rs)</Text>
+                        <Text style={fontWeight400} className="text-gray-800 text-xs">Contact</Text>
                         <TextInput
-                            value={rateCow}
-                            onChangeText={setRateCow}
-                            style={fontWeight400}
-                            keyboardType="numeric"
-                            className="     form-control
-                            block
-                            py-1.5
-                            px-2
-                            text-base
-                            font-normal
-                            text-gray-700
-                            bg-white bg-clip-padding
-                            border border-solid border-gray-300
-                            rounded
-                            w-full
-                            mb-2.5
-                           "
-                        />
-                        <Text style={fontWeight400} className="text-gray-800 text-xs">Camel Charges (Rs)</Text>
-                        <TextInput
-                            value={rateCamel}
-                            onChangeText={setRateCamel}
+                            value={contact}
+                            onChangeText={setContact}
                             style={fontWeight400}
                             keyboardType="numeric"
                             className="     form-control
@@ -129,7 +110,7 @@ const MyModalButcher = ({ modalVisible, setModalVisible, setToastDisplay }) => {
                         <TextInput
                             value={description}
                             onChangeText={setDescription}
-                            style={fontWeight400}                            
+                            style={fontWeight400}
                             className="     form-control
                             block
                             py-1.5
@@ -144,6 +125,7 @@ const MyModalButcher = ({ modalVisible, setModalVisible, setToastDisplay }) => {
                             mb-2.5
                            "
                         />
+                        <Text style={fontWeight400} className="text-red-500 text-xs">{error}</Text>
                         <View className='flex flex-row justify-between mt-2.5 pt-3 border-t border-t-gray-200'>
                             <Pressable className=' p-2 rounded border bg-[#ffffff] border-[#e8b05c] flex flex-row w-[49%] gap-x-1 active:scale-95'>
                                 <Icon name="close-outline" size={20} color="#e8b05c" />
@@ -187,4 +169,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default MyModalButcher;
+export default MyModalRider;

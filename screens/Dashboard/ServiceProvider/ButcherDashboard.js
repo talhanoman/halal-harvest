@@ -12,9 +12,9 @@ import Toast from '../../../components/Toast';
 // Firebase Imports
 import { getDatabase, get, ref, query, equalTo, orderByKey, orderByChild } from 'firebase/database'
 import { getAuth } from 'firebase/auth';
-const tabStyle = 'text-xs text-[#e8b05c] p-1 border border-[#e8b05c] rounded-md';
-const activeTabStyle = 'text-xs bg-[#e8b05c] text-[#FFFFFF] p-1 border border-[#e8b05c] rounded-md';
-export default function RidersDashboard({ navigation }) {
+const tabStyle = 'text-xs text-[#e8b05c] p-1 border border-[#e8b05c] rounded-md active:scale-95';
+const activeTabStyle = 'text-xs bg-[#e8b05c] text-[#FFFFFF] p-1 border border-[#e8b05c] rounded-md active:scale-95';
+export default function ButcherDashboard({ navigation }) {
   const [allServices, setAllServices] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [serviceExists, setServiceExists] = useState(false);
@@ -139,15 +139,12 @@ export default function RidersDashboard({ navigation }) {
             </Pressable>
           </View>
           {
-            allServices?.map(({service, user, id}) => {
+            allServices?.map(({ service, user, id }) => {
               return (
                 <BookingCardRequest key={id} status={service?.status} user={user} service={service} id={id} fetchAllServices={fetchAllServices} />
               )
             })
           }
-          {/* <BookingCardRequest status={'Approved'} /> */}
-          {/* <BookingCardRequest status={'Pending'} /> */}
-          {/* <BookingCardRequest status={'Served'} /> */}
         </ScrollView>
 
         <NavFooterSP navigation={navigation} serviceType='Butcher' />

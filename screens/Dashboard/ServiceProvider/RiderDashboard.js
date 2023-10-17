@@ -1,17 +1,94 @@
-import { View, ScrollView, Pressable, TextInput, Image, Text, StyleSheet } from 'react-native'
+import { View, ScrollView, Pressable, TextInput, Text, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import NavHeader from '../../../components/Seller/NavHeader'
-import BookingCardRequest from '../../../components/ServiceProvider/BookingCardRequest'
 import { fontWeight400, fontWeight600 } from '../../../assets/Styles/FontWeights';
 import NavFooterSP from '../../../components/ServiceProvider/NavFooterSP';
+import MyModalRider from '../../../components/ServiceProvider/MyModalRider';
+import Toast from '../../../components/Toast';
+// Firebase Imports
+import { getDatabase, get, ref, query, equalTo, orderByChild } from 'firebase/database'
+import { getAuth } from 'firebase/auth';
 
-
-const tabStyle = 'text-xs text-[#e8b05c] p-1 border border-[#e8b05c] rounded-md';
-const activeTabStyle = 'text-xs bg-[#e8b05c] text-[#FFFFFF] p-1 border border-[#e8b05c] rounded-md';
+const tabStyle = 'text-xs text-[#e8b05c] p-1 border border-[#e8b05c] rounded-md active:scale-95';
+const activeTabStyle = 'text-xs bg-[#e8b05c] text-[#FFFFFF] p-1 border border-[#e8b05c] rounded-md active:scale-95';
 export default function RidersDashboard({ navigation }) {
+  const db = getDatabase()
+  const auth = getAuth()
   const [filter, setFilter] = useState('All');
+  const [allServices, setAllServices] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [serviceExists, setServiceExists] = useState(false);
+
+  const handleServiceExists = async () => {
+    const riderServiceQuery = query(ref(db, 'OfferedServices'), orderByChild('service_provider_id'), equalTo(auth.currentUser.uid));
+    try {
+      const snapshot = await get(riderServiceQuery);
+      if (snapshot.exists()) {
+        console.log("Service Exists");
+        setServiceExists(true);
+      } else {
+        console.log("Service Does Not Exist");
+        setServiceExists(false);
+      }
+    } catch (error) {
+      console.error('Error checking service existence:', error);
+      setServiceExists(null);
+    }
+  };
+
+  const fetchAllServices = async () => {
+    try {
+      const snapshot = await get(ref(db, 'ServiceRequests'));
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+
+        // Map data to array
+        const dataArray = await Promise.all(
+          Object.keys(data).map(async (key) => {
+            const serviceRequest = data[key];
+
+            // Fetch user data for the service request
+            const userSnapshot = await get(ref(db, `/Users/${serviceRequest.user_id}`));
+
+            if (userSnapshot.exists()) {
+              const userData = userSnapshot.val();
+              return {
+                id: key,
+                service : serviceRequest,
+                user: userData,
+              };
+            } else {
+              console.error(`User data not found for service request with ID ${key}`);
+              return null;
+            }
+          })
+        );
+
+        // Filter out null entries (cases where user data was not found)
+        const filteredDataArray = dataArray.filter((entry) => entry !== null);
+
+        setAllServices(filteredDataArray);        
+        console.log('Data Array', filteredDataArray);
+      } else {
+        console.log('No Data');
+        setAllServices(null);
+      }
+    } catch (error) {
+      console.error('Error fetching service requests:', error);
+    }
+  };
+
+  const handleModalOpen = () => {
+    setModalVisible(true);
+  }
+
+  const [toastDisplay, setToastDisplay] = useState(false)
+  useEffect(() => {
+    handleServiceExists();
+    fetchAllServices();
+  }, [])
   return (
     <SafeAreaView>
       <View className='flex flex-col h-screen'>
@@ -26,14 +103,17 @@ export default function RidersDashboard({ navigation }) {
               placeholderTextColor="#aaa"
             />
           </View>
-          <View className='flex flex-row justify-between'>
+          <View className='flex flex-row justify-between items-center'>
             <Text className='text-lg' style={fontWeight600}>Bookings: </Text>
-            <Pressable className='my-5 py-3 rounded bg-[#e8b05c]'>
-              <Icon name="add-circle-outline" size={20} color="#ffffff" className={`mr-4`} />
-              <Text className='text-white text-center' style={fontWeight400}>
-                New Service
-              </Text>
-            </Pressable>
+            {
+              !serviceExists &&
+              <Pressable onPress={handleModalOpen} className='my-5 p-3 rounded bg-[#e8b05c] flex flex-row'>
+                <Icon name="add-circle-outline" size={20} color="#ffffff" className={`mr-4`} />
+                <Text className='text-white text-center' style={fontWeight400}>
+                  New Service
+                </Text>
+              </Pressable>
+            }
           </View>
           <View className='flex flex-row justify-between bg-white p-2 my-4 rounded-md' style={shadow}>
             <Pressable onPress={() => setFilter('All')}>
@@ -49,13 +129,26 @@ export default function RidersDashboard({ navigation }) {
               <Text className={filter === 'Rejected' ? activeTabStyle : tabStyle} style={fontWeight600}>Rejected</Text>
             </Pressable>
           </View>
-          <BookingCardRequest status={'Approved'} />
-          <BookingCardRequest status={'Pending'} />
-          <BookingCardRequest status={'Served'} />
+          {
+            allServices?.filter(({ service, user }) => {
+              if (service?.service_type === 'Rider' && service?.service_provider_id === auth.currentUser.uid) {
+                return true;
+              }
+            }).map((serviceUser) => {                           
+              return (
+                // <BookingCardRequest key={id} status={service?.status} user={user} service={service} id={id} fetchAllServices={fetchAllServices} />
+                <Text>1</Text>
+              )
+            })
+          }
         </ScrollView>
         <NavFooterSP navigation={navigation} serviceType={'Rider'} />
       </View>
       {/* Footer */}
+      <MyModalRider modalVisible={modalVisible} setModalVisible={setModalVisible} setToastDisplay={setToastDisplay} fetchAllServices={fetchAllServices} />
+      <Toast display={toastDisplay} message={'Your Service has been saved!'} />
+      {/* Footer */}
+
     </SafeAreaView>
   )
 }
