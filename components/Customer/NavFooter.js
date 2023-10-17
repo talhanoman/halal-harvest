@@ -11,8 +11,8 @@ export default function NavFooter({ navigation }) {
     const route = useRoute();
     return (
         <View style={style.shadow} className='fixed bottom-0 h-[80px] px-4 border-none bg-[#f7f8f8]'>
-            <View className='flex flex-row'>
-                <View className='w-4/12'>
+            <View className='flex flex-row my-auto'>
+                <View className='w-6/12'>
                     <View className='flex flex-row my-auto items-center justify-around'>
                         <Pressable onPress={() => navigation.navigate('CustomerDashboard')} className={route.name === 'CustomerDashboard' ? activeTabStyle : inActiveTabStyle}>
                             <AntDesign name="home" size={30} color="#e8b05c" />
@@ -23,14 +23,8 @@ export default function NavFooter({ navigation }) {
                             <Text style={fontWeight500} className='text-[#e8b05c] text-xs'>Chats</Text>
                         </Pressable>
                     </View>
-                </View>
-                <View className='w-4/12'>
-                    <Pressable onPress={() => navigation.navigate('BuyCustomerScreen')} className='flex flex-col items-center px-4 py-1 rounded bg-[#e8b05c] w-2/3 mx-auto'>
-                        <Ionicons name="add-circle-outline" size={30} color="white" />
-                        <Text style={fontWeight500} className='text-white text-sm'>Buy</Text>
-                    </Pressable>
-                </View>
-                <View className='w-4/12'>
+                </View>            
+                <View className='w-6/12'>
                     <View className='flex flex-row my-auto items-center justify-around'>
                         <Pressable onPress={()=> navigation.navigate('SellerView')} className={route.name === 'SellerAds' ? activeTabStyle : inActiveTabStyle}>
                             <Ionicons name="heart-outline" size={30} color="#e8b05c" />
