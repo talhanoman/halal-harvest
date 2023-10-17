@@ -27,17 +27,18 @@ function Badge({ type }) {
         </>
     )
 }
-export default function BookingCard({ status }) {
+export default function BookingCard({ booking }) {
+    const { user } = booking;
     return (
         <Pressable style={shadow} className='w-full bg-white rounded-md p-2 mb-3 active:scale-95'>
-            <Text style={fontWeight500} className='text-xs'>Booking Id: #8217361827</Text>
+            <Text style={fontWeight500} className='text-xs'>Booking Id: #{booking?.id?.slice(0, 10)}</Text>
             {/* Row */}
             <View className='flex flex-row justify-between items-center'>
                 <View className='w-[49%]'>
                     <Text style={fontWeight400} className='text-xs '>Service Type:</Text>
                 </View>
                 <View className='w-[49%]'>
-                    <Text style={fontWeight500} className='text-sm  text-right'>Butcher</Text>
+                    <Text style={fontWeight500} className='text-sm  text-right'>{booking?.service_type}</Text>
                 </View>
             </View>
             {/* Row */}
@@ -46,7 +47,7 @@ export default function BookingCard({ status }) {
                     <Text style={fontWeight400} className='text-xs '>Service Provider Name:</Text>
                 </View>
                 <View className='w-[49%]'>
-                    <Text style={fontWeight500} className='text-sm  text-right'>Talha Noman</Text>
+                    <Text style={fontWeight500} className='text-sm  text-right'>{user?.fullname}</Text>
                 </View>
             </View>
             {/* Row */}
@@ -55,7 +56,7 @@ export default function BookingCard({ status }) {
                     <Text style={fontWeight400} className='text-xs '>Date:</Text>
                 </View>
                 <View className='w-[49%]'>
-                    <Text style={fontWeight500} className='text-sm  text-right'>Wed 22, May</Text>
+                    <Text style={fontWeight500} className='text-sm  text-right'>{booking?.date}</Text>
                 </View>
             </View>
             {/* Row */}
@@ -64,7 +65,16 @@ export default function BookingCard({ status }) {
                     <Text style={fontWeight400} className='text-xs '>Charges:</Text>
                 </View>
                 <View className='w-[49%]'>
-                    <Text style={fontWeight500} className='text-sm  text-right'>Rs. 22000</Text>
+                    <Text style={fontWeight500} className='text-sm  text-right'>Rs. {booking?.service_type === 'Butcher' ? booking?.total : booking?.fare}</Text>
+                </View>
+            </View>
+            {/* Row */}
+            <View className='flex flex-row justify-between items-center'>
+                <View className='w-[49%]'>
+                    <Text style={fontWeight400} className='text-xs '>Contact:</Text>
+                </View>
+                <View className='w-[49%]'>
+                    <Text style={fontWeight500} className='text-sm  text-right'>{booking?.customerContact}</Text>
                 </View>
             </View>
             {/* Row */}
@@ -73,7 +83,7 @@ export default function BookingCard({ status }) {
                     <Text style={fontWeight400} className='text-xs '>Status:</Text>
                 </View>
 
-                <Badge type={status} />
+                <Badge type={booking?.status} />
             </View>
             {/* Divider */}
             <View className='h-[1px] bg-gray-300 my-3' />

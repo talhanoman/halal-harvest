@@ -37,6 +37,7 @@ export default function BookingDetailsButcher({ navigation, route }) {
   const [cows, setCows] = useState(0)
   const [camels, setCamels] = useState(0)
   const [currentLocation, setCurrentLocation] = useState("")
+  const [customerContact, setCustomerContact] = useState("");
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
     setShow(false);
@@ -92,28 +93,34 @@ export default function BookingDetailsButcher({ navigation, route }) {
   }
 
   const handleRequestService = () => {
-  
-    if (date !== "" && handleTotal() !== 0) {
-      set(ref(db, 'ServiceRequests/' + uuidv4()), {
-        user_id: auth.currentUser.uid,
-        service_provider_id: user.user_id,
-        date: date?.toLocaleDateString(),
-        time: date?.toLocaleTimeString(),
-        address: currentLocation,
-        number_of_goats: goats,
-        number_of_camels: camels,
-        number_of_cows: cows,
-        total: handleTotal(),
-        status : 'Pending',
-        service_type : service.service_type
 
-      }).then(() => {
-        console.log('Success Requesting Service');
-        setIsBooked(true)
-        setTimeout(() => {
-          navigation.navigate('AllBookingsCustomer')
-        }, 2000);
-      })
+    if (date !== "" && handleTotal() !== 0) {
+      if (customerContact.length === 11) {
+        set(ref(db, 'ServiceRequests/' + uuidv4()), {
+          user_id: auth.currentUser.uid,
+          service_provider_id: user.user_id,
+          date: date?.toLocaleDateString(),
+          time: date?.toLocaleTimeString(),
+          address: currentLocation,
+          number_of_goats: goats,
+          number_of_camels: camels,
+          number_of_cows: cows,
+          total: handleTotal(),
+          status: 'Pending',
+          service_type: service.service_type,
+          customerContact: customerContact,
+
+        }).then(() => {
+          console.log('Success Requesting Service');
+          setIsBooked(true)
+          setTimeout(() => {
+            navigation.navigate('AllBookingsCustomer')
+          }, 2000);
+        })
+      }else {
+        setError("Incorrect Contact Number!")
+      }
+
     } else {
       setError("Please fill all details!")
     }
@@ -153,6 +160,27 @@ export default function BookingDetailsButcher({ navigation, route }) {
               <Icon name="calendar-outline" size={20} color="#ffffff" />
             </Pressable>
           </View>
+          <Text style={fontWeight400}>Customer Contact:</Text>
+          <TextInput
+            style={fontWeight400}
+            className="
+                 form-control
+                 block
+                 py-1.5
+                 px-2
+                 text-base
+                 font-normal
+                 text-gray-700
+                 bg-white bg-clip-padding
+                 border border-solid border-gray-300
+                 rounded 
+                 w-full
+                 mb-1"
+            value={customerContact}
+            placeholder="Enter Contact"
+            keyboardType="phone-pad"
+            onChangeText={(text) => setCustomerContact(text)}
+          />
           {/* Booking Time */}
           <Text style={fontWeight400} className="text-gray-800 ">Select Booking Time: </Text>
           <View className='flex flex-row justify-between items-center gap-x-2 mb-3'>

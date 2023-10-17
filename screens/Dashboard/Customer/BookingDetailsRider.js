@@ -18,12 +18,12 @@ export default function BookingDetailsRider({ navigation, route }) {
   // Firebase Hooks
   const db = getDatabase();
   const auth = getAuth()
-
+  
   // Navigation Params
   const user = route.params?.user;
   const service = route.params?.service;
 
-
+  const [errorMsg, setErrorMsg] = useState('');
   const [error, setError] = useState("");
   const [isBooked, setIsBooked] = useState(false);
   const mapRef = useRef()
@@ -90,8 +90,8 @@ export default function BookingDetailsRider({ navigation, route }) {
           to: to,
           customerContact: customerContact,
           status: 'Pending',
-          service_type: service.service_type
-
+          service_type: service.service_type,
+          fare : fare    
         }).then(() => {
           console.log('Success Requesting Service');
           setIsBooked(true)
