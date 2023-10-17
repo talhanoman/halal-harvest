@@ -6,6 +6,7 @@ import NavFooter from '../../../components/Customer/NavFooter'
 import ServiceProviderCard from '../../../components/Customer/ServiceProviderCard'
 // Firebase Imports
 import { getDatabase, get, ref } from 'firebase/database'
+import ServiceProviderCardSH from '../../../components/Customer/ServiceProviderCardSH'
 
 export default function AllSlaughterHousesScreen({ navigation }) {
     const [sHouseListings, setSHouseListings] = useState([]);
@@ -74,7 +75,7 @@ export default function AllSlaughterHousesScreen({ navigation }) {
                                 }
                             }).map(({ id, service, user }) => {
                                 return (
-                                    <ServiceProviderCard key={id} service={service} user={user} navigation={navigation} serviceProvider={'SlaughterHouse'} />
+                                    <ServiceProviderCardSH key={id} service={service} user={user} navigation={navigation} serviceProvider={'SlaughterHouse'} />
                                 )
                             })
                         }
