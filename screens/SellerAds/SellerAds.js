@@ -1,6 +1,6 @@
-import { View, ScrollView } from 'react-native'
+import { View, ScrollView, RefreshControl } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import React, { useState, useEffect, useLayoutEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import NavFooter from '../../components/Seller/NavFooter'
 import NavHeader from '../../components/Seller/NavHeader'
 import { getDatabase, ref, get } from "firebase/database";
@@ -38,15 +38,29 @@ export default function SellerAds({ navigation }) {
         }
     };
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         fetchSellerListings()
     }, [])
+
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);        
+        fetchSellerListings()
+        .then(()=>{
+            setRefreshing(false);
+        })
+    }, []);
     return (
         <SafeAreaView>
             <View className='flex flex-col h-screen'>
                 {/* Nav Header */}
                 <NavHeader title={'Seller Ads'} />
-                <ScrollView className='flex-grow px-4'>
+                <ScrollView className='flex-grow px-4'
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                    }
+                >
                     <View className="mt-5">
                         {/* Seller Card */}
                         {
@@ -57,7 +71,7 @@ export default function SellerAds({ navigation }) {
                                     <SellerCard key={id} age={age} category={category} color={color} price={price} weight={weight} type={type} animalImage={animalImage} />
                                 )
                             })
-                        }                    
+                        }
                     </View>
                 </ScrollView>
                 <NavFooter navigation={navigation} />
