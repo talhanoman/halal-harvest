@@ -386,7 +386,7 @@ const { shadow } = StyleSheet.create({
   }
 })
 
-//table chart.
+{/*table chart*/}
 const data = {
   labels: ["January", "February", "March", "April", "May", "June"],
   datasets: [
