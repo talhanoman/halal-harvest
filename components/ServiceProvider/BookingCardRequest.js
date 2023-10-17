@@ -34,7 +34,7 @@ function Badge({ type }) {
 }
 
 export default function BookingCardRequest({ status, service, user, id, fetchAllServices }) {
-    const db = getDatabase();    
+    const db = getDatabase();
 
     const updateServiceRequestStatus = async (serviceRequestId, newStatus) => {
         const serviceRequestRef = ref(db, `/ServiceRequests/${serviceRequestId}`);
@@ -44,7 +44,7 @@ export default function BookingCardRequest({ status, service, user, id, fetchAll
             fetchAllServices();
         } catch (error) {
             console.error('Error updating service request status:', error.message);
-            
+
         }
     };
     return (
@@ -71,7 +71,7 @@ export default function BookingCardRequest({ status, service, user, id, fetchAll
                     <Text style={fontWeight400} className='text-xs '>Destination:</Text>
                 </View>
                 <View className='w-[49%]'>
-                    <Text style={fontWeight500} className='text-sm  text-right'>{service?.address}</Text>
+                    <Text style={fontWeight500} className='text-sm  text-right'>{service.service_type === 'Rider' ? service?.to : service?.address}</Text>
                 </View>
             </View>
             {/* Row */}
@@ -95,10 +95,19 @@ export default function BookingCardRequest({ status, service, user, id, fetchAll
             {/* Row */}
             <View className='flex flex-row justify-between items-center'>
                 <View className='w-[49%]'>
+                    <Text style={fontWeight400} className='text-xs '>Time:</Text>
+                </View>
+                <View className='w-[49%]'>
+                    <Text style={fontWeight500} className='text-sm  text-right'>{service?.time}</Text>
+                </View>
+            </View>
+            {/* Row */}
+            <View className='flex flex-row justify-between items-center'>
+                <View className='w-[49%]'>
                     <Text style={fontWeight400} className='text-xs '>Charges:</Text>
                 </View>
                 <View className='w-[49%]'>
-                    <Text style={fontWeight500} className='text-sm  text-right'>Rs. {service?.total}</Text>
+                    <Text style={fontWeight500} className='text-sm  text-right'>Rs. {service.service_type === 'Rider' ? service?.fare : service?.total}</Text>
                 </View>
             </View>
             {/* Row */}

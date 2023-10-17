@@ -129,7 +129,7 @@ export default function ButcherDashboard({ navigation }) {
               <Text className={filter === 'Rejected' ? activeTabStyle : tabStyle} style={fontWeight600}>Rejected</Text>
             </Pressable>
           </View>
-          <View className='flex flex-row justify-between items-center'>
+          <View className='flex flex-row justify-between items-center mb-4'>
             <Text className='text-lg' style={fontWeight600}>Bookings: </Text>
             {
               !serviceExists &&
@@ -143,22 +143,19 @@ export default function ButcherDashboard({ navigation }) {
 
           </View>
           {
-            serviceExists?
-            allServices?.service?.length === 0?
+            serviceExists ?
+              allServices?.length === 0 &&
 
-              <>
-                <View className='p-4 flex flex-col items-center justify-center'>
-                  <Image
-                    source={require('../../../assets/WaitingIllustration-removebg-preview.png')}
-                    className='w-full bg-contain h-52 p-2 object-contain'
-                  />
-                  <Text style={fontWeight500} className='text-lg text-center'>Waiting for bookings.</Text>
-                </View>
-              </>
-              :
-              <>
-              {/* If service exists and there are currently no bookings. */}
-              </>
+                <>
+                  <View className='p-4 flex flex-col items-center justify-center'>
+                    <Image
+                      source={require('../../../assets/WaitingIllustration-removebg-preview.png')}
+                      className='w-full bg-contain h-52 p-2 object-contain'
+                    />
+                    <Text style={fontWeight500} className='text-lg text-center'>Waiting for bookings.</Text>
+                  </View>
+                </>
+              
               :
               <View className='p-4 flex flex-col items-center justify-center'>
                 <Image

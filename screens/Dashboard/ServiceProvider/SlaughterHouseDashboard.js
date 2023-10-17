@@ -68,9 +68,14 @@ export default function SlaughterHouseDashboard({ navigation }) {
 
         // Filter out null entries (cases where user data was not found)
         const filteredDataArray = dataArray.filter((entry) => entry !== null);
+        const sHouseFilter = filteredDataArray.filter(({ user, service }) => {
+          if (service?.service_type === 'SlaughterHouse' && service?.service_provider_id === auth.currentUser.uid) {
+            return true;
+          }
+        })
 
-        setAllServices(filteredDataArray);
-        console.log('Data Array', filteredDataArray);
+        setAllServices(sHouseFilter);
+        console.log('Data Array', sHouseFilter);
       } else {
         console.log('No Data');
         setAllServices(null);
@@ -118,7 +123,7 @@ export default function SlaughterHouseDashboard({ navigation }) {
               <Text className={filter === 'Rejected' ? activeTabStyle : tabStyle} style={fontWeight600}>Rejected</Text>
             </Pressable>
           </View>
-          <View className='flex flex-row justify-between items-center'>
+          <View className='flex flex-row justify-between items-center mb-4'>
             <Text className='text-lg' style={fontWeight600}>Bookings: </Text>
             {
               !serviceExists &&
@@ -131,16 +136,22 @@ export default function SlaughterHouseDashboard({ navigation }) {
             }
           </View>
           {
+            console.log(allServices.length)
+          }
+          {
             serviceExists ?
-              <>
-                <View className='p-4 flex flex-col items-center justify-center'>
-                  <Image
-                    source={require('../../../assets/WaitingIllustration-removebg-preview.png')}
-                    className='w-full bg-contain h-52 p-2 object-contain'
-                  />
-                  <Text style={fontWeight500} className='text-lg text-center'>Waiting for bookings.</Text>
-                </View>
-              </>
+              allServices?.length === 0 &&
+
+                <>
+                  <View className='p-4 flex flex-col items-center justify-center'>
+                    <Image
+                      source={require('../../../assets/WaitingIllustration-removebg-preview.png')}
+                      className='w-full bg-contain h-52 p-2 object-contain'
+                    />
+                    <Text style={fontWeight500} className='text-lg text-center'>Waiting for bookings.</Text>
+                  </View>
+                </>
+              
               :
               <View className='p-4 flex flex-col items-center justify-center'>
                 <Image
@@ -150,9 +161,14 @@ export default function SlaughterHouseDashboard({ navigation }) {
                 <Text style={fontWeight500} className='text-lg text-center'>Please add a service to get started.</Text>
               </View>
           }
-          {/* <BookingCardRequest status={'Approved'} />
-          <BookingCardRequest status={'Pending'} />
-          <BookingCardRequest status={'Served'} /> */}
+
+          {
+            allServices?.map(({ service, user, id }) => {
+              return (
+                <BookingCardRequest key={id} status={service?.status} user={user} service={service} id={id} fetchAllServices={fetchAllServices} />
+              )
+            })
+          }        
         </ScrollView>
         <NavFooterSP navigation={navigation} serviceType={'Slaughter House'} />
       </View>

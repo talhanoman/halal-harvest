@@ -7,6 +7,7 @@ import { fontWeight400, fontWeight500, fontWeight600 } from '../../../assets/Sty
 import NavFooterSP from '../../../components/ServiceProvider/NavFooterSP';
 import MyModalRider from '../../../components/ServiceProvider/MyModalRider';
 import Toast from '../../../components/Toast';
+import BookingCardRequest from '../../../components/ServiceProvider/BookingCardRequest';
 // Firebase Imports
 import { getDatabase, get, ref, query, equalTo, orderByChild } from 'firebase/database'
 import { getAuth } from 'firebase/auth';
@@ -121,7 +122,7 @@ export default function RidersDashboard({ navigation }) {
               <Text className={filter === 'Rejected' ? activeTabStyle : tabStyle} style={fontWeight600}>Rejected</Text>
             </Pressable>
           </View>
-          <View className='flex flex-row justify-between items-center'>
+          <View className='flex flex-row justify-between items-center mb-4'>
             <Text className='text-lg' style={fontWeight600}>Bookings: </Text>
             {
               !serviceExists &&
@@ -135,7 +136,7 @@ export default function RidersDashboard({ navigation }) {
           </View>
           {
             serviceExists ?
-              allServices?.service?.length === 0 ?
+              allServices?.length === 0 &&
 
                 <>
                   <View className='p-4 flex flex-col items-center justify-center'>
@@ -146,10 +147,7 @@ export default function RidersDashboard({ navigation }) {
                     <Text style={fontWeight500} className='text-lg text-center'>Waiting for bookings.</Text>
                   </View>
                 </>
-                :
-                <>
-                  {/* If service exists and there are currently no bookings. */}
-                </>
+              
               :
               <View className='p-4 flex flex-col items-center justify-center'>
                 <Image
@@ -160,10 +158,9 @@ export default function RidersDashboard({ navigation }) {
               </View>
           }
           {
-            allServices?.map((serviceUser) => {
+            allServices?.map(({ service, user, id }) => {
               return (
-                // <BookingCardRequest key={id} status={service?.status} user={user} service={service} id={id} fetchAllServices={fetchAllServices} />
-                <Text>1</Text>
+                <BookingCardRequest key={id} status={service?.status} user={user} service={service} id={id} fetchAllServices={fetchAllServices} />               
               )
             })
           }
