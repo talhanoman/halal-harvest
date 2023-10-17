@@ -6,6 +6,7 @@ import { useCart } from '../../Context/CartContext'; // Import the useCart hook
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { fontWeight400, fontWeight500, fontWeight600 } from '../../assets/Styles/FontWeights';
 import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import NavHeader from '../Seller/NavHeader';
 import { getDatabase, ref, set } from 'firebase/database'
 import { getAuth } from 'firebase/auth';
@@ -177,9 +178,15 @@ export default CartScreen = ({ navigation }) => {
                     />
                     {
                         cartItems.length > 0 && address.length > 0 &&
-                        <Pressable className='my-5 py-3 rounded bg-[#e8b05c] disabled:opacity-50 disabled:bg-gray-200 active:scale-95 disabled:scale-100' onPress={handlePurchase}>
-                            <Text className='text-white text-center' style={fontWeight400}>Buy Now</Text>
-                        </Pressable>
+                        <>
+                            <Pressable className='my-5 py-3 rounded bg-[#e8b05c] disabled:opacity-50 disabled:bg-gray-200 active:scale-95 disabled:scale-100' onPress={handlePurchase}>
+                                <Text className='text-white text-center' style={fontWeight400}>Buy Now</Text>
+                            </Pressable>
+                            <Pressable className='mb-5 py-3 rounded bg-[#7a72fe] disabled:opacity-50 disabled:bg-gray-200 active:scale-95 disabled:scale-100 flex-row justify-center items-center' onPress={handlePurchase}>
+                                <Text className='text-white text-center' style={fontWeight400}>Pay with </Text>
+                                <FontAwesome5 color={'#ffffff'}  name='cc-stripe' />
+                            </Pressable>
+                        </>
                     }
                     {
                         cartItems.length === 0 &&
