@@ -278,7 +278,7 @@ export default function SellerDashboard({ navigation }) {
                         <Text style={fontWeight700} className='text-2xl text-[#e8b05c]'>{sharedListings}</Text>
                       </View>
                     </View>
-                    <Pressable onPress={()=> {navigation.navigate('TotalSales')}} className='mt-5 flex flex-row justify-between active:scale-95'>
+                    <Pressable onPress={()=> {navigation.navigate('TotalSales')}} className='mt-5 flex flex-row justify-between'>
                       <View style={shadow} className='w-full rounded-md bg-white p-5'>
                         <Text style={fontWeight500} className='text-sm mb-1'>Total Sales</Text>
                         <Text style={fontWeight700} className='text-2xl text-[#e8b05c]'>{totalSales}</Text>
@@ -361,7 +361,7 @@ export default function SellerDashboard({ navigation }) {
                 />
 
                 {/* onPress event */}
-                <Pressable style={shadow} className='my-5 py-3 rounded text-[#e8b05c] bg-[#FFFFFF] w-1/3 ml-auto active:scale-95' onPress={handleSaveSellerInfo}>
+                <Pressable style={shadow} className='my-5 py-3 rounded text-[#e8b05c] bg-[#FFFFFF] w-1/3 ml-auto' onPress={handleSaveSellerInfo}>
                   <Text className='text-[#e8b05c] text-center' style={fontWeight400}>{
                     'Save'
                   }</Text>
@@ -386,7 +386,7 @@ const { shadow } = StyleSheet.create({
   }
 })
 
-
+//table chart.
 const data = {
   labels: ["January", "February", "March", "April", "May", "June"],
   datasets: [
