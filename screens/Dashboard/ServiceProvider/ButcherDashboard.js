@@ -99,7 +99,7 @@ export default function ButcherDashboard({ navigation }) {
   useEffect(() => {
     handleServiceExists();
     fetchAllServices();
-  }, [serviceExists])
+  }, [])
 
   return (
     <SafeAreaView>
