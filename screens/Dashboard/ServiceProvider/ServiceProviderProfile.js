@@ -9,8 +9,8 @@ import NavFooterSP from '../../../components/ServiceProvider/NavFooterSP'
 export default function ServiceProviderProfile({ navigation, route }) {
     const { serviceType } = route.params;
     const [error, setError] = useState('')
+    const auth = getAuth()
     const handleSignout = () => {
-        const auth = getAuth()
         signOut(auth).then(() => {
             navigation.navigate("Login")
         }).catch((error) => {
@@ -30,8 +30,8 @@ export default function ServiceProviderProfile({ navigation, route }) {
                             source={require('../../../assets/sample-avatar.png')}
                             className='w-16 h-16 rounded-full mx-auto'
                         />
-                        <Text className='text-base text-center' style={fontWeight500}>Talha Noman</Text>
-                        <Text className='text-sm text-center' style={fontWeight300}>saad10@gmail.com</Text>
+                        <Text className='text-base text-center' style={fontWeight500}>{auth.currentUser.displayName}</Text>
+                        <Text className='text-sm text-center' style={fontWeight300}>{auth.currentUser.email}</Text>
                         <Text className='text-base text-center' style={fontWeight300}>{serviceType}</Text>
                         <View className='bg-gray-200 h-[1px] w-full my-3' />
                         <View className='flex flex-col gap-y-2'>

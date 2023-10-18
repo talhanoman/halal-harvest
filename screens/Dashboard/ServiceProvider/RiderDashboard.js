@@ -15,24 +15,22 @@ import { getAuth } from 'firebase/auth';
 const tabStyle = 'text-xs text-[#e8b05c] p-1 border border-[#e8b05c] rounded-md active:scale-95';
 const activeTabStyle = 'text-xs bg-[#e8b05c] text-[#FFFFFF] p-1 border border-[#e8b05c] rounded-md active:scale-95';
 export default function RidersDashboard({ navigation }) {
-  const db = getDatabase()
-  const auth = getAuth()
-  const [filter, setFilter] = useState('All');
+  const db = getDatabase();
+  const auth = getAuth();
+
+  const [serviceExists, setServiceExists] = useState(null);
   const [allServices, setAllServices] = useState([]);
+  const [filter, setFilter] = useState('All');
+  const [displayedServices, setDisplayedServices] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [serviceExists, setServiceExists] = useState(false);
+  const [toastDisplay, setToastDisplay] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const handleServiceExists = async () => {
     const riderServiceQuery = query(ref(db, 'OfferedServices'), orderByChild('service_provider_id'), equalTo(auth.currentUser.uid));
     try {
       const snapshot = await get(riderServiceQuery);
-      if (snapshot.exists()) {
-        console.log("Service Exists");
-        setServiceExists(true);
-      } else {
-        console.log("Service Does Not Exist");
-        setServiceExists(false);
-      }
+      setServiceExists(snapshot.exists());
     } catch (error) {
       console.error('Error checking service existence:', error);
       setServiceExists(null);
@@ -73,36 +71,49 @@ export default function RidersDashboard({ navigation }) {
           if (service?.service_type === 'Rider' && service?.service_provider_id === auth.currentUser.uid) {
             return true;
           }
-        })
+          return false;
+        });
+
         setAllServices(riderFilter);
-        console.log('Data Array', riderFilter);
+        setDisplayedServices(filterServices(riderFilter, filter));
       } else {
-        console.log('No Data');
-        setAllServices(null);
+        setAllServices([]);
+        setDisplayedServices([]);
       }
     } catch (error) {
       console.error('Error fetching service requests:', error);
     }
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await handleServiceExists();
+    await fetchAllServices();
+    setRefreshing(false);
+  };
+
+  const filterServices = (services, selectedFilter) => {
+    if (selectedFilter === 'All') {
+      return services;
+    }
+    return services.filter(({ service }) => service?.status === selectedFilter);
+  };
+
+  const handleFilterChange = (newFilter) => {
+    setFilter(newFilter);
+    setDisplayedServices(filterServices(allServices, newFilter));
+  };
+
   const handleModalOpen = () => {
     setModalVisible(true);
   }
 
-  const [toastDisplay, setToastDisplay] = useState(false)
+
   useEffect(() => {
     handleServiceExists();
     fetchAllServices();
-  }, [])
-  const [refreshing, setRefreshing] = React.useState(false);
-
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    handleServiceExists();
-    fetchAllServices().then(() => {
-      setRefreshing(false);
-    })
   }, []);
+
   return (
     <SafeAreaView>
       <View className='flex flex-col h-screen'>
@@ -122,16 +133,16 @@ export default function RidersDashboard({ navigation }) {
             />
           </View>
           <View className='flex flex-row justify-between bg-white p-2 my-4 rounded-md' style={shadow}>
-            <Pressable onPress={() => setFilter('All')}>
+            <Pressable onPress={() => handleFilterChange('All')}>
               <Text className={filter === 'All' ? activeTabStyle : tabStyle} style={fontWeight600}>All</Text>
             </Pressable>
-            <Pressable onPress={() => setFilter('Pending')}>
+            <Pressable onPress={() => handleFilterChange('Pending')}>
               <Text className={filter === 'Pending' ? activeTabStyle : tabStyle} style={fontWeight600}>Pending</Text>
             </Pressable>
-            <Pressable onPress={() => setFilter('Served')}>
+            <Pressable onPress={() => handleFilterChange('Served')}>
               <Text className={filter === 'Served' ? activeTabStyle : tabStyle} style={fontWeight600}>Served</Text>
             </Pressable>
-            <Pressable onPress={() => setFilter('Rejected')}>
+            <Pressable onPress={() => handleFilterChange('Rejected')}>
               <Text className={filter === 'Rejected' ? activeTabStyle : tabStyle} style={fontWeight600}>Rejected</Text>
             </Pressable>
           </View>
@@ -171,7 +182,7 @@ export default function RidersDashboard({ navigation }) {
               </View>
           }
           {
-            allServices?.map(({ service, user, id }) => {
+            displayedServices?.map(({ service, user, id }) => {
               return (
                 <BookingCardRequest key={id} status={service?.status} user={user} service={service} id={id} fetchAllServices={fetchAllServices} />
               )

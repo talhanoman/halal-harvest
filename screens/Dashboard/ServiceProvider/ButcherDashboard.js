@@ -1,4 +1,4 @@
-import { View, ScrollView, Pressable, TextInput, Text, StyleSheet, Image } from 'react-native'
+import { View, ScrollView, Pressable, TextInput, Text, StyleSheet, Image, RefreshControl } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useState, useEffect } from 'react'
@@ -15,63 +15,51 @@ import { getAuth } from 'firebase/auth';
 const tabStyle = 'text-xs text-[#e8b05c] p-1 border border-[#e8b05c] rounded-md active:scale-95';
 const activeTabStyle = 'text-xs bg-[#e8b05c] text-[#FFFFFF] p-1 border border-[#e8b05c] rounded-md active:scale-95';
 export default function ButcherDashboard({ navigation }) {
-  const [allServices, setAllServices] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [serviceExists, setServiceExists] = useState(false);
-
-  const [filter, setFilter] = useState('All');
   const db = getDatabase();
   const auth = getAuth();
 
-  const handleModalOpen = () => {
-    setModalVisible(true);
-  }
-  const handleModalClose = () => {
-    setModalVisible(false);
-  }
+  const [serviceExists, setServiceExists] = useState(null);
+  const [allServices, setAllServices] = useState([]);
+  const [filter, setFilter] = useState('All');
+  const [displayedServices, setDisplayedServices] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [toastDisplay, setToastDisplay] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
   const handleServiceExists = async () => {
-    const butcherServiceQuery = query(ref(db, 'OfferedServices'), orderByChild('service_provider_id'), equalTo(auth.currentUser.uid));
+    const riderServiceQuery = query(ref(db, 'OfferedServices'), orderByChild('service_provider_id'), equalTo(auth.currentUser.uid));
     try {
-      const snapshot = await get(butcherServiceQuery);
-      if (snapshot.exists()) {
-        // this means that service already exists.
-        console.log("Service Exists");
-        setServiceExists(true);
-      } else {
-        // Return an empty array or handle the case where there are no animals
-        console.log("Service Does Not Exist");
-        setServiceExists(false);
-      }
+      const snapshot = await get(riderServiceQuery);
+      setServiceExists(snapshot.exists());
     } catch (error) {
-      // Handle any errors here        
-      setServiceExists(null)
+      console.error('Error checking service existence:', error);
+      setServiceExists(null);
     }
-  }
+  };
+
   const fetchAllServices = async () => {
     try {
-      const snapshot = await get(ref(db, '/ServiceRequests'));
+      const snapshot = await get(ref(db, 'ServiceRequests'));
       if (snapshot.exists()) {
         const data = snapshot.val();
 
         // Map data to array
         const dataArray = await Promise.all(
           Object.keys(data).map(async (key) => {
-            const service = data[key];
-            const userId = service.user_id;
+            const serviceRequest = data[key];
 
-            // Fetch user data for the service
-            const userSnapshot = await get(ref(db, `/Users/${userId}`));
+            // Fetch user data for the service request
+            const userSnapshot = await get(ref(db, `/Users/${serviceRequest.user_id}`));
 
             if (userSnapshot.exists()) {
               const userData = userSnapshot.val();
               return {
                 id: key,
-                service,
-                user: userData
+                service: serviceRequest,
+                user: userData,
               };
             } else {
-              // Handle the case where the user data doesn't exist
-              console.error(`User data not found for service with ID ${key}`);
+              console.error(`User data not found for service request with ID ${key}`);
               return null;
             }
           })
@@ -79,34 +67,62 @@ export default function ButcherDashboard({ navigation }) {
 
         // Filter out null entries (cases where user data was not found)
         const filteredDataArray = dataArray.filter((entry) => entry !== null);
-        const butcherFilter = filteredDataArray.filter(({ user, service }) => {
+        const riderFilter = filteredDataArray.filter(({ user, service }) => {
           if (service?.service_type === 'Butcher' && service?.service_provider_id === auth.currentUser.uid) {
             return true;
           }
-        })
-        setAllServices(butcherFilter);
-        console.clear();
-        console.log('Data Array', butcherFilter);
+          return false;
+        });
+
+        setAllServices(riderFilter);
+        setDisplayedServices(filterServices(riderFilter, filter));
       } else {
-        console.log("No Data");
-        setAllServices(null);
+        setAllServices([]);
+        setDisplayedServices([]);
       }
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching service requests:', error);
     }
   };
-  const [toastDisplay, setToastDisplay] = useState(false)
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await handleServiceExists();
+    await fetchAllServices();
+    setRefreshing(false);
+  };
+
+  const filterServices = (services, selectedFilter) => {
+    if (selectedFilter === 'All') {
+      return services;
+    }
+    return services.filter(({ service }) => service?.status === selectedFilter);
+  };
+
+  const handleFilterChange = (newFilter) => {
+    setFilter(newFilter);
+    setDisplayedServices(filterServices(allServices, newFilter));
+  };
+
+  const handleModalOpen = () => {
+    setModalVisible(true);
+  }
+
+
   useEffect(() => {
     handleServiceExists();
     fetchAllServices();
-  }, [])
-
+  }, []);
   return (
     <SafeAreaView>
       <View className='flex flex-col h-screen'>
         {/* Nav Header */}
         <NavHeader title={'Butchers Dashboard'} navigation={navigation} />
-        <ScrollView className='flex-grow px-4'>
+        <ScrollView className='flex-grow px-4'
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
           <View className={`flex flex-row items-center border border-gray-300 rounded-md px-4 bg-white my-5`}>
             <Icon name="search" size={20} color="#aaa" className={`mr-4`} />
             <TextInput
@@ -116,16 +132,16 @@ export default function ButcherDashboard({ navigation }) {
             />
           </View>
           <View className='flex flex-row justify-between bg-white p-2 my-4 rounded-md' style={shadow}>
-            <Pressable onPress={() => setFilter('All')}>
+            <Pressable onPress={() => handleFilterChange('All')}>
               <Text className={filter === 'All' ? activeTabStyle : tabStyle} style={fontWeight600}>All</Text>
             </Pressable>
-            <Pressable onPress={() => setFilter('Pending')}>
+            <Pressable onPress={() => handleFilterChange('Pending')}>
               <Text className={filter === 'Pending' ? activeTabStyle : tabStyle} style={fontWeight600}>Pending</Text>
             </Pressable>
-            <Pressable onPress={() => setFilter('Served')}>
+            <Pressable onPress={() => handleFilterChange('Served')}>
               <Text className={filter === 'Served' ? activeTabStyle : tabStyle} style={fontWeight600}>Served</Text>
             </Pressable>
-            <Pressable onPress={() => setFilter('Rejected')}>
+            <Pressable onPress={() => handleFilterChange('Rejected')}>
               <Text className={filter === 'Rejected' ? activeTabStyle : tabStyle} style={fontWeight600}>Rejected</Text>
             </Pressable>
           </View>
@@ -146,16 +162,16 @@ export default function ButcherDashboard({ navigation }) {
             serviceExists ?
               allServices?.length === 0 &&
 
-                <>
-                  <View className='p-4 flex flex-col items-center justify-center'>
-                    <Image
-                      source={require('../../../assets/WaitingIllustration-removebg-preview.png')}
-                      className='w-full bg-contain h-52 p-2 object-contain'
-                    />
-                    <Text style={fontWeight500} className='text-lg text-center'>Waiting for bookings.</Text>
-                  </View>
-                </>
-              
+              <>
+                <View className='p-4 flex flex-col items-center justify-center'>
+                  <Image
+                    source={require('../../../assets/WaitingIllustration-removebg-preview.png')}
+                    className='w-full bg-contain h-52 p-2 object-contain'
+                  />
+                  <Text style={fontWeight500} className='text-lg text-center'>Waiting for bookings.</Text>
+                </View>
+              </>
+
               :
               <View className='p-4 flex flex-col items-center justify-center'>
                 <Image
