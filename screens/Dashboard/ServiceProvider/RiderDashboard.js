@@ -1,4 +1,4 @@
-import { View, ScrollView, Pressable, TextInput, Text, StyleSheet, Image } from 'react-native'
+import { View, ScrollView, Pressable, TextInput, Text, StyleSheet, Image, RefreshControl } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useState, useEffect } from 'react'
@@ -94,12 +94,25 @@ export default function RidersDashboard({ navigation }) {
     handleServiceExists();
     fetchAllServices();
   }, [])
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    handleServiceExists();
+    fetchAllServices().then(() => {
+      setRefreshing(false);
+    })
+  }, []);
   return (
     <SafeAreaView>
       <View className='flex flex-col h-screen'>
         {/* Nav Header */}
         <NavHeader title={'Riders Dashboard'} navigation={navigation} />
-        <ScrollView className='flex-grow px-4'>
+        <ScrollView className='flex-grow px-4'
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
           <View className={`flex flex-row items-center border border-gray-300 rounded-md px-4 bg-white my-5`}>
             <Icon name="search" size={20} color="#aaa" className={`mr-4`} />
             <TextInput
@@ -138,16 +151,16 @@ export default function RidersDashboard({ navigation }) {
             serviceExists ?
               allServices?.length === 0 &&
 
-                <>
-                  <View className='p-4 flex flex-col items-center justify-center'>
-                    <Image
-                      source={require('../../../assets/WaitingIllustration-removebg-preview.png')}
-                      className='w-full bg-contain h-52 p-2 object-contain'
-                    />
-                    <Text style={fontWeight500} className='text-lg text-center'>Waiting for bookings.</Text>
-                  </View>
-                </>
-              
+              <>
+                <View className='p-4 flex flex-col items-center justify-center'>
+                  <Image
+                    source={require('../../../assets/WaitingIllustration-removebg-preview.png')}
+                    className='w-full bg-contain h-52 p-2 object-contain'
+                  />
+                  <Text style={fontWeight500} className='text-lg text-center'>Waiting for bookings.</Text>
+                </View>
+              </>
+
               :
               <View className='p-4 flex flex-col items-center justify-center'>
                 <Image
@@ -160,7 +173,7 @@ export default function RidersDashboard({ navigation }) {
           {
             allServices?.map(({ service, user, id }) => {
               return (
-                <BookingCardRequest key={id} status={service?.status} user={user} service={service} id={id} fetchAllServices={fetchAllServices} />               
+                <BookingCardRequest key={id} status={service?.status} user={user} service={service} id={id} fetchAllServices={fetchAllServices} />
               )
             })
           }

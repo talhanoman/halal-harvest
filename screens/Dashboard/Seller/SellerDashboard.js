@@ -123,7 +123,7 @@ export default function SellerDashboard({ navigation }) {
       })
       console.clear()
       console.log('Orders Filtered', ordersArray)
-      console.log('User id', userDetails.user_id)      
+      console.log('User id', userDetails.user_id)
       let ordersArrayLength = ordersFiltered?.length;
       setTotalSales(ordersArrayLength)
     }
@@ -199,9 +199,8 @@ export default function SellerDashboard({ navigation }) {
     }
   }, [detailsFound])
 
-
   const handleSaveSellerInfo = () => {
-    if (cnic !== '' && cityName !== '' && storeName !== '') {
+    if (cnic.length === 13 && cityName !== '' && storeName !== '') {
       set(ref(db, 'Sellers/' + userDetails.user_id), {
         city: cityName,
         cnic: cnic,
@@ -229,6 +228,16 @@ export default function SellerDashboard({ navigation }) {
         .catch((err) => {
           console.log('Something Went Wrong While Posting Seller!', err);
         })
+    } else {
+      Alert.alert('Invalid Input', 'Please input correct details!', [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
+      ]);
+
     }
 
   }
@@ -278,7 +287,7 @@ export default function SellerDashboard({ navigation }) {
                         <Text style={fontWeight700} className='text-2xl text-[#e8b05c]'>{sharedListings}</Text>
                       </View>
                     </View>
-                    <Pressable onPress={()=> {navigation.navigate('TotalSales')}} className='mt-5 flex flex-row justify-between active:scale-95'>
+                    <Pressable onPress={() => { navigation.navigate('TotalSales') }} className='mt-5 flex flex-row justify-between active:scale-95'>
                       <View style={shadow} className='w-full rounded-md bg-white p-5'>
                         <Text style={fontWeight500} className='text-sm mb-1'>Total Sales</Text>
                         <Text style={fontWeight700} className='text-2xl text-[#e8b05c]'>{totalSales}</Text>
@@ -319,7 +328,7 @@ export default function SellerDashboard({ navigation }) {
                 <Text style={fontWeight600} className="text-[#FFFFFF] text-lg">CNIC</Text>
                 <TextInput
                   style={fontWeight500}
-                  keyboardType='default'
+                  keyboardType='numeric'
                   value={cnic}
                   onChangeText={setCnic}
 
